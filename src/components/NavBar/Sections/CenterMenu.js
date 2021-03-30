@@ -25,7 +25,6 @@ const StyledLink = styled(Link)`
 const CenterMenu = () => {
   // 메뉴 목록
   const menuList = [
-    { route: "/", name: "Home" },
     { route: "/about", name: "About" },
     { route: "/", name: "menu1" },
     { route: "/", name: "menu2" },
