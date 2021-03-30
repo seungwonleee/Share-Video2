@@ -8,14 +8,14 @@ import Typography from "@material-ui/core/Typography";
 
 // styled components
 const FooterSection = styled.footer`
-  height: 20vh;
+  min-height: 200px;
+  width: 100%;
   background: #2b2d2e;
   color: #d5d5d5;
   a {
     color: #d5d5d5;
   }
   @media only screen and (max-width: 768px) {
-    height: 30vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,6 +29,11 @@ const LogoSection = styled.h2`
   padding: 2rem 5rem 0.5rem;
   p {
     font-size: ${(props) => props.theme.fontSizes.titleSize};
+  }
+  @media only screen and (max-width: 576px) {
+    p {
+      font-size: ${(props) => props.theme.fontSizes.xxxlarge};
+    }
   }
 `;
 
@@ -49,6 +54,11 @@ const CopyrightSection = styled.div`
   span {
     font-size: ${(props) => props.theme.fontSizes.small};
   }
+  @media only screen and (max-width: 768px) {
+    p {
+      text-align: center;
+    }
+  }
 `;
 
 // Copyright Component
@@ -66,31 +76,47 @@ const Copyright = () => {
 
 const Footer = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:380px)",
+    query: "(min-width:576px)",
   });
   return (
     <FooterSection>
-      <LogoSection>
-        <BatteryCharging20Icon style={{ color: "green", fontSize: "3.6rem" }} />
-        <p>Check Charging</p>
-      </LogoSection>
-      {breakPoint ? (
-        <EmailSection>
-          <a href="mailto:seungwon.code@gmail.com">
-            Email: seungwon.code@gmail.com
-          </a>
-        </EmailSection>
-      ) : (
-        <>
-          <EmailSection>
-            <p>Contact</p>
-            <a href="mailto:seungwon.code@gmail.com">seungwon.code@gmail.com</a>
-          </EmailSection>
-        </>
-      )}
-      <CopyrightSection>
-        <Copyright />
-      </CopyrightSection>
+      <div style={{ padding: "30px 0 50px 0" }}>
+        {breakPoint ? (
+          <>
+            <LogoSection>
+              <BatteryCharging20Icon
+                style={{ color: "green", fontSize: "3.6rem" }}
+              />
+              <p>Check Charging</p>
+            </LogoSection>
+            <EmailSection>
+              <a href="mailto:seungwon.code@gmail.com">
+                Email: seungwon.code@gmail.com
+              </a>
+            </EmailSection>
+          </>
+        ) : (
+          <>
+            <LogoSection>
+              <BatteryCharging20Icon
+                style={{ color: "green", fontSize: "2.4rem" }}
+              />
+              <p>Check Charging</p>
+            </LogoSection>
+            <EmailSection>
+              <br />
+              <p>Contact</p>
+              <br />
+              <a href="mailto:seungwon.code@gmail.com">
+                seungwon.code@gmail.com
+              </a>
+            </EmailSection>
+          </>
+        )}
+        <CopyrightSection>
+          <Copyright />
+        </CopyrightSection>
+      </div>
     </FooterSection>
   );
 };
