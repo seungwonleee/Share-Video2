@@ -5,7 +5,6 @@ import { useHistory, Link } from "react-router-dom";
 //Material UI 회원가입 Form 관련 Imports
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -22,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    height: "80vh",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -148,7 +146,6 @@ const RegisterPage = () => {
   return (
     <>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
