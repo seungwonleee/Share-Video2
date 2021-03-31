@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Carousel from "react-material-ui-carousel";
+import { Paper, Button, Slide } from "@material-ui/core";
 import axios from "axios";
 import {
   API_URL,
@@ -10,6 +12,7 @@ import {
 } from "../Config";
 import MainImage from "./Sections/MainImage";
 import GridCards from "../commons/GridCards";
+import Item from "./Sections/CarouselMainImage";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -45,14 +48,15 @@ const LandingPage = () => {
   const classes = useStyles();
 
   const [Movies, setMovies] = useState([]);
-  const [MainMovieImage, setMainMovieImage] = useState(null);
+  // const [MainMovieImage, setMainMovieImage] = useState(null);
+  const [MainMovieImage, setMainMovieImage] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getMovies = (endpoint) => {
     axios.get(endpoint).then((response) => {
-      console.log("인기 영화===>", response.data);
+      console.log("인기 영화===>", response.data.results);
       setMovies([...Movies, ...response.data.results]);
-      setMainMovieImage(response.data.results[0]);
+      setMainMovieImage(...MainMovieImage, response.data.results);
       setCurrentPage(response.data.page);
     });
   };
@@ -69,18 +73,29 @@ const LandingPage = () => {
     }`;
     getMovies(endpoint);
   };
-
+  console.log("Carousel 이미지====>", MainMovieImage);
   return (
     <>
       <Container>
-        {/* Main Image */}
+        {/* Main Image Carousel*/}
         {MainMovieImage && (
-          <MainImage
-            image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${MainMovieImage.backdrop_path}`}
-            titleEnglish={MainMovieImage.original_title}
-            titleKorean={MainMovieImage.title}
-            text={MainMovieImage.overview}
-          />
+          <Carousel
+            animation="slide"
+            IndicatorIcon={false}
+            indicatorIconButtonProps={{
+              style: {
+                display: "none",
+              },
+            }}
+          >
+            {MainMovieImage.map((image, i) => (
+              <Item
+                key={i}
+                image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${image.backdrop_path}`}
+                name={image.title}
+              />
+            ))}
+          </Carousel>
         )}
 
         <MovieList>
