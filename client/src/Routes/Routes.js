@@ -16,6 +16,8 @@ import FindAccountPage from "../components/FindAccountPage/FindAccountPage";
 import NoMatchPage from "../components/NoMatchPage/NoMatchPage";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
+//movie imports
+import MovieDetail from "../components/MovieDetail/MovieDetail";
 
 const MainSection = styled.section`
   background: #f7f7f7;
@@ -37,6 +39,8 @@ const Routes = () => {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/mypage" component={MyPage} />
           <Route exact path="/findaccount" component={FindAccountPage} />
+          {/* movie 관련 Route */}
+          <Route exact path="/movie/:movieId" component={MovieDetail} />
           {/* 설정하지 않은 URL 입력시 NoMatchPage로 이동 */}
           <Route path="*" component={NoMatchPage} />
         </Switch>
