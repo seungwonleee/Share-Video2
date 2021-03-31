@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { API_URL, API_KEY, IMAGE_BASE_URL } from "../Config";
+import {
+  API_URL,
+  API_KEY,
+  IMAGE_BASE_URL,
+  ORIGINAL_SIZE,
+  POSTER_SIZE,
+} from "../Config";
 import MainImage from "./Sections/MainImage";
 import GridCards from "../commons/GridCards";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
 const Container = styled.div`
@@ -45,7 +50,7 @@ const LandingPage = () => {
 
   const getMovies = (endpoint) => {
     axios.get(endpoint).then((response) => {
-      // console.log(response.data);
+      console.log("인기 영화===>", response.data);
       setMovies([...Movies, ...response.data.results]);
       setMainMovieImage(response.data.results[0]);
       setCurrentPage(response.data.page);
@@ -66,48 +71,51 @@ const LandingPage = () => {
   };
 
   return (
-    <Container>
-      {/* Main Image */}
-      {MainMovieImage && (
-        <MainImage
-          image={`${IMAGE_BASE_URL}w1280${MainMovieImage.backdrop_path}`}
-          title={MainMovieImage.original_title}
-          text={MainMovieImage.overview}
-        />
-      )}
+    <>
+      <Container>
+        {/* Main Image */}
+        {MainMovieImage && (
+          <MainImage
+            image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${MainMovieImage.backdrop_path}`}
+            titleEnglish={MainMovieImage.original_title}
+            titleKorean={MainMovieImage.title}
+            text={MainMovieImage.overview}
+          />
+        )}
 
-      <MovieList>
-        <h2>인기 Movies</h2>
-        <br />
-        <hr />
-        <br />
-
-        {/* 인기 Movie 목록  */}
-        <div className={classes.root}>
-          <Grid container spacing={2}>
-            {Movies &&
-              Movies.map((movie, index) => (
-                <GridCards
-                  landingPage
-                  key={index}
-                  image={
-                    movie.poster_path
-                      ? `${IMAGE_BASE_URL}w500${movie.poster_path}`
-                      : null
-                  }
-                  movieId={movie.id}
-                  movieName={movie.original_title}
-                />
-              ))}
-          </Grid>
-        </div>
-      </MovieList>
-
+        <MovieList>
+          <h2>인기 Movies</h2>
+          <br />
+          <hr />
+          <br />
+          {/* 인기 Movie 목록 Grid Cards */}
+          <div className={classes.root}>
+            <Grid container spacing={2}>
+              {Movies &&
+                Movies.map((movie, index) => (
+                  <GridCards
+                    landingPage
+                    key={index}
+                    image={
+                      movie.poster_path
+                        ? `${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`
+                        : null
+                    }
+                    movieId={movie.id}
+                    movieNameEnglish={movie.original_title}
+                    movieNameKorean={movie.title}
+                    voteAverage={movie.vote_average}
+                  />
+                ))}
+            </Grid>
+          </div>
+        </MovieList>
+      </Container>
       {/* 영화 목록 더보기 버튼 */}
       <LoadMoreButton>
         <button onClick={loadMoreButton}>Load More</button>
       </LoadMoreButton>
-    </Container>
+    </>
   );
 };
 
