@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BatteryCharging20Icon from "@material-ui/icons/BatteryCharging20";
+import TheatersIcon from "@material-ui/icons/Theaters";
 import styled from "styled-components";
 import "./MenuFont.css";
 
@@ -20,8 +20,8 @@ const Title = styled.h1`
 const LeftMenu = () => {
   return (
     <StyledLink to="/">
-      <BatteryCharging20Icon style={{ fontSize: "4.8rem", color: "green" }} />
-      <Title className="Logo-Font">Check Charing</Title>
+      <TheatersIcon style={{ fontSize: "4.8rem", color: "brown" }} />
+      <Title className="Logo-Font">Share-Video</Title>
     </StyledLink>
   );
 };

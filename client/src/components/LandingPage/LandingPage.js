@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Carousel from "react-material-ui-carousel";
-import { Paper, Button, Slide } from "@material-ui/core";
 import axios from "axios";
 import {
   API_URL,
@@ -10,7 +9,6 @@ import {
   ORIGINAL_SIZE,
   POSTER_SIZE,
 } from "../Config";
-import MainImage from "./Sections/MainImage";
 import GridCards from "../commons/GridCards";
 import Item from "./Sections/CarouselMainImage";
 

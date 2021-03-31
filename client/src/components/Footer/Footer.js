@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 // material UI Imports
-import BatteryCharging20Icon from "@material-ui/icons/BatteryCharging20";
+import TheatersIcon from "@material-ui/icons/Theaters";
 import Typography from "@material-ui/core/Typography";
 
 // styled components
@@ -84,10 +84,8 @@ const Footer = () => {
         {breakPoint ? (
           <>
             <LogoSection>
-              <BatteryCharging20Icon
-                style={{ color: "green", fontSize: "3.6rem" }}
-              />
-              <p>Check Charging</p>
+              <TheatersIcon style={{ color: "brown", fontSize: "3.6rem" }} />
+              <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
               <a href="mailto:seungwon.code@gmail.com">
@@ -98,10 +96,8 @@ const Footer = () => {
         ) : (
           <>
             <LogoSection>
-              <BatteryCharging20Icon
-                style={{ color: "green", fontSize: "2.4rem" }}
-              />
-              <p>Check Charging</p>
+              <TheatersIcon style={{ color: "brown", fontSize: "2.4rem" }} />
+              <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
               <br />
