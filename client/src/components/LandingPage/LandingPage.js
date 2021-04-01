@@ -46,15 +46,15 @@ const LandingPage = () => {
   const classes = useStyles();
 
   const [Movies, setMovies] = useState([]);
-  // const [MainMovieImage, setMainMovieImage] = useState(null);
-  const [MainMovieImage, setMainMovieImage] = useState([]);
+  // const [mainMovieImage, setMainMovieImage] = useState(null);
+  const [mainMovieImage, setMainMovieImage] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getMovies = (endpoint) => {
     axios.get(endpoint).then((response) => {
-      console.log("인기 영화===>", response.data.results);
+      // console.log("인기 영화 ===>", response.data.results);
       setMovies([...Movies, ...response.data.results]);
-      setMainMovieImage(...MainMovieImage, response.data.results);
+      setMainMovieImage(...mainMovieImage, response.data.results);
       setCurrentPage(response.data.page);
     });
   };
@@ -71,12 +71,12 @@ const LandingPage = () => {
     }`;
     getMovies(endpoint);
   };
-  console.log("Carousel 이미지====>", MainMovieImage);
+  // console.log("Carousel 이미지 ====>", mainMovieImage);
   return (
     <>
       <Container>
         {/* Main Image Carousel*/}
-        {MainMovieImage && (
+        {mainMovieImage && (
           <Carousel
             animation="slide"
             IndicatorIcon={false}
@@ -86,7 +86,7 @@ const LandingPage = () => {
               },
             }}
           >
-            {MainMovieImage.map((image, i) => (
+            {mainMovieImage.map((image, i) => (
               <Item
                 key={i}
                 image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${image.backdrop_path}`}

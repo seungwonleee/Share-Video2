@@ -1,6 +1,7 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { loginState, setUid } from "../../../features/auth/authSlice";
 import { authService } from "../../../fire_module/fireMain";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -24,14 +25,16 @@ const StyledLink = styled(Link)`
 
 const RightMenu = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
   let history = useHistory();
 
   // 로그아웃하기
   const handleLogout = () => {
     authService.signOut();
     history.push("/");
-    // TODO reload 하지않으면 Auth 상태에 따라 메뉴가 바뀌지 않음 / indexdDB 저장 내용은 삭제됨
-    window.location.reload(true);
+    // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
+    dispatch(loginState());
+    dispatch(setUid(null));
   };
 
   return (

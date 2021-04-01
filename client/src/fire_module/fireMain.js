@@ -16,5 +16,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Social 로그인
 export const firebaseInstance = firebase;
-
+// Auth (회원가입, 로그인)
 export const authService = firebase.auth();
+// DB 저장
+export const dbService = firebase.firestore();

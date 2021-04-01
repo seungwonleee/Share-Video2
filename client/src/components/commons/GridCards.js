@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 // Material UI Imports
@@ -47,6 +47,8 @@ const GridCards = ({
 }) => {
   const classes = useStyles();
 
+  const [like, setLike] = useState(0);
+
   if (landingPage) {
     return (
       // 인기 영화 목록 Grid Cards (LandingPage)
@@ -77,8 +79,27 @@ const GridCards = ({
                 <ShareIcon />
               </IconButton>
             </div>
-            <div style={{ paddingRight: "1rem" }}>
-              <Typography variant="body2" color="textSecondary" component="p">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="p"
+                style={{ paddingRight: "1rem" }}
+              >
+                좋아요: {like}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="p"
+                style={{ paddingRight: "1rem" }}
+              >
                 평점: {voteAverage}
               </Typography>
             </div>

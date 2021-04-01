@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Routes from "./Routes/Routes";
 import { authService } from "./fire_module/fireMain";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleLoginState } from "./features/auth/authSlice";
+import { loginState, setUid } from "./features/auth/authSlice";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./Theme/theme";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
@@ -28,14 +28,20 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   const state = useSelector((state) => state.auth.isLoggedIn);
+  const uid = useSelector((state) => state.auth.uid);
   const dispatch = useDispatch();
   console.log("로그인 상태 => ", state);
+  console.log("uid 상태 => ", uid);
 
   // 로그인 Auth 변경 감지
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
-      {
-        user && dispatch(toggleLoginState());
+      // console.log(user);
+      if (user) {
+        dispatch(loginState());
+        dispatch(setUid(user.uid));
+      } else {
+        console.log("로그인 상태 변경 X");
       }
     });
   }, []);
