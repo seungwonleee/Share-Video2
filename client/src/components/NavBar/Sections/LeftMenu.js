@@ -20,7 +20,7 @@ const Title = styled.h1`
 const LeftMenu = () => {
   return (
     <StyledLink to="/">
-      <TheatersIcon style={{ fontSize: "4.8rem", color: "brown" }} />
+      <TheatersIcon style={{ fontSize: "4.8rem", color: "#A5292A" }} />
       <Title className="Logo-Font">Share-Video</Title>
     </StyledLink>
   );

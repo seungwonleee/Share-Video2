@@ -84,7 +84,7 @@ const Footer = () => {
         {breakPoint ? (
           <>
             <LogoSection>
-              <TheatersIcon style={{ color: "brown", fontSize: "3.6rem" }} />
+              <TheatersIcon style={{ color: "#A5292A", fontSize: "3.6rem" }} />
               <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
@@ -96,7 +96,7 @@ const Footer = () => {
         ) : (
           <>
             <LogoSection>
-              <TheatersIcon style={{ color: "brown", fontSize: "2.4rem" }} />
+              <TheatersIcon style={{ color: "#A5292A", fontSize: "2.4rem" }} />
               <p>Share-Video</p>
             </LogoSection>
             <EmailSection>

@@ -28,8 +28,41 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
+  textField: {
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "light-gray",
+    },
+    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#A5292A",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#A5292A",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "black",
+    },
+    "&:hover .MuiOutlinedInput-input": {
+      color: "gray",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+      color: "black",
+    },
+    "& .MuiInputLabel-outlined": {
+      color: "gray",
+    },
+    "&:hover .MuiInputLabel-outlined": {
+      color: "gray",
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "gray",
+    },
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    background: "#A5292A",
+    "&:hover": {
+      background: "#822626",
+    },
   },
   title: {
     fontSize: "3.4rem",
@@ -111,7 +144,7 @@ const FindAccountPage = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Check Charging
+          Share-Video
         </Typography>
         <br />
         <Typography className={classes.text}>(계정 찾기)</Typography>
@@ -136,6 +169,7 @@ const FindAccountPage = () => {
                 onChange={handleInput}
                 inputProps={{ className: classes.text }} // font size of input text
                 InputLabelProps={{ className: classes.text }} // font size of input label
+                className={classes.textField}
               />
             </Grid>
           </Grid>

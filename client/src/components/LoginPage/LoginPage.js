@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#03C75A",
+    backgroundColor: "#A5292A",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -62,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
       borderColor: "light-gray",
     },
     "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#03C75A",
+      borderColor: "#A5292A",
     },
     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#03C75A",
+      borderColor: "#A5292A",
     },
     "& .MuiOutlinedInput-input": {
       color: "black",
@@ -88,9 +88,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    background: "#03C75A",
+    background: "#A5292A",
     "&:hover": {
-      background: "#11a653",
+      background: "#822626",
     },
   },
   title: {
@@ -197,7 +197,7 @@ const LoginPage = () => {
           </Avatar>
           <Link to="/" className={classes.titleLink}>
             <Typography component="h1" variant="h5" className={classes.title}>
-              Check Charging
+              Share-Video
             </Typography>
           </Link>
           <Typography className={classes.text}>(로그인)</Typography>
