@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { authService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { loginState, setUid } from "../../features/auth/authSlice";
 // Drawer 관련 Import
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
 });
 
 const DrawerButton = () => {
+  const dispatch = useDispatch();
   //Material UI 관련코드
   const classes = useStyles();
   const [state, setState] = useState({
@@ -42,8 +44,9 @@ const DrawerButton = () => {
   const handleLogout = () => {
     authService.signOut();
     history.push("/");
-    // TODO 새로고침을 하지않으면 Auth 상태에 따른 메뉴가 바뀌지 않음 / indexdDB 저장내용은 삭제됨 / reload 만이 정답인지 찾아보기
-    window.location.reload(true);
+    // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
+    dispatch(loginState());
+    dispatch(setUid(null));
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
