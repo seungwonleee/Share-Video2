@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
+import { useSelector } from "react-redux";
+import { dbService } from "../../fire_module/fireMain";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -46,8 +48,20 @@ const GridCards = ({
   character,
 }) => {
   const classes = useStyles();
+  const uid = useSelector((state) => state.auth.uid);
 
-  const [like, setLike] = useState(0);
+  //사용자 식별 uid 와 좋아요 누른 목록 DB에 저장
+  //doc Method의 인자로는 String만 가능하다.
+  const handleLikeItem = () => {
+    dbService.collection(uid).doc("like").collection(uid).doc(movieId).set({
+      movieId,
+      image,
+      movieNameKorean,
+      movieNameEnglish,
+      voteAverage,
+      createdAt: Date.now(),
+    });
+  };
 
   if (landingPage) {
     return (
@@ -72,28 +86,17 @@ const GridCards = ({
             }}
           >
             <div>
-              <IconButton aria-label="add to favorites">
+              <IconButton
+                aria-label="add to favorites"
+                onClick={handleLikeItem}
+              >
                 <FavoriteIcon />
               </IconButton>
               <IconButton aria-label="share">
                 <ShareIcon />
               </IconButton>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
-                style={{ paddingRight: "1rem" }}
-              >
-                좋아요: {like}
-              </Typography>
-
+            <div>
               <Typography
                 variant="body2"
                 color="textSecondary"

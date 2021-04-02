@@ -114,7 +114,7 @@ const LandingPage = () => {
                         ? `${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`
                         : null
                     }
-                    movieId={movie.id}
+                    movieId={String(movie.id)}
                     movieNameEnglish={movie.original_title}
                     movieNameKorean={movie.title}
                     voteAverage={movie.vote_average}
