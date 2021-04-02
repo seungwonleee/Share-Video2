@@ -8,39 +8,17 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
-
-const handleDeleteLikeList = () => {
-  alert("삭제하시겠습니까?");
-};
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const columns = [
   { field: "id", headerName: "영화 코드", width: 100 },
   // { field: "image", headerName: "First name", width: 130 },
-  { field: "movieNameEnglish", headerName: "정식 제목", width: 130 },
+  { field: "movieNameEnglish", headerName: "오리지널 제목", width: 130 },
   { field: "movieNameKorean", headerName: "한국어 제목", width: 130 },
   {
     field: "voteAverage",
     headerName: "영화 평점",
     width: 130,
-  },
-  {
-    field: "button",
-    headerName: " ",
-    width: 100,
-    renderCell: (params) => (
-      <strong>
-        {/* {params.value.getFullYear()} */}
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          style={{ padding: "0.3rem" }}
-          onClick={handleDeleteLikeList}
-        >
-          <span style={{ fontSize: "1.6rem" }}>삭제</span>
-        </Button>
-      </strong>
-    ),
   },
 ];
 
@@ -51,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     "& > *": {
       margin: theme.spacing(1),
+    },
+  },
+  button: {
+    margin: theme.spacing(1),
+    background: "#435ce8",
+    color: "#FFFFFF",
+    "&:hover": {
+      background: "#4051B5",
     },
   },
 }));
@@ -66,10 +52,17 @@ const MyPage = () => {
   const classes = useStyles();
   let history = useHistory();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
   const uid = useSelector((state) => state.auth.uid);
 
+  // 로그인한 유저가 아니라면 접근하지 못하도록 Redirect
+  if (!isLoggedIn) {
+    history.push("/");
+  }
+
   const [visible, setVisible] = useState(false);
+  // TODO 테이블 선택 목록
+  const [selection, setSelection] = useState([]);
+  console.log("선택목록 ====> ", selection);
 
   const [like, setLike] = useState([]);
   console.log("like 목록 ====> ", like);
@@ -97,12 +90,30 @@ const MyPage = () => {
 
   useEffect(() => {
     getLike();
+    dbService.collection(uid).onSnapshot((snapshot) => {
+      console.log("someThing happed===>", snapshot.docs);
+    });
   }, []);
 
-  // 로그인한 유저가 아니라면 접근하지 못하도록 Redirect
-  if (!isLoggedIn) {
-    history.push("/");
-  }
+  const handleLikeListRemove = async () => {
+    const ok = window.confirm("정말로 삭제하시겠습니까?");
+    if (ok) {
+      // firestore DB delete
+      await selection.map((movieId) => {
+        dbService
+          .collection(uid)
+          .doc("like")
+          .collection(uid)
+          .doc(movieId)
+          .delete()
+          .then(() => {
+            console.log("삭제 성공!");
+          })
+          .catch((error) => console.log("삭제 에러 ==> ", error));
+      });
+    }
+  };
+
   return (
     <div
       style={{
@@ -142,9 +153,18 @@ const MyPage = () => {
           rows={like}
           columns={columns}
           pageSize={5}
-          style={{ background: "brown" }}
+          checkboxSelection
+          onSelectionModelChange={(row) => setSelection(row.selectionModel)}
         />
       </div>
+      <Button
+        variant="contained"
+        className={classes.button}
+        startIcon={<DeleteIcon />}
+        onClick={handleLikeListRemove}
+      >
+        좋아요 삭제
+      </Button>
     </div>
   );
 };
