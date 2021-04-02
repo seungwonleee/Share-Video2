@@ -13,7 +13,7 @@ const Item = styled.li`
   padding: ${(props) => props.theme.paddings.xlarge};
   font-size: ${(props) => props.theme.fontSizes.small};
   &:hover {
-    color: ${(props) => props.theme.colors.green};
+    color: #a5292a;
   }
 `;
 
