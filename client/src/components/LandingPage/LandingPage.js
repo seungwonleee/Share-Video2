@@ -14,6 +14,7 @@ import Item from "./Sections/CarouselMainImage";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -24,9 +25,21 @@ const MovieList = styled.div`
   margin: 1rem auto;
 `;
 
+const Title = styled.h2`
+  font-size: ${(props) => props.theme.fontSizes.xxxlarge};
+  padding-bottom: ${(props) => props.theme.paddings.xxxlarge};
+  border-bottom: 1px solid gray;
+  margin-bottom: 1.5rem;
+`;
+
 const LoadMoreButton = styled.div`
   display: flex;
   justify-content: center;
+  padding: 3rem 0 3rem 0;
+  Button {
+    font-size: ${(props) => props.theme.fontSizes.xxxlarge};
+    padding: 1.5rem 4rem;
+  }
 `;
 
 // Material UI 디자인 작성
@@ -46,7 +59,6 @@ const LandingPage = () => {
   const classes = useStyles();
 
   const [Movies, setMovies] = useState([]);
-  // const [mainMovieImage, setMainMovieImage] = useState(null);
   const [mainMovieImage, setMainMovieImage] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -54,7 +66,7 @@ const LandingPage = () => {
     axios.get(endpoint).then((response) => {
       // console.log("인기 영화 ===>", response.data.results);
       setMovies([...Movies, ...response.data.results]);
-      setMainMovieImage(...mainMovieImage, response.data.results);
+      setMainMovieImage(response.data.results);
       setCurrentPage(response.data.page);
     });
   };
@@ -86,21 +98,21 @@ const LandingPage = () => {
               },
             }}
           >
-            {mainMovieImage.map((image, i) => (
-              <Item
-                key={i}
-                image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${image.backdrop_path}`}
-                name={image.title}
-              />
-            ))}
+            {mainMovieImage.map((image, i) => {
+              return (
+                <Item
+                  key={i}
+                  image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${image.backdrop_path}`}
+                  name={image.title}
+                />
+              );
+            })}
           </Carousel>
         )}
 
         <MovieList>
-          <h2>인기 Movies</h2>
-          <br />
-          <hr />
-          <br />
+          <Title>추천 Movies</Title>
+
           {/* 인기 Movie 목록 Grid Cards */}
           <div className={classes.root}>
             <Grid container spacing={2}>
@@ -126,7 +138,9 @@ const LandingPage = () => {
       </Container>
       {/* 영화 목록 더보기 버튼 */}
       <LoadMoreButton>
-        <button onClick={loadMoreButton}>Load More</button>
+        <Button variant="contained" onClick={loadMoreButton}>
+          Load More
+        </Button>
       </LoadMoreButton>
     </>
   );
