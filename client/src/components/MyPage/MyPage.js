@@ -44,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
 const Title = styled.h1`
   font-size: ${(props) => props.theme.fontSizes.titleSize};
 `;
-const P = styled.p`
-  font-size: ${(props) => props.theme.fontSizes.base};
-`;
 
 const MyPage = () => {
   const classes = useStyles();
@@ -60,39 +57,28 @@ const MyPage = () => {
   }
 
   const [visible, setVisible] = useState(false);
-  // TODO 테이블 선택 목록
   const [selection, setSelection] = useState([]);
-  console.log("선택목록 ====> ", selection);
-
   const [like, setLike] = useState([]);
-  console.log("like 목록 ====> ", like);
+  // console.log("선택목록 ====> ", selection);
+  // console.log("like 목록 ====> ", like);
 
-  const getLike = async () => {
-    const getData = await dbService
+  useEffect(() => {
+    dbService
       .collection(uid)
       .doc("like")
       .collection(uid)
-      .get();
-
-    //TODO 구조분해 할당이 안되는 이유 확인해보기
-    const dataList = [];
-    getData.forEach((doc) => {
-      // dataList.push(doc.data());
-      // Matrial UI data grid를 사용하려면 고유 id 값이 필요하다.
-      dataList.push({
-        ...doc.data(),
-        id: Number(doc.data().movieId),
-        button: null,
+      .onSnapshot((snapshot) => {
+        // console.log("살시간 데이터 변경 ===>", snapshot.docs);
+        const likeListData = snapshot.docs.map((doc, index) => {
+          // console.log(doc.data());
+          return {
+            ...doc.data(),
+            id: Number(doc.data().movieId),
+          };
+        });
+        // console.log("좋아요 목록 ===> ", ...likeListData);
+        setLike([...likeListData]);
       });
-    });
-    setLike(dataList);
-  };
-
-  useEffect(() => {
-    getLike();
-    dbService.collection(uid).onSnapshot((snapshot) => {
-      console.log("someThing happed===>", snapshot.docs);
-    });
   }, []);
 
   const handleLikeListRemove = async () => {
