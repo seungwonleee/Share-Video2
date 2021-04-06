@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./MenuFont.css";
+import axios from "axios";
 
 // styled-components
 const List = styled.ul`
@@ -31,7 +32,17 @@ const RightMenu = () => {
   // 로그아웃하기
   const handleLogout = () => {
     authService.signOut();
-    history.push("/");
+    axios
+      .get("/api/users/logout")
+      .then((res) => {
+        if (res.status === 200) {
+          history.push("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
     dispatch(loginState());
     dispatch(setUid(null));

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 
@@ -9,6 +10,9 @@ const P = styled.p`
 `;
 
 const AboutPage = () => {
+  axios.get("/api/users/auth").then((res) => {
+    console.log("auth ===> ", res.data);
+  });
   return (
     <div>
       <Title>여기는 about 페이지 입니다.</Title>

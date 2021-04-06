@@ -78,9 +78,10 @@ const FindAccountPage = () => {
 
   // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
   let history = useHistory();
-  if (isLoggedIn) {
-    history.push("/");
-  }
+  //TODO 코드 수정하기
+  // if (isLoggedIn) {
+  //   history.push("/");
+  // }
   // Materail Ui 디자인에 사용
   const classes = useStyles();
   const [email, setEmail] = useState("");

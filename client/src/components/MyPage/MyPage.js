@@ -52,9 +52,10 @@ const MyPage = () => {
   const uid = useSelector((state) => state.auth.uid);
 
   // 로그인한 유저가 아니라면 접근하지 못하도록 Redirect
-  if (!isLoggedIn) {
-    history.push("/");
-  }
+  //TODO 코드 수정하기
+  // if (!isLoggedIn) {
+  //   history.push("/");
+  // }
 
   const [visible, setVisible] = useState(false);
   const [selection, setSelection] = useState([]);

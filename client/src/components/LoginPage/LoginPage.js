@@ -17,6 +17,7 @@ import Container from "@material-ui/core/Container";
 //Font Awesome 관련 Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
 
 // styled-components
 const SocialLoginMixin = css`
@@ -113,9 +114,10 @@ const LoginPage = () => {
 
   // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
   let history = useHistory();
-  if (isLoggedIn) {
-    history.push("/");
-  }
+  //TODO 코드 수정하기
+  // if (isLoggedIn) {
+  //   history.push("/");
+  // }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -139,6 +141,18 @@ const LoginPage = () => {
     await authService
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
+        //로그인 user token 생성 및 cookie에 저장
+        let body = {
+          uid: user.user.uid,
+        };
+
+        axios
+          .post("/api/users/login", body)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => console.log(error));
+
         // 로그인 성공
         if (user.operationType === "signIn") {
           alert("로그인 성공! 환영합니다.");

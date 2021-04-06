@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import axios from "axios";
 
 // Materaul UI 회원가입 Form Design
 const useStyles = makeStyles((theme) => ({
@@ -86,9 +87,10 @@ const RegisterPage = () => {
 
   // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
   let history = useHistory();
-  if (isLoggedIn) {
-    history.push("/");
-  }
+  //TODO 수정하기
+  // if (isLoggedIn) {
+  //   history.push("/");
+  // }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -113,10 +115,38 @@ const RegisterPage = () => {
     await authService
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
-        // 회원가입 및 로그인 성공
-        if (user.operationType === "signIn") {
-          alert("회원가입을 축하합니다. 환영합니다.");
-        }
+        // console.log("회원가입", user.user.uid);
+
+        let body = {
+          uid: user.user.uid,
+          email,
+        };
+
+        //회원가입시 uid mongoDB에 저장
+        //TODO 수정하기
+        axios
+          .post("/api/users/register", body)
+          .then((response) => {
+            console.log("회원가입 ===>", response);
+            if (response.status === 200) {
+              // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
+              axios
+                .post("/api/users/login", body)
+                .then((response) => {
+                  console.log("회원가입 로그인 ===>", response);
+                  if (response.status === 200) {
+                    alert("회원가입을 축하합니다. 환영합니다.");
+                  }
+                })
+                .catch((error) => console.log(error));
+            }
+          })
+          .catch((error) => console.log(error));
+
+        // // 회원가입 및 로그인 성공
+        // if (user.operationType === "signIn") {
+        //   alert("회원가입을 축하합니다. 환영합니다.");
+        // }
         // LandingPage로 이동
         history.push("/");
       })
