@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import styled from "styled-components";
+import Auth from "../hoc/auth";
 // 라우팅할 모든 페이지 imports
 import LandingPage from "../components/LandingPage/LandingPage";
 import AboutPage from "../components/AboutPage/AboutPage";
@@ -33,12 +34,16 @@ const Routes = () => {
       {pathname !== "/login" && pathname !== "/register" && <NavBar />}
       <MainSection>
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/about" component={AboutPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/mypage" component={MyPage} />
-          <Route exact path="/findaccount" component={FindAccountPage} />
+          <Route exact path="/" component={Auth(LandingPage)} />
+          <Route exact path="/about" component={Auth(AboutPage)} />
+          <Route exact path="/register" component={Auth(RegisterPage, false)} />
+          <Route exact path="/login" component={Auth(LoginPage, false)} />
+          <Route exact path="/mypage" component={Auth(MyPage, true)} />
+          <Route
+            exact
+            path="/findaccount"
+            component={Auth(FindAccountPage, false)}
+          />
           {/* movie 관련 Route */}
           <Route exact path="/movie/:movieId" component={MovieDetail} />
           {/* 설정하지 않은 URL 입력시 NoMatchPage로 이동 */}

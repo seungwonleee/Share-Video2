@@ -35,17 +35,17 @@ const RightMenu = () => {
     axios
       .get("/api/users/logout")
       .then((res) => {
-        if (res.status === 200) {
+        console.log(res.data.removeCookie);
+        if (res.data.removeCookie) {
           history.push("/");
+          // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
+          dispatch(loginState(false));
+          dispatch(setUid(null));
         }
       })
       .catch((error) => {
         console.log(error);
       });
-
-    // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
-    dispatch(loginState());
-    dispatch(setUid(null));
   };
 
   return (

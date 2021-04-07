@@ -61,13 +61,13 @@ const MovieDetail = (props) => {
 
     // 영화 상세 정보
     axios.get(endpointMovieInfo).then((response) => {
-      console.log("MovieInfo ====>", response.data);
+      // console.log("MovieInfo ====>", response.data);
       setMovie(response.data);
     });
 
     // 영화 관계자 정보
     axios.get(endpointCast).then((response) => {
-      console.log("Cast ====>", response.data.cast);
+      // console.log("Cast ====>", response.data.cast);
       setCasts(response.data.cast);
     });
   }, []);

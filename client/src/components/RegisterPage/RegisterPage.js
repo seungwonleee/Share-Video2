@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { authService } from "../../fire_module/fireMain";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { loginState, setUid } from "../../features/auth/authSlice";
 import { useHistory, Link } from "react-router-dom";
 //Material UI 회원가입 Form 관련 Imports
 import Avatar from "@material-ui/core/Avatar";
@@ -82,15 +83,8 @@ const RegisterPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
-  //redux로 로그인 상태 체크
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
   let history = useHistory();
-  //TODO 수정하기
-  // if (isLoggedIn) {
-  //   history.push("/");
-  // }
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -108,7 +102,7 @@ const RegisterPage = () => {
     }
   };
 
-  //회원가입하기 ( 회원가입 성공하면 바로 로그인된다. )
+  //회원가입하기 ( 회원가입에 성공하면 바로 로그인 된다. )
   const handleCreateAccount = async (event) => {
     event.preventDefault();
 
@@ -123,30 +117,25 @@ const RegisterPage = () => {
         };
 
         //회원가입시 uid mongoDB에 저장
-        //TODO 수정하기
         axios
           .post("/api/users/register", body)
           .then((response) => {
-            console.log("회원가입 ===>", response);
-            if (response.status === 200) {
+            if (response.data.success) {
               // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
               axios
                 .post("/api/users/login", body)
                 .then((response) => {
-                  console.log("회원가입 로그인 ===>", response);
-                  if (response.status === 200) {
+                  if (response.data.loginSuccess) {
                     alert("회원가입을 축하합니다. 환영합니다.");
                   }
+                  dispatch(loginState(response.data.loginSuccess));
+                  dispatch(setUid(response.data.userUid));
                 })
                 .catch((error) => console.log(error));
             }
           })
           .catch((error) => console.log(error));
 
-        // // 회원가입 및 로그인 성공
-        // if (user.operationType === "signIn") {
-        //   alert("회원가입을 축하합니다. 환영합니다.");
-        // }
         // LandingPage로 이동
         history.push("/");
       })

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { authService, firebaseInstance } from "../../fire_module/fireMain";
-import { useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginState, setUid } from "../../features/auth/authSlice";
+import axios from "axios";
 import styled, { css } from "styled-components";
 //Material UI 로그인 Form 관련 Imports
 import Avatar from "@material-ui/core/Avatar";
@@ -17,7 +19,6 @@ import Container from "@material-ui/core/Container";
 //Font Awesome 관련 Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import axios from "axios";
 
 // styled-components
 const SocialLoginMixin = css`
@@ -109,15 +110,8 @@ const LoginPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
-  //redux로 로그인 상태 체크
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
   let history = useHistory();
-  //TODO 코드 수정하기
-  // if (isLoggedIn) {
-  //   history.push("/");
-  // }
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -134,29 +128,29 @@ const LoginPage = () => {
         break;
     }
   };
-  //로그인하기
+  //이메일 주소 로그인
   const handleLogin = async (event) => {
     event.preventDefault();
 
     await authService
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
-        //로그인 user token 생성 및 cookie에 저장
         let body = {
           uid: user.user.uid,
         };
-
+        //로그인 user token 생성 및 cookie에 저장
         axios
           .post("/api/users/login", body)
           .then((response) => {
-            console.log(response);
+            // console.log(response.data);
+            if (response.data.loginSuccess) {
+              alert("로그인 성공! 환영합니다.");
+            }
+            dispatch(loginState(response.data.loginSuccess));
+            dispatch(setUid(response.data.userUid));
           })
           .catch((error) => console.log(error));
 
-        // 로그인 성공
-        if (user.operationType === "signIn") {
-          alert("로그인 성공! 환영합니다.");
-        }
         // 홈으로 이동
         history.push("/");
       })
@@ -199,7 +193,46 @@ const LoginPage = () => {
     }
 
     const data = await authService.signInWithPopup(provider);
-    console.log(data);
+
+    let body = {
+      uid: data.user.uid,
+      email: data.additionalUserInfo.profile.email,
+    };
+
+    //회원가입시 uid mongoDB에 저장
+    axios
+      .post("/api/users/register", body)
+      .then((response) => {
+        if (response.data.success) {
+          // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
+          axios
+            .post("/api/users/login", body)
+            .then((response) => {
+              if (response.data.loginSuccess) {
+                alert("회원가입을 축하합니다. 환영합니다.");
+              }
+              dispatch(loginState(response.data.loginSuccess));
+              dispatch(setUid(response.data.userUid));
+            })
+            .catch((error) => console.log(error));
+        } else {
+          //이미 DB에 회원 정보가 있는 경우 바로 로그인
+          axios
+            .post("/api/users/login", body)
+            .then((response) => {
+              if (response.data.loginSuccess) {
+                alert("로그인 성공! 환영합니다.");
+              }
+              dispatch(loginState(response.data.loginSuccess));
+              dispatch(setUid(response.data.userUid));
+            })
+            .catch((error) => console.log(error));
+        }
+      })
+      .catch((error) => console.log(error));
+
+    // LandingPage로 이동
+    history.push("/");
   };
 
   return (

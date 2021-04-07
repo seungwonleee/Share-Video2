@@ -27,24 +27,21 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => {
-  const state = useSelector((state) => state.auth.isLoggedIn);
-  const uid = useSelector((state) => state.auth.uid);
-  const dispatch = useDispatch();
-  console.log("로그인 상태 => ", state);
-  console.log("uid 상태 => ", uid);
+  // const dispatch = useDispatch();
 
-  // 로그인 Auth 변경 감지
-  useEffect(() => {
-    authService.onAuthStateChanged((user) => {
-      // console.log(user);
-      if (user) {
-        dispatch(loginState());
-        dispatch(setUid(user.uid));
-      } else {
-        console.log("로그인 상태 변경 X");
-      }
-    });
-  }, []);
+  // // 로그인 Auth 변경 감지
+  // useEffect(() => {
+  //   authService.onAuthStateChanged((user) => {
+  //     // console.log("Auth 변경 감지 ===> ", user);
+  //     if (user) {
+  //       dispatch(loginState(true));
+  //       dispatch(setUid(user.uid));
+  //     } else {
+  //       dispatch(loginState(false));
+  //       dispatch(setUid(user));
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div>

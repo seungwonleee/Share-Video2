@@ -9,8 +9,8 @@ export const authSlice = createSlice({
   },
   reducers: {
     // 로그인 상태 업데이트
-    loginState: (state) => {
-      state.isLoggedIn = !state.isLoggedIn;
+    loginState: (state, action) => {
+      state.isLoggedIn = action.payload;
     },
     // 사용자 식별 코드 업데이트
     setUid: (state, action) => {

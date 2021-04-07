@@ -57,7 +57,7 @@ app.post("/api/users/login", (req, res) => {
       res
         .cookie("x_auth", user.token)
         .status(200)
-        .json({ loginSuccess: true, userId: user._id });
+        .json({ loginSuccess: true, userId: user._id, userUid: user.uid });
     });
   });
 });
@@ -74,7 +74,9 @@ app.get("/api/users/auth", auth, (req, res) => {
 
 app.get("/api/users/logout", auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
-    if (err) return res.json({ success: false, err });
+    if (err) {
+      return res.json({ logout: false, removeCookie: false, err });
+    }
     // 저장된 Cookie 삭제
     res
       .clearCookie("x_auth")

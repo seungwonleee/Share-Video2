@@ -48,14 +48,7 @@ const Title = styled.h1`
 const MyPage = () => {
   const classes = useStyles();
   let history = useHistory();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const uid = useSelector((state) => state.auth.uid);
-
-  // 로그인한 유저가 아니라면 접근하지 못하도록 Redirect
-  //TODO 코드 수정하기
-  // if (!isLoggedIn) {
-  //   history.push("/");
-  // }
 
   const [visible, setVisible] = useState(false);
   const [selection, setSelection] = useState([]);
@@ -64,22 +57,27 @@ const MyPage = () => {
   // console.log("like 목록 ====> ", like);
 
   useEffect(() => {
-    dbService
-      .collection(uid)
-      .doc("like")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("살시간 데이터 변경 ===>", snapshot.docs);
-        const likeListData = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          return {
-            ...doc.data(),
-            id: Number(doc.data().movieId),
-          };
+    if (uid) {
+      dbService
+        .collection(uid)
+        .doc("like")
+        .collection(uid)
+        .onSnapshot((snapshot) => {
+          // console.log("살시간 데이터 변경 ===>", snapshot.docs);
+          const likeListData = snapshot.docs.map((doc, index) => {
+            // console.log(doc.data());
+            return {
+              ...doc.data(),
+              id: Number(doc.data().movieId),
+            };
+          });
+          // console.log("좋아요 목록 ===> ", ...likeListData);
+          setLike([...likeListData]);
         });
-        // console.log("좋아요 목록 ===> ", ...likeListData);
-        setLike([...likeListData]);
-      });
+    } else {
+      // 로그인한 유저가 아니라면 접근하지 못하도록 Redirect
+      history.push("/login");
+    }
   }, []);
 
   const handleLikeListRemove = async () => {
