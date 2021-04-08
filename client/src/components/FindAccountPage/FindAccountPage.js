@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { authService } from "../../fire_module/fireMain";
-import { useSelector } from "react-redux";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 //Material UI 로그인 Form 관련 Imports
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -73,15 +72,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FindAccountPage = () => {
-  //redux로 로그인 상태 체크
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // 로그인한 유저는 해당 페이지에 접근하지 못하도록 Redirect
-  let history = useHistory();
-  //TODO 코드 수정하기
-  // if (isLoggedIn) {
-  //   history.push("/");
-  // }
   // Materail Ui 디자인에 사용
   const classes = useStyles();
   const [email, setEmail] = useState("");

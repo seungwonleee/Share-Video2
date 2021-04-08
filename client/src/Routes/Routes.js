@@ -17,6 +17,8 @@ import FindAccountPage from "../components/FindAccountPage/FindAccountPage";
 import NoMatchPage from "../components/NoMatchPage/NoMatchPage";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
+import IndividualWorkPage from "../components/IndividualWorkPage/IndividualWorkPage";
+import VideoUploadPage from "../components/VideoUploadPage/VideoUploadPage";
 //movie imports
 import MovieDetail from "../components/MovieDetail/MovieDetail";
 
@@ -26,6 +28,9 @@ const MainSection = styled.section`
 `;
 
 const Routes = () => {
+  //option 미입력    =>  아무나 출입이 가능한 페이지
+  //true    =>  로그인한 유저만 출입이 가능한 페이지
+  //false   =>  로그인한 유저는 출입 불가능한 페이지
   // 라우팅 경로 확인
   const { pathname } = useLocation();
   // console.log(pathname);
@@ -43,6 +48,16 @@ const Routes = () => {
             exact
             path="/findaccount"
             component={Auth(FindAccountPage, false)}
+          />
+          <Route
+            exact
+            path="/videoupload"
+            component={Auth(VideoUploadPage, true)}
+          />
+          <Route
+            exact
+            path="/individualwork"
+            component={Auth(IndividualWorkPage)}
           />
           {/* movie 관련 Route */}
           <Route exact path="/movie/:movieId" component={MovieDetail} />

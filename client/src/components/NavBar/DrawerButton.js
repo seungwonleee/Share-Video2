@@ -61,11 +61,9 @@ const DrawerButton = () => {
   };
 
   const itemsList = [
-    { text: "Home", onClick: () => history.push("/") },
     { text: "About", onClick: () => history.push("/about") },
-    { text: "menu1", onClick: () => history.push("/") },
-    { text: "menu2", onClick: () => history.push("/") },
-    { text: "menu3", onClick: () => history.push("/") },
+    { text: "개인 작품", onClick: () => history.push("/individualwork") },
+    { text: "작품 공유하기", onClick: () => history.push("/videoupload") },
   ];
   // 로그인 상태 메뉴
   const loginList = [
