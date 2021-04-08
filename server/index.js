@@ -69,6 +69,7 @@ app.get("/api/users/auth", auth, (req, res) => {
     _id: req.user._id,
     isAuth: true,
     uid: req.user.uid,
+    email: req.user.email,
   });
 });
 

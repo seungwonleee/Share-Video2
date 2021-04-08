@@ -6,6 +6,7 @@ export const authSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     uid: null,
+    email: null,
   },
   reducers: {
     // 로그인 상태 업데이트
@@ -16,10 +17,14 @@ export const authSlice = createSlice({
     setUid: (state, action) => {
       state.uid = action.payload;
     },
+    // 사용자 이메일 계정
+    setEmail: (state, action) => {
+      state.email = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loginState, setUid } = authSlice.actions;
+export const { loginState, setUid, setEmail } = authSlice.actions;
 
 export default authSlice.reducer;

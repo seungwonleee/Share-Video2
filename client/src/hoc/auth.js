@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginState, setUid } from "../features/auth/authSlice";
+import { loginState, setUid, setEmail } from "../features/auth/authSlice";
 
 export default (SpecificComponent, option) => {
   //option 미입력    =>  아무나 출입이 가능한 페이지
@@ -21,10 +21,8 @@ export default (SpecificComponent, option) => {
         if (!res.data.isAuth) {
           if (option) {
             alert("로그인 후 사용 가능합니다.");
-            history.push("/login");
+            return history.push("/login");
           }
-          dispatch(loginState(false));
-          dispatch(setUid(null));
         } else {
           //로그인 한 상태
           if (option === false) {
@@ -32,6 +30,7 @@ export default (SpecificComponent, option) => {
           }
           dispatch(loginState(res.data.isAuth));
           dispatch(setUid(res.data.uid));
+          dispatch(setEmail(res.data.email));
         }
       });
     }, []);

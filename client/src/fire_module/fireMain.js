@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 // Add the Firebase services that you want to use (사용하고 싶은 모듈 import 하기)
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 // For Firebase JS SDK Import
 import fireSDK from "./fireSDK";
@@ -18,5 +19,7 @@ firebase.initializeApp(firebaseConfig);
 export const firebaseInstance = firebase;
 // Auth (회원가입, 로그인)
 export const authService = firebase.auth();
-// DB 저장
+// FireStore DB 저장
 export const dbService = firebase.firestore();
+// FireStore storage 영상 저장
+export const storageService = firebase.storage();
