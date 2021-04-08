@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { authService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loginState, setUid } from "../../features/auth/authSlice";
+import { loginState, setUid, setEmail } from "../../features/auth/authSlice";
+import axios from "axios";
 // Drawer 관련 Import
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -43,10 +44,21 @@ const DrawerButton = () => {
   let history = useHistory();
   const handleLogout = () => {
     authService.signOut();
-    history.push("/");
-    // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
-    dispatch(loginState());
-    dispatch(setUid(null));
+    axios
+      .get("/api/users/logout")
+      .then((res) => {
+        console.log(res.data.removeCookie);
+        if (res.data.removeCookie) {
+          history.push("/");
+          // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
+          dispatch(loginState(false));
+          dispatch(setUid(null));
+          dispatch(setEmail(null));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
