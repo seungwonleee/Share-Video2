@@ -5,6 +5,49 @@ import AddIcon from "@material-ui/icons/Add";
 import { dbService, storageService } from "../../fire_module/fireMain";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import styled from "styled-components";
+
+const Title = styled.div`
+  text-align: center;
+  margin: 2rem;
+  h1 {
+    font-size: ${(props) => props.theme.fontSizes.titleSize};
+  }
+`;
+
+const VideoDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  label {
+    margin-top: 2rem;
+    font-size: ${(props) => props.theme.fontSizes.base};
+  }
+  input {
+    height: 3rem;
+    font-size: ${(props) => props.theme.fontSizes.base};
+  }
+  textArea {
+    height: 6rem;
+    font-size: ${(props) => props.theme.fontSizes.base};
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+  }
+  select {
+    height: 3rem;
+    font-size: ${(props) => props.theme.fontSizes.base};
+  }
+  Button {
+    margin-top: 2rem;
+    span {
+      font-size: ${(props) => props.theme.fontSizes.base};
+    }
+  }
+`;
 
 //장르 목록
 const Catogory = [
@@ -21,6 +64,9 @@ const Catogory = [
 ];
 
 const VideoUploadPage = () => {
+  const breakPoint = useMediaQuery({
+    query: "(min-width:768px)",
+  });
   let history = useHistory();
 
   //현재 로그인한 회원 정보
@@ -138,65 +184,117 @@ const VideoUploadPage = () => {
         height: "80vh",
       }}
     >
-      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <h1> 내 작품 판매, 공유하기</h1>
-      </div>
+      <Title>
+        <h1> 작품 판매, 공유하기</h1>
+      </Title>
 
       <form onSubmit={onSubmit}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
-            {({ getRootProps, getInputProps }) => (
+        {breakPoint ? (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
+              {({ getRootProps, getInputProps }) => (
+                <div
+                  style={{
+                    width: "300px",
+                    height: "240px",
+                    border: "1px solid lightgray",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  {...getRootProps()}
+                >
+                  <input {...getInputProps()} />
+                  <AddIcon style={{ fontSize: "3rem" }} />
+                </div>
+              )}
+            </Dropzone>
+
+            {preview && (
               <div
                 style={{
-                  width: "300px",
-                  height: "240px",
-                  border: "1px solid lightgray",
                   display: "flex",
-                  alignItems: "center",
+                  flexDirection: "column",
                   justifyContent: "center",
+                  alignItems: "center",
                 }}
-                {...getRootProps()}
               >
-                <input {...getInputProps()} />
-                <AddIcon style={{ fontSize: "3rem" }} />
+                <div
+                  style={{
+                    background: "black",
+                    width: "300px",
+                    height: "240px",
+                  }}
+                >
+                  <video
+                    src={preview}
+                    style={{ width: "300px", height: "240px" }}
+                    controls
+                  ></video>
+                </div>
+                <p>영상 미리보기</p>
               </div>
             )}
-          </Dropzone>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            {preview ? (
+              <></>
+            ) : (
+              <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
+                {({ getRootProps, getInputProps }) => (
+                  <div
+                    style={{
+                      width: "300px",
+                      height: "240px",
+                      border: "1px solid lightgray",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    {...getRootProps()}
+                  >
+                    <input {...getInputProps()} />
+                    <AddIcon style={{ fontSize: "3rem" }} />
+                  </div>
+                )}
+              </Dropzone>
+            )}
 
-          {preview && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            {preview && (
               <div
                 style={{
-                  background: "black",
-                  width: "300px",
-                  height: "240px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <video
-                  src={preview}
-                  style={{ width: "300px", height: "240px" }}
-                  controls
-                ></video>
+                <div
+                  style={{
+                    background: "black",
+                    width: "300px",
+                    height: "240px",
+                  }}
+                >
+                  <video
+                    src={preview}
+                    style={{ width: "300px", height: "240px" }}
+                    controls
+                  ></video>
+                </div>
+                <p>영상 미리보기</p>
               </div>
-              <p>영상 미리보기</p>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-          }}
-        >
+        <VideoDescription>
           <label>제목</label>
           <input onChange={handleChangeTitle} value={title} />
 
@@ -204,39 +302,22 @@ const VideoUploadPage = () => {
           <textarea onChange={handleChangeDecsription} value={description} />
 
           <div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "10rem",
-              }}
-            >
-              <label>장르</label>
-              <select onChange={handleChangeCategory}>
-                {Catogory.map((item, index) => (
-                  <option key={index} value={item.label}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <label>장르</label>
+            <select onChange={handleChangeCategory}>
+              {Catogory.map((item, index) => (
+                <option key={index} value={item.label}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "10rem",
-              }}
-            >
-              <label>가격</label>
-              <input
-                placeholder="원 단위로 입력하세요."
-                value={cost}
-                onChange={handleChangeCost}
-              />
-            </div>
+            <label>가격</label>
+            <input
+              placeholder="원 단위로 입력하세요."
+              value={cost}
+              onChange={handleChangeCost}
+            />
           </div>
-          <br />
 
           <Button
             variant="contained"
@@ -244,9 +325,9 @@ const VideoUploadPage = () => {
             size="large"
             onClick={onSubmit}
           >
-            공유하기
+            <span>공유하기</span>
           </Button>
-        </div>
+        </VideoDescription>
       </form>
     </div>
   );
