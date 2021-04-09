@@ -32,16 +32,16 @@ const NavButton = styled(Button)`
 `;
 
 const MyPage = () => {
+  const [title, setTitle] = useState("좋아요 목록");
   const [visible, setVisible] = useState({
     likeVisible: true,
     shoppingBasketVisible: false,
     purchaseHistoryVisible: false,
     myIndividualWorkVisible: false,
   });
-  // console.log(" visible 상태 ====> ", visible);
 
   const handleVisible = (event) => {
-    console.log(event.currentTarget.name);
+    // 새로고침시 likeVisible state 값이 true 이기때문에 좋아요 목록으로 고정된다.
     switch (event.currentTarget.name) {
       case "like":
         setVisible({
@@ -50,6 +50,7 @@ const MyPage = () => {
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: false,
         });
+        setTitle("좋아요 목록");
         break;
       case "shoppingBasket":
         setVisible({
@@ -58,6 +59,7 @@ const MyPage = () => {
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: false,
         });
+        setTitle("장바구니");
         break;
       case "purchaseHistory":
         setVisible({
@@ -66,6 +68,7 @@ const MyPage = () => {
           purchaseHistoryVisible: true,
           myIndividualWorkVisible: false,
         });
+        setTitle("구매내역");
         break;
       case "myIndividualWork":
         setVisible({
@@ -74,13 +77,14 @@ const MyPage = () => {
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: true,
         });
+        setTitle("내 작품");
         break;
     }
   };
 
   return (
     <Container>
-      <h1>내 정보</h1>
+      <h1>{`My Page(${title})`}</h1>
 
       {/* 목록 카테고리 */}
       <nav>
