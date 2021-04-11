@@ -86,6 +86,14 @@ app.get("/api/users/logout", auth, (req, res) => {
   });
 });
 
+app.get("/api/users/list", async (req, res) => {
+  //등록된 사용자 목록 전체
+  const userList = await User.find((err, docs) => {
+    if (err) return res.json({ loadUser: "fail" });
+  });
+  res.status(200).json({ loadUser: "success", userList });
+});
+
 const port = 5000;
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

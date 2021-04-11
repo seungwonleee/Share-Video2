@@ -37,21 +37,31 @@ const Image = styled.img`
 `;
 
 const GridCards = ({
+  // movie, movieDetail 관련 props
   landingPage,
+  castList,
+  individualWork,
   image,
   movieId,
   movieNameEnglish,
   movieNameKorean,
   voteAverage,
-  castList,
   castName,
   character,
+  //individualWork 관련 props
+  cost,
+  createdAt,
+  creatorUid,
+  description,
+  downloadURL,
+  email,
+  genre,
+  title,
 }) => {
   const classes = useStyles();
   const uid = useSelector((state) => state.auth.uid);
 
   //사용자 식별 uid 와 좋아요 누른 목록 DB에 저장
-  //doc Method의 인자로는 String만 가능하다.
   const handleLikeItem = () => {
     dbService.collection(uid).doc("like").collection(uid).doc(movieId).set({
       movieId,
@@ -112,7 +122,7 @@ const GridCards = ({
     );
   } else if (castList) {
     return (
-      // 출연진 목록 Grid Cards
+      // 출연진 목록 Grid Cards (MovieDetialPage)
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <Card className={classes.root}>
           <CardMedia>
@@ -124,6 +134,60 @@ const GridCards = ({
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               본명: {castName}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  } else if (individualWork) {
+    //업로드 몇 분 전
+    const uploadTimeMinutes = Math.floor(
+      ((Date.now() - createdAt) * 0.1) / 60 / 60
+    );
+    //업로드 몇 시간 전
+    const uploadTimeHour = Math.floor(
+      ((Date.now() - createdAt) * 0.1) / 60 / 60 / 60
+    );
+    // 업로드 몇 일 전
+    const uploadTimeDay = Math.floor(
+      ((Date.now() - createdAt) * 0.1) / 60 / 60 / 60 / 60
+    );
+    return (
+      // 개인 작품 목록 Grid Cards (IndividualWorkPage)
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Card className={classes.root}>
+          <CardMedia>
+            <video
+              src={downloadURL ? downloadURL : noImage}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </CardMedia>
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              제목: {title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              설명: {description}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              장르: {genre}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              가격: {cost === 0 ? "무료" : cost}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              제작자: {email}
+              <input type="hidden" value={creatorUid} />
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              업로드일:{" "}
+              {uploadTimeMinutes > 60
+                ? `${
+                    uploadTimeHour > 24
+                      ? `${uploadTimeDay} 일 전`
+                      : `${uploadTimeHour} 시간 전`
+                  }`
+                : `${uploadTimeMinutes} 분 전`}
             </Typography>
           </CardContent>
         </Card>
