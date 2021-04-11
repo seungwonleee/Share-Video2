@@ -3,7 +3,8 @@ import { authService } from "../../fire_module/fireMain";
 import { useDispatch } from "react-redux";
 import { loginState, setUid } from "../../features/auth/authSlice";
 import { useHistory, Link } from "react-router-dom";
-//Material UI 회원가입 Form 관련 Imports
+import axios from "axios";
+//회원가입 Form Material UI Imports
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -14,7 +15,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from "axios";
 
 // Materaul UI 회원가입 Form Design
 const useStyles = makeStyles((theme) => ({

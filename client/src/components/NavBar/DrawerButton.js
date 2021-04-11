@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loginState, setUid, setEmail } from "../../features/auth/authSlice";
 import axios from "axios";
-// Drawer 관련 Import
+// Drawer 관련 Material UI Imports
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
 import { dbService, storageService } from "../../fire_module/fireMain";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
+// Material UI Imports
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
 
 const Title = styled.div`
   text-align: center;

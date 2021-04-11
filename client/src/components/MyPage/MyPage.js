@@ -54,13 +54,9 @@ const MyPage = () => {
     myIndividualWorkVisible: false,
   });
   const [shoppingBasketCount, setShoppingBasketCount] = useState(0);
-  useEffect(async () => {
-    const uid = await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      return res.data.uid;
-    });
 
-    dbService
+  const getShoppingBasketCount = async (uid) => {
+    await dbService
       .collection(uid)
       .doc("shoppingBasket")
       .collection(uid)
@@ -68,6 +64,18 @@ const MyPage = () => {
         // console.log("실시간 데이터 변경 ===>", snapshot.docs);
         setShoppingBasketCount(snapshot.docs.length);
       });
+  };
+
+  const getUid = async () => {
+    const uid = await axios.get("/api/users/auth").then((res) => {
+      setUid(res.data.uid);
+      return res.data.uid;
+    });
+    getShoppingBasketCount(uid);
+  };
+
+  useEffect(() => {
+    getUid();
   }, []);
 
   const handleVisible = (event) => {

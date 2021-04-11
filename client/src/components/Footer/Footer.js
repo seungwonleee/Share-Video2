@@ -15,12 +15,6 @@ const FooterSection = styled.footer`
   a {
     color: #d5d5d5;
   }
-  @media only screen and (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 `;
 
 const LogoSection = styled.h2`
@@ -30,7 +24,7 @@ const LogoSection = styled.h2`
   p {
     font-size: ${(props) => props.theme.fontSizes.titleSize};
   }
-  @media only screen and (max-width: 576px) {
+  @media only screen and (max-width: 600px) {
     p {
       font-size: ${(props) => props.theme.fontSizes.xxxlarge};
     }
@@ -54,11 +48,6 @@ const CopyrightSection = styled.div`
   span {
     font-size: ${(props) => props.theme.fontSizes.small};
   }
-  @media only screen and (max-width: 768px) {
-    p {
-      text-align: center;
-    }
-  }
 `;
 
 // Copyright Component
@@ -76,11 +65,19 @@ const Copyright = () => {
 
 const Footer = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:576px)",
+    query: "(min-width:600px)",
   });
   return (
     <FooterSection>
-      <div style={{ padding: "30px 0 50px 0" }}>
+      <div
+        style={{
+          padding: "30px 0 50px 0",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         {breakPoint ? (
           <>
             <LogoSection>
@@ -92,6 +89,9 @@ const Footer = () => {
                 Email: seungwon.code@gmail.com
               </a>
             </EmailSection>
+            <CopyrightSection>
+              <Copyright />
+            </CopyrightSection>
           </>
         ) : (
           <>
@@ -100,18 +100,16 @@ const Footer = () => {
               <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
-              <br />
-              <p>Contact</p>
-              <br />
+              <p style={{ margin: "1rem" }}>Contact</p>
               <a href="mailto:seungwon.code@gmail.com">
                 seungwon.code@gmail.com
               </a>
             </EmailSection>
+            <CopyrightSection>
+              <Copyright />
+            </CopyrightSection>
           </>
         )}
-        <CopyrightSection>
-          <Copyright />
-        </CopyrightSection>
       </div>
     </FooterSection>
   );

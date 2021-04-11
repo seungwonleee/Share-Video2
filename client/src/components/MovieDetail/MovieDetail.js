@@ -52,24 +52,29 @@ const MovieDetail = (props) => {
     setActorToggle(!ActorToggle);
   };
 
-  useEffect(() => {
-    // 영화 상세 정보 호출 API
-    let endpointMovieInfo = `${API_URL}movie/${movieId}?api_key=${API_KEY}&language=ko-KR`;
-
-    // 영화 관계자 정보 호출 API
-    let endpointCast = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}&language=ko-KR`;
-
+  const getMovieDetailInfo = async (endpointMovieInfo) => {
     // 영화 상세 정보
-    axios.get(endpointMovieInfo).then((response) => {
+    await axios.get(endpointMovieInfo).then((response) => {
       // console.log("MovieInfo ====>", response.data);
       setMovie(response.data);
     });
+  };
 
+  const getMovieCastInfo = async (endpointCast) => {
     // 영화 관계자 정보
-    axios.get(endpointCast).then((response) => {
+    await axios.get(endpointCast).then((response) => {
       // console.log("Cast ====>", response.data.cast);
       setCasts(response.data.cast);
     });
+  };
+
+  useEffect(() => {
+    // 영화 상세 정보 호출 API
+    let endpointMovieInfo = `${API_URL}movie/${movieId}?api_key=${API_KEY}&language=ko-KR`;
+    // 영화 관계자 정보 호출 API
+    let endpointCast = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}&language=ko-KR`;
+    getMovieDetailInfo(endpointMovieInfo);
+    getMovieCastInfo(endpointCast);
   }, []);
 
   return (

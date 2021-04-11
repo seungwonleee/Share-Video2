@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "320px",
   },
+  center: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 }));
 
 // styled-components
@@ -84,7 +89,7 @@ const GridCards = ({
   };
 
   // 장바구니에 추가 (fireStore에 저장)
-  const addShoppingbasket = async (e) => {
+  const addShoppingbasket = async () => {
     try {
       await dbService
         .collection(uid)
@@ -107,13 +112,13 @@ const GridCards = ({
       alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
     }
   };
-
+  //TODO 결제페이지로 넘어가기
   const buyItem = () => {};
 
   if (landingPage) {
     return (
       // 인기 영화 목록 Grid Cards (LandingPage)
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
         <Card className={classes.root}>
           <a href={`/movie/${movieId}`}>
             <CardMedia>
@@ -160,7 +165,7 @@ const GridCards = ({
   } else if (castList) {
     return (
       // 출연진 목록 Grid Cards (MovieDetialPage)
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
         <Card className={classes.root}>
           <CardMedia>
             <Image src={image ? image : noImage} />
@@ -191,7 +196,7 @@ const GridCards = ({
     );
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
         <Card className={classes.root}>
           <CardMedia>
             <video

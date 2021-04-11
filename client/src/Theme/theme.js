@@ -60,6 +60,11 @@ const deviceSizes = {
   tablet: "768px",
   desktop: "992px",
   largeDesktop: "1200px",
+  //material ui 기준 break-point
+  // value         |0px     600px    960px    1280px   1920px
+  // key           |xs      sm       md       lg       xl
+  // screen width  |--------|--------|--------|--------|-------->
+  // range         |   xs   |   sm   |   md   |   lg   |   xl
 };
 
 const theme = {

@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Routes from "./Routes/Routes";
-import { authService } from "./fire_module/fireMain";
-import { useSelector, useDispatch } from "react-redux";
-import { loginState, setUid } from "./features/auth/authSlice";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./Theme/theme";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
@@ -27,22 +24,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => {
-  // const dispatch = useDispatch();
-
-  // // 로그인 Auth 변경 감지
-  // useEffect(() => {
-  //   authService.onAuthStateChanged((user) => {
-  //     // console.log("Auth 변경 감지 ===> ", user);
-  //     if (user) {
-  //       dispatch(loginState(true));
-  //       dispatch(setUid(user.uid));
-  //     } else {
-  //       dispatch(loginState(false));
-  //       dispatch(setUid(user));
-  //     }
-  //   });
-  // }, []);
-
   return (
     <div>
       {/* 전역 스타일 지정해주는 컴포넌트 */}

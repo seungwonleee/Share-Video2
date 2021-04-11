@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
-//Material UI Components
+import axios from "axios";
+//Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
 import DeleteIcon from "@material-ui/icons/Delete";
-import axios from "axios";
 
 const RemoveButton = styled(Button)`
   span {
@@ -52,30 +52,35 @@ const LikePage = () => {
   const [like, setLike] = useState([]);
   const [uid, setUid] = useState("");
 
-  useEffect(async () => {
+  const getLikeList = async (uid) => {
+    dbService
+      .collection(uid)
+      .doc("like")
+      .collection(uid)
+      .onSnapshot((snapshot) => {
+        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+        const likeListData = snapshot.docs.map((doc, index) => {
+          // console.log(doc.data());
+          return {
+            ...doc.data(),
+            id: Number(doc.data().movieId),
+          };
+        });
+        // console.log("좋아요 목록 ===> ", ...likeListData);
+        setLike([...likeListData]);
+      });
+  };
+
+  const getUid = async () => {
     const uid = await axios.get("/api/users/auth").then((res) => {
       setUid(res.data.uid);
       return res.data.uid;
     });
+    getLikeList(uid);
+  };
 
-    if (uid) {
-      dbService
-        .collection(uid)
-        .doc("like")
-        .collection(uid)
-        .onSnapshot((snapshot) => {
-          // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-          const likeListData = snapshot.docs.map((doc, index) => {
-            // console.log(doc.data());
-            return {
-              ...doc.data(),
-              id: Number(doc.data().movieId),
-            };
-          });
-          // console.log("좋아요 목록 ===> ", ...likeListData);
-          setLike([...likeListData]);
-        });
-    }
+  useEffect(() => {
+    getUid();
   }, []);
 
   const handleLikeListRemove = async () => {

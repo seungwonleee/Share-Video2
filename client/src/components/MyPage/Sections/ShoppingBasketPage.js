@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
-//Material UI Components
+//Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
@@ -51,31 +51,36 @@ const ShoppingBasketPage = () => {
   const [uid, setUid] = useState("");
   const [refDownloadUrl, setRefDownloadUrl] = useState("");
 
-  useEffect(async () => {
+  const shoppingBasketList = async (uid) => {
+    dbService
+      .collection(uid)
+      .doc("shoppingBasket")
+      .collection(uid)
+      .onSnapshot((snapshot) => {
+        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+        const myShoppingBasket = snapshot.docs.map((doc, index) => {
+          // console.log(doc.data());
+          setRefDownloadUrl(doc.data().downloadURL);
+          return {
+            ...doc.data(),
+            id: doc.data().title,
+          };
+        });
+        // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
+        setShoppingBasket([...myShoppingBasket]);
+      });
+  };
+
+  const getUid = async () => {
     const uid = await axios.get("/api/users/auth").then((res) => {
       setUid(res.data.uid);
       return res.data.uid;
     });
+    shoppingBasketList(uid);
+  };
 
-    if (uid) {
-      dbService
-        .collection(uid)
-        .doc("shoppingBasket")
-        .collection(uid)
-        .onSnapshot((snapshot) => {
-          // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-          const myShoppingBasket = snapshot.docs.map((doc, index) => {
-            // console.log(doc.data());
-            setRefDownloadUrl(doc.data().downloadURL);
-            return {
-              ...doc.data(),
-              id: doc.data().title,
-            };
-          });
-          // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
-          setShoppingBasket([...myShoppingBasket]);
-        });
-    }
+  useEffect(() => {
+    getUid();
   }, []);
 
   const handleShoppingBasketListRemove = async () => {

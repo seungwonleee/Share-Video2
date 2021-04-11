@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import TheatersIcon from "@material-ui/icons/Theaters";
 import styled from "styled-components";
 import "./MenuFont.css";
+//Material UI Imports
+import TheatersIcon from "@material-ui/icons/Theaters";
 
 // styled-components
 const StyledLink = styled(Link)`

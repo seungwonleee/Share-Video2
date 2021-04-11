@@ -127,6 +127,8 @@ const FindAccountPage = () => {
           case "auth/invalid-email":
             alert("잘못된 형식의 이메일 주소입니다.");
             break;
+          default:
+            break;
         }
       });
   };
