@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
+import Button from "@material-ui/core/Button";
 
 // Material UI CSS
 const useStyles = makeStyles((theme) => ({
@@ -49,19 +50,20 @@ const GridCards = ({
   castName,
   character,
   //individualWork 관련 props
-  cost,
-  createdAt,
-  creatorUid,
-  description,
-  downloadURL,
-  email,
-  genre,
   title,
+  description,
+  genre,
+  cost,
+  creatorUid,
+  email,
+  createdAt,
+  downloadURL,
 }) => {
   const classes = useStyles();
   const uid = useSelector((state) => state.auth.uid);
+  const [showMessage, setShowMessage] = useState("");
 
-  //사용자 식별 uid 와 좋아요 누른 목록 DB에 저장
+  //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
   const handleLikeItem = () => {
     dbService.collection(uid).doc("like").collection(uid).doc(movieId).set({
       movieId,
@@ -72,6 +74,41 @@ const GridCards = ({
       createdAt: Date.now(),
     });
   };
+
+  //장바구니에 상품을 담으면 보여주는 메시지
+  const showAddMessage = () => {
+    setShowMessage("장바구니에 상품을 담았습니다.");
+    setTimeout(() => {
+      setShowMessage("");
+    }, 1000);
+  };
+
+  // 장바구니에 추가 (fireStore에 저장)
+  const addShoppingbasket = async (e) => {
+    try {
+      await dbService
+        .collection(uid)
+        .doc("shoppingBasket")
+        .collection(uid)
+        .doc(title)
+        .set({
+          title,
+          description,
+          genre,
+          cost,
+          creatorUid,
+          email,
+          createdAt,
+          downloadURL,
+        });
+      showAddMessage();
+    } catch (error) {
+      console.log(error);
+      alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
+    }
+  };
+
+  const buyItem = () => {};
 
   if (landingPage) {
     return (
@@ -190,6 +227,30 @@ const GridCards = ({
                 : `${uploadTimeMinutes} 분 전`}
             </Typography>
           </CardContent>
+          <div style={{ textAlign: "center" }}>
+            {showMessage ? (
+              <p>{showMessage}</p>
+            ) : (
+              <p style={{ textIndent: "-1000px" }}>showMessage</p>
+            )}
+          </div>
+          <div style={{ textAlign: "center", margin: "1rem" }}>
+            <Button
+              variant="contained"
+              style={{ margin: "0.5rem" }}
+              onClick={addShoppingbasket}
+            >
+              장바구니
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ margin: "0.5rem" }}
+              onClick={buyItem}
+            >
+              구매하기
+            </Button>
+          </div>
         </Card>
       </Grid>
     );

@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
       fontSizes: "3rem",
     },
   },
-  removeButton: {
+  Button: {
     margin: theme.spacing(1),
-    background: "#435ce8",
-    color: "#FFFFFF",
-    "&:hover": {
-      background: "#4051B5",
-    },
+    // background: "#435ce8",
+    // color: "#FFFFFF",
+    // "&:hover": {
+    //   background: "#4051B5",
+    // },
   },
 }));
 
@@ -123,7 +123,7 @@ const MyIndividualWorkPage = () => {
 
       <RemoveButton
         variant="contained"
-        className={classes.removeButton}
+        className={classes.Button}
         startIcon={<DeleteIcon />}
         onClick={handleLikeListRemove}
         size="large"

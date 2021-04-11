@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-//Material UI Components
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { dbService } from "../../fire_module/fireMain";
+import axios from "axios";
 //Import MyPage Navigation
 import LikePage from "./Sections/LikePage";
 import ShoppingBasketPage from "./Sections/ShoppingBasketPage";
 import PurchaseHistoryPage from "./Sections/PurchaseHistoryPage";
 import MyIndividualWorkPage from "./Sections/MyIndividualWorkPage";
+// Material UI Imports
+import { withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -10,
+    top: 2,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}))(Badge);
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +45,7 @@ const NavButton = styled(Button)`
 `;
 
 const MyPage = () => {
+  const [uid, setUid] = useState("");
   const [title, setTitle] = useState("좋아요 목록");
   const [visible, setVisible] = useState({
     likeVisible: true,
@@ -39,6 +53,22 @@ const MyPage = () => {
     purchaseHistoryVisible: false,
     myIndividualWorkVisible: false,
   });
+  const [shoppingBasketCount, setShoppingBasketCount] = useState(0);
+  useEffect(async () => {
+    const uid = await axios.get("/api/users/auth").then((res) => {
+      setUid(res.data.uid);
+      return res.data.uid;
+    });
+
+    dbService
+      .collection(uid)
+      .doc("shoppingBasket")
+      .collection(uid)
+      .onSnapshot((snapshot) => {
+        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+        setShoppingBasketCount(snapshot.docs.length);
+      });
+  }, []);
 
   const handleVisible = (event) => {
     // 새로고침시 likeVisible state 값이 true 이기때문에 좋아요 목록으로 고정된다.
@@ -79,6 +109,9 @@ const MyPage = () => {
         });
         setTitle("내 작품");
         break;
+      //default를 작성하지 않아도 되지만 eslint로인해 생기는 노란줄 표시를 지우고자 작성함
+      default:
+        break;
     }
   };
 
@@ -96,7 +129,13 @@ const MyPage = () => {
             <span>좋아요 목록</span>
           </NavButton>
           <NavButton name="shoppingBasket" onClick={handleVisible}>
-            <span>장바구니</span>
+            {shoppingBasketCount ? (
+              <StyledBadge badgeContent={shoppingBasketCount} color="secondary">
+                <span>장바구니</span>
+              </StyledBadge>
+            ) : (
+              <span>장바구니</span>
+            )}
           </NavButton>
           <NavButton name="purchaseHistory" onClick={handleVisible}>
             <span>구매내역</span>
