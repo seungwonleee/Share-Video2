@@ -15,6 +15,13 @@ import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import Button from "@material-ui/core/Button";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+
+// styled-components
+const Image = styled.img`
+  width: 100%;
+  height: 320px;
+`;
 
 // Material UI CSS
 const useStyles = makeStyles((theme) => ({
@@ -35,12 +42,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
 }));
-
-// styled-components
-const Image = styled.img`
-  width: 100%;
-  height: 320px;
-`;
 
 const GridCards = ({
   // movie, movieDetail 관련 props
@@ -64,8 +65,11 @@ const GridCards = ({
   createdAt,
   downloadURL,
 }) => {
+  // Materail Ui 디자인에 사용
   const classes = useStyles();
+
   const uid = useSelector((state) => state.auth.uid);
+
   const [showMessage, setShowMessage] = useState("");
 
   //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
@@ -112,8 +116,6 @@ const GridCards = ({
       alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
     }
   };
-  //TODO 결제페이지로 넘어가기
-  const buyItem = () => {};
 
   if (landingPage) {
     return (
@@ -206,30 +208,34 @@ const GridCards = ({
           </CardMedia>
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              제목: {title}
+              <span style={{ fontSize: "1.4rem" }}>제목: {title}</span>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              설명: {description}
+              <span style={{ fontSize: "1.4rem" }}>설명: {description}</span>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              장르: {genre}
+              <span style={{ fontSize: "1.4rem" }}>장르: {genre}</span>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              가격: {cost === 0 ? "무료" : cost}
+              <span style={{ fontSize: "1.4rem" }}>
+                가격: {cost === 0 ? "무료" : cost}
+              </span>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              제작자: {email}
+              <span style={{ fontSize: "1.4rem" }}>제작자: {email}</span>
               <input type="hidden" value={creatorUid} />
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              업로드일:{" "}
-              {uploadTimeMinutes > 60
-                ? `${
-                    uploadTimeHour > 24
-                      ? `${uploadTimeDay} 일 전`
-                      : `${uploadTimeHour} 시간 전`
-                  }`
-                : `${uploadTimeMinutes} 분 전`}
+              <span style={{ fontSize: "1.4rem" }}>
+                업로드일:{" "}
+                {uploadTimeMinutes > 60
+                  ? `${
+                      uploadTimeHour > 24
+                        ? `${uploadTimeDay ? uploadTimeDay : 1} 일 전`
+                        : `${uploadTimeHour} 시간 전`
+                    }`
+                  : `${uploadTimeMinutes} 분 전`}
+              </span>
             </Typography>
           </CardContent>
           <div style={{ textAlign: "center" }}>
@@ -245,15 +251,26 @@ const GridCards = ({
               style={{ margin: "0.5rem" }}
               onClick={addShoppingbasket}
             >
-              장바구니
+              <span style={{ fontSize: "1.4rem" }}>장바구니</span>
             </Button>
             <Button
               variant="contained"
               color="secondary"
               style={{ margin: "0.5rem" }}
-              onClick={buyItem}
             >
-              구매하기
+              <a
+                href={downloadURL}
+                style={{
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <PlayCircleOutlineIcon />
+                <p style={{ paddingLeft: "0.5rem", fontSize: "1.4rem" }}>
+                  예고편
+                </p>
+              </a>
             </Button>
           </div>
         </Card>

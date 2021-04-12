@@ -19,6 +19,8 @@ import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import IndividualWorkPage from "../components/IndividualWorkPage/IndividualWorkPage";
 import VideoUploadPage from "../components/VideoUploadPage/VideoUploadPage";
+import PaymentPage from "../components/PaymentPage/PaymentPage";
+import CompletePaymentPage from "../components/PaymentPage/CompletePaymentPage";
 //movie imports
 import MovieDetail from "../components/MovieDetail/MovieDetail";
 
@@ -35,7 +37,7 @@ const Routes = () => {
   const { pathname } = useLocation();
   // console.log(pathname);
   return (
-    <Suspense>
+    <>
       {pathname !== "/login" && pathname !== "/register" && <NavBar />}
       <MainSection>
         <Switch>
@@ -59,6 +61,12 @@ const Routes = () => {
             path="/individualwork"
             component={Auth(IndividualWorkPage)}
           />
+          <Route exact path="/payment" component={Auth(PaymentPage, true)} />
+          <Route
+            exact
+            path="/completepayment"
+            component={Auth(CompletePaymentPage, true)}
+          />
           {/* movie 관련 Route */}
           <Route exact path="/movie/:movieId" component={MovieDetail} />
           {/* 설정하지 않은 URL 입력시 NoMatchPage로 이동 */}
@@ -66,7 +74,7 @@ const Routes = () => {
         </Switch>
       </MainSection>
       {pathname !== "/login" && pathname !== "/register" && <Footer />}
-    </Suspense>
+    </>
   );
 };
 

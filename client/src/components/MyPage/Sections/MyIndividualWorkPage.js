@@ -16,7 +16,7 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "title", headerName: "작품 제목", width: 100 },
+  { field: "title", headerName: "작품 제목", width: 130 },
   { field: "description", headerName: "설명", width: 130 },
   { field: "genre", headerName: "장르", width: 100 },
   { field: "cost", headerName: "가격", width: 100 },
@@ -24,18 +24,8 @@ const columns = [
 ];
 
 const useStyles = makeStyles((theme) => ({
-  tableFont: {
-    "& .MuiDataGrid-root .MuiDataGrid-mainGridContainer": {
-      fontSizes: "3rem",
-    },
-  },
   Button: {
     margin: theme.spacing(1),
-    // background: "#435ce8",
-    // color: "#FFFFFF",
-    // "&:hover": {
-    //   background: "#4051B5",
-    // },
   },
 }));
 
@@ -43,6 +33,7 @@ const MyIndividualWorkPage = () => {
   const breakPoint = useMediaQuery({
     query: "(min-width:768px)",
   });
+  // Materail Ui 디자인에 사용
   const classes = useStyles();
 
   const [selection, setSelection] = useState([]);
@@ -71,11 +62,10 @@ const MyIndividualWorkPage = () => {
   };
 
   const getUid = async () => {
-    const uid = await axios.get("/api/users/auth").then((res) => {
+    await axios.get("/api/users/auth").then((res) => {
       setUid(res.data.uid);
-      return res.data.uid;
+      getMyIndividualWorkList(res.data.uid);
     });
-    getMyIndividualWorkList(uid);
   };
 
   useEffect(() => {
@@ -105,7 +95,7 @@ const MyIndividualWorkPage = () => {
   return (
     <>
       {breakPoint ? (
-        <div style={{ height: "400px", minWidth: "600px" }}>
+        <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
             rows={myVideo}
             columns={columns}

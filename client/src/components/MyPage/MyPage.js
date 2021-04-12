@@ -67,11 +67,10 @@ const MyPage = () => {
   };
 
   const getUid = async () => {
-    const uid = await axios.get("/api/users/auth").then((res) => {
+    await axios.get("/api/users/auth").then((res) => {
       setUid(res.data.uid);
-      return res.data.uid;
+      getShoppingBasketCount(res.data.uid);
     });
-    getShoppingBasketCount(uid);
   };
 
   useEffect(() => {

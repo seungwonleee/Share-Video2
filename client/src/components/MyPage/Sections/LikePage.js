@@ -16,7 +16,7 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "id", headerName: "영화 코드", width: 100 },
+  { field: "id", headerName: "영화 코드", width: 130 },
   { field: "movieNameEnglish", headerName: "오리지널 제목", width: 130 },
   { field: "movieNameKorean", headerName: "한국어 제목", width: 130 },
   {
@@ -27,18 +27,8 @@ const columns = [
 ];
 
 const useStyles = makeStyles((theme) => ({
-  tableFont: {
-    "& .MuiDataGrid-root .MuiDataGrid-mainGridContainer": {
-      fontSizes: "3rem",
-    },
-  },
   Button: {
     margin: theme.spacing(1),
-    // background: "#435ce8",
-    // color: "#FFFFFF",
-    // "&:hover": {
-    //   background: "#4051B5",
-    // },
   },
 }));
 
@@ -46,6 +36,7 @@ const LikePage = () => {
   const breakPoint = useMediaQuery({
     query: "(min-width:768px)",
   });
+  // Materail Ui 디자인에 사용
   const classes = useStyles();
 
   const [selection, setSelection] = useState([]);
@@ -72,11 +63,10 @@ const LikePage = () => {
   };
 
   const getUid = async () => {
-    const uid = await axios.get("/api/users/auth").then((res) => {
+    await axios.get("/api/users/auth").then((res) => {
       setUid(res.data.uid);
-      return res.data.uid;
+      getLikeList(res.data.uid);
     });
-    getLikeList(uid);
   };
 
   useEffect(() => {
@@ -105,7 +95,7 @@ const LikePage = () => {
   return (
     <>
       {breakPoint ? (
-        <div style={{ height: "400px", minWidth: "600px" }}>
+        <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
             rows={like}
             columns={columns}
