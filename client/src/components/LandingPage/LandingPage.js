@@ -11,6 +11,7 @@ import {
 } from "../Config";
 import GridCards from "../commons/GridCards";
 import Item from "./Sections/CarouselMainImage";
+import DialogMessage from "../commons/DialogMessage";
 //Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -142,6 +143,8 @@ const LandingPage = () => {
           Load More
         </Button>
       </LoadMoreButton>
+      {/* 좋아요(like), Clipboard 버튼 클릭시 dialog 메시지 호출 */}
+      <DialogMessage />
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { dbService } from "../../fire_module/fireMain";
+import DialogMessage from "../commons/DialogMessage";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -86,6 +87,8 @@ const IndividualWorkPage = () => {
             ))}
         </Grid>
       </div>
+      {/* 장바구니 버튼 클릭시 dialog 메시지 호출 */}
+      <DialogMessage />
     </div>
   );
 };

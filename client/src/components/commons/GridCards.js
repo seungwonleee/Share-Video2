@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 import { useSelector } from "react-redux";
 import { dbService } from "../../fire_module/fireMain";
+import { useHistory } from "react-router-dom";
+import { YOUTUBE_API_URL, YOUTUBE_API_KEY } from "../Config";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { dialogState } from "../../features/dialog/dialogSlice";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -21,6 +26,10 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 const Image = styled.img`
   width: 100%;
   height: 320px;
+`;
+
+const Text = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.base};
 `;
 
 // Material UI CSS
@@ -68,56 +77,73 @@ const GridCards = ({
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
+  let history = useHistory();
+  const dispatch = useDispatch();
+
   const uid = useSelector((state) => state.auth.uid);
 
-  const [showMessage, setShowMessage] = useState("");
-
-  //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
-  const handleLikeItem = () => {
-    dbService.collection(uid).doc("like").collection(uid).doc(movieId).set({
-      movieId,
-      image,
-      movieNameKorean,
-      movieNameEnglish,
-      voteAverage,
-      createdAt: Date.now(),
-    });
-  };
-
-  //장바구니에 상품을 담으면 보여주는 메시지
-  const showAddMessage = () => {
-    setShowMessage("장바구니에 상품을 담았습니다.");
-    setTimeout(() => {
-      setShowMessage("");
-    }, 1000);
-  };
-
-  // 장바구니에 추가 (fireStore에 저장)
-  const addShoppingbasket = async () => {
-    try {
+  if (landingPage) {
+    //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
+    const addLikeItem = async () => {
+      //로그인 하지 않은 사용자는 장바구니 기능x
+      if (!uid) {
+        alert("로그인 후 사용 가능합니다.");
+        history.push("/login");
+        return;
+      }
       await dbService
         .collection(uid)
-        .doc("shoppingBasket")
+        .doc("like")
         .collection(uid)
-        .doc(title)
+        .doc(movieId)
         .set({
-          title,
-          description,
-          genre,
-          cost,
-          creatorUid,
-          email,
-          createdAt,
-          downloadURL,
+          movieId,
+          image,
+          movieNameKorean,
+          movieNameEnglish,
+          voteAverage,
+          createdAt: Date.now(),
         });
-      showAddMessage();
-    } catch (error) {
-      console.log(error);
-      alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
-    }
-  };
 
-  if (landingPage) {
+      // 좋아요 (like) 목록에 추가 dialog 안내 후 Dialog 제거
+      dispatch(
+        dialogState({
+          dialogState: true,
+          message: "좋아요 목록에 추가했습니다.",
+        })
+      );
+      setTimeout(() => {
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
+      }, 1300);
+    };
+
+    // clipboard 복사 및 클립보드 복사 안내 후 Dialog 제거
+    const copyMovieTitle = (event) => {
+      const { name } = event.currentTarget;
+      const movieTitle = name;
+      navigator.clipboard.writeText(movieTitle);
+
+      dispatch(
+        dialogState({
+          dialogState: true,
+          message: "제목을 클립보드에 복사했습니다.",
+        })
+      );
+      setTimeout(() => {
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
+      }, 1300);
+    };
+
     return (
       // 인기 영화 목록 Grid Cards (LandingPage)
       <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
@@ -129,7 +155,8 @@ const GridCards = ({
           </a>
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              {movieNameKorean} <br /> ({movieNameEnglish})
+              <Text>{movieNameKorean}</Text> <br />{" "}
+              <Text>({movieNameEnglish})</Text>
             </Typography>
           </CardContent>
           <CardActions
@@ -140,13 +167,26 @@ const GridCards = ({
             }}
           >
             <div>
-              <IconButton
-                aria-label="add to favorites"
-                onClick={handleLikeItem}
-              >
+              {/* 좋아요 목록 추가 버튼  */}
+              <IconButton aria-label="add to favorites" onClick={addLikeItem}>
                 <FavoriteIcon />
               </IconButton>
-              <IconButton aria-label="share">
+              {/* 영화 예고편 youtube list 로 이동 버튼  * Youtube API 호출 가능 횟수가 적어서 대체 */}
+              <a
+                href={`https://www.youtube.com/results?search_query=${movieNameKorean} 공식 예고편`}
+                target="_blank"
+              >
+                <IconButton aria-label="share">
+                  <PlayCircleOutlineIcon />
+                </IconButton>
+              </a>
+              {/* clipboard 제목 복사 버튼 */}
+              <IconButton
+                aria-label="share"
+                className="share"
+                name={movieNameKorean}
+                onClick={copyMovieTitle}
+              >
                 <ShareIcon />
               </IconButton>
             </div>
@@ -157,7 +197,7 @@ const GridCards = ({
                 component="p"
                 style={{ paddingRight: "1rem" }}
               >
-                평점: {voteAverage}
+                <Text>평점: {voteAverage}</Text>
               </Typography>
             </div>
           </CardActions>
@@ -174,10 +214,10 @@ const GridCards = ({
           </CardMedia>
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              등장인물: {character}
+              <Text>등장인물: {character}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              본명: {castName}
+              <Text>본명: {castName}</Text>
             </Typography>
           </CardContent>
         </Card>
@@ -196,6 +236,56 @@ const GridCards = ({
     const uploadTimeDay = Math.floor(
       ((Date.now() - createdAt) * 0.1) / 60 / 60 / 60 / 60
     );
+
+    // 장바구니에 상품을 담으면 Dialog 안내 후 Dialog 제거
+    const showAddMessage = () => {
+      dispatch(
+        dialogState({
+          dialogState: true,
+          message: "장바구니에 상품을 담았습니다.",
+        })
+      );
+      setTimeout(() => {
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
+      }, 1300);
+    };
+
+    // 장바구니에 추가 (fireStore에 저장)
+    const addShoppingbasket = async () => {
+      //로그인 하지 않은 사용자는 장바구니 기능x
+      if (!uid) {
+        alert("로그인 후 사용 가능합니다.");
+        history.push("/login");
+        return;
+      }
+      try {
+        await dbService
+          .collection(uid)
+          .doc("shoppingBasket")
+          .collection(uid)
+          .doc(title)
+          .set({
+            title,
+            description,
+            genre,
+            cost,
+            creatorUid,
+            email,
+            createdAt,
+            downloadURL,
+          });
+        //dialog 메세지
+        showAddMessage();
+      } catch (error) {
+        console.log(error);
+        alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
+      }
+    };
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
       <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
@@ -208,25 +298,22 @@ const GridCards = ({
           </CardMedia>
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>제목: {title}</span>
+              <Text>제목: {title}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>설명: {description}</span>
+              <Text>설명: {description}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>장르: {genre}</span>
+              <Text>장르: {genre}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>
-                가격: {cost === 0 ? "무료" : cost}
-              </span>
+              <Text>가격: {cost === 0 ? "무료" : cost}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>제작자: {email}</span>
-              <input type="hidden" value={creatorUid} />
+              <Text>제작자: {email}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <span style={{ fontSize: "1.4rem" }}>
+              <Text>
                 업로드일:{" "}
                 {uploadTimeMinutes > 60
                   ? `${
@@ -235,23 +322,16 @@ const GridCards = ({
                         : `${uploadTimeHour} 시간 전`
                     }`
                   : `${uploadTimeMinutes} 분 전`}
-              </span>
+              </Text>
             </Typography>
           </CardContent>
-          <div style={{ textAlign: "center" }}>
-            {showMessage ? (
-              <p>{showMessage}</p>
-            ) : (
-              <p style={{ textIndent: "-1000px" }}>showMessage</p>
-            )}
-          </div>
           <div style={{ textAlign: "center", margin: "1rem" }}>
             <Button
               variant="contained"
               style={{ margin: "0.5rem" }}
               onClick={addShoppingbasket}
             >
-              <span style={{ fontSize: "1.4rem" }}>장바구니</span>
+              <Text>장바구니</Text>
             </Button>
             <Button
               variant="contained"
