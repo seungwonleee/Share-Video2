@@ -1,9 +1,10 @@
 import React from "react";
+import dotenv from "dotenv";
 import Routes from "./Routes/Routes";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./Theme/theme";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-
+dotenv.config();
 // styled-components
 const GlobalStyle = createGlobalStyle`
   * {

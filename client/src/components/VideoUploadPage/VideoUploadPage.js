@@ -9,11 +9,45 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 
+const Section = styled.section`
+  max-width: 700px;
+  margin: 2rem auto;
+  height: 80vh;
+`;
+
 const Title = styled.div`
   text-align: center;
   margin: 2rem;
   h1 {
     font-size: ${(props) => props.theme.fontSizes.titleSize};
+  }
+`;
+
+const DropzoneBox = styled.div`
+  width: 300px;
+  height: 240px;
+  border: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PreviewBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  div {
+    background: black;
+    width: 300px;
+    height: 240px;
+  }
+  video {
+    width: 300px;
+    height: 240px;
+  }
+  p {
+    font-size: ${(props) => props.theme.fontSizes.base};
   }
 `;
 
@@ -28,10 +62,22 @@ const VideoDescription = styled.div`
   input {
     height: 3rem;
     font-size: ${(props) => props.theme.fontSizes.base};
+    border: solid 1px lightgray;
+    &:focus {
+      transition: 0.5s;
+      outline: none;
+      border: solid 1px #a5292a;
+    }
   }
   textArea {
     height: 6rem;
     font-size: ${(props) => props.theme.fontSizes.base};
+    border: solid 1px lightgray;
+    &:focus {
+      transition: 0.5s;
+      outline: none;
+      border: solid 1px #a5292a;
+    }
   }
   div {
     display: flex;
@@ -41,6 +87,12 @@ const VideoDescription = styled.div`
   select {
     height: 3rem;
     font-size: ${(props) => props.theme.fontSizes.base};
+    border: solid 1px lightgray;
+    &:focus {
+      transition: 0.5s;
+      outline: none;
+      border: solid 1px #a5292a;
+    }
   }
   Button {
     margin-top: 2rem;
@@ -178,13 +230,7 @@ const VideoUploadPage = () => {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "700px",
-        margin: "2rem auto",
-        height: "80vh",
-      }}
-    >
+    <Section>
       <Title>
         <h1> 작품 판매, 공유하기</h1>
       </Title>
@@ -194,47 +240,20 @@ const VideoUploadPage = () => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
               {({ getRootProps, getInputProps }) => (
-                <div
-                  style={{
-                    width: "300px",
-                    height: "240px",
-                    border: "1px solid lightgray",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  {...getRootProps()}
-                >
+                <DropzoneBox {...getRootProps()}>
                   <input {...getInputProps()} />
                   <AddIcon style={{ fontSize: "3rem" }} />
-                </div>
+                </DropzoneBox>
               )}
             </Dropzone>
 
             {preview && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    background: "black",
-                    width: "300px",
-                    height: "240px",
-                  }}
-                >
-                  <video
-                    src={preview}
-                    style={{ width: "300px", height: "240px" }}
-                    controls
-                  ></video>
+              <PreviewBox>
+                <div>
+                  <video src={preview} controls></video>
                 </div>
                 <p>영상 미리보기</p>
-              </div>
+              </PreviewBox>
             )}
           </div>
         ) : (
@@ -249,48 +268,21 @@ const VideoUploadPage = () => {
             ) : (
               <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
                 {({ getRootProps, getInputProps }) => (
-                  <div
-                    style={{
-                      width: "300px",
-                      height: "240px",
-                      border: "1px solid lightgray",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    {...getRootProps()}
-                  >
+                  <DropzoneBox {...getRootProps()}>
                     <input {...getInputProps()} />
                     <AddIcon style={{ fontSize: "3rem" }} />
-                  </div>
+                  </DropzoneBox>
                 )}
               </Dropzone>
             )}
 
             {preview && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    background: "black",
-                    width: "300px",
-                    height: "240px",
-                  }}
-                >
-                  <video
-                    src={preview}
-                    style={{ width: "300px", height: "240px" }}
-                    controls
-                  ></video>
+              <PreviewBox>
+                <div>
+                  <video src={preview} controls></video>
                 </div>
                 <p>영상 미리보기</p>
-              </div>
+              </PreviewBox>
             )}
           </div>
         )}
@@ -330,7 +322,7 @@ const VideoUploadPage = () => {
           </Button>
         </VideoDescription>
       </form>
-    </div>
+    </Section>
   );
 };
 

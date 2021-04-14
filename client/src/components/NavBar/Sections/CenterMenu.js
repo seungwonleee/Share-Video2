@@ -25,7 +25,7 @@ const StyledLink = styled(Link)`
 const CenterMenu = () => {
   // 메뉴 목록
   const menuList = [
-    { route: "/about", name: "About" },
+    { route: "/searchplace", name: "극장 찾기" },
     { route: "/individualwork", name: "개인 작품" },
     { route: "/videoupload", name: "작품 공유하기" },
   ];

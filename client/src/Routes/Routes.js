@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,7 +9,7 @@ import styled from "styled-components";
 import Auth from "../hoc/auth";
 // 라우팅할 모든 페이지 imports
 import LandingPage from "../components/LandingPage/LandingPage";
-import AboutPage from "../components/AboutPage/AboutPage";
+import SearchPlacePage from "../components/SearchPlacePage/SearchPlacePage";
 import RegisterPage from "../components/RegisterPage/RegisterPage";
 import LoginPage from "../components/LoginPage/LoginPage";
 import MyPage from "../components/MyPage/MyPage";
@@ -42,7 +42,7 @@ const Routes = () => {
       <MainSection>
         <Switch>
           <Route exact path="/" component={Auth(LandingPage)} />
-          <Route exact path="/about" component={Auth(AboutPage)} />
+          <Route exact path="/searchplace" component={Auth(SearchPlacePage)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/mypage" component={Auth(MyPage, true)} />

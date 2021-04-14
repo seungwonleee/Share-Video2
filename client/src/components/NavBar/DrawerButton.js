@@ -73,7 +73,7 @@ const DrawerButton = () => {
   };
 
   const itemsList = [
-    { text: "About", onClick: () => history.push("/about") },
+    { text: "극장 찾기", onClick: () => history.push("/searchplace") },
     { text: "개인 작품", onClick: () => history.push("/individualwork") },
     { text: "작품 공유하기", onClick: () => history.push("/videoupload") },
   ];
