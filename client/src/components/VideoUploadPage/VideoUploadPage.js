@@ -165,11 +165,11 @@ const VideoUploadPage = () => {
       return alert("모든 항목을 입력해주세요.");
     }
 
-    //해당 계정으로 업로드한 영상의 수가 3개가 넘으면 못올리게 제어
+    //해당 계정으로 업로드한 영상의 수가 2개가 넘으면 못올리게 제어
     const count = await storageService.ref().child(uid).listAll();
     // console.log(count._delegate.items.length);
     if (count._delegate.items.length >= 3) {
-      return alert("영상은 최대 3개까지 공유할 수 있습니다.");
+      return alert("영상은 최대 2개까지 공유할 수 있습니다.");
     }
 
     //영상 업로드 (Firebase Sotrage 와 FireStore DB에 영상 정보 저장)

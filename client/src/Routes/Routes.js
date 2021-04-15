@@ -73,7 +73,9 @@ const Routes = () => {
           <Route path="*" component={NoMatchPage} />
         </Switch>
       </MainSection>
-      {pathname !== "/login" && pathname !== "/register" && <Footer />}
+      {pathname !== "/login" &&
+        pathname !== "/register" &&
+        pathname !== "/videoupload" && <Footer />}
     </>
   );
 };

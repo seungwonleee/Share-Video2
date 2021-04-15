@@ -4,6 +4,9 @@ import { useHistory } from "react-router-dom";
 import { dbService } from "../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { dialogState } from "../../features/dialog/dialogSlice";
+import DialogMessage from "../commons/DialogMessage";
 //Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -62,12 +65,12 @@ const PaymentPage = () => {
   });
   const classes = useStyles();
   let history = useHistory();
+  const dispatch = useDispatch();
 
   const [uid, setUid] = useState("");
   const [buyList, setBuyList] = useState([]);
   const [totalCost, setTotalCost] = useState([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  console.log("buy list ===>", buyList);
+  // console.log("buy list ===>", buyList);
 
   // 주문금액 총 합계
   const calculateTotalCost = (items) => {
@@ -174,13 +177,22 @@ const PaymentPage = () => {
     //결제 후 장바구니에서 삭제
     deleteShoppingList();
     //DB 작업동안 안내 Dialog 표시
-    setDialogOpen(true);
+    dispatch(
+      dialogState({
+        dialogState: true,
+        message: "결제 진행 중 입니다. 잠시만 기다려주세요.",
+      })
+    );
     setTimeout(() => {
-      //DB 완료 후 안내 Dialog 제거
-      setDialogOpen(false);
+      dispatch(
+        dialogState({
+          dialogState: false,
+          message: null,
+        })
+      );
       //결제 완료 페이지로 이동
       history.push("/completepayment");
-    }, 1700);
+    }, 1300);
   };
 
   return (
@@ -283,20 +295,8 @@ const PaymentPage = () => {
           <span>결제하기</span>
         </ControlButton>
       </Container>
-      {/* 결제 완료시 dialog */}
-      <Dialog
-        open={dialogOpen}
-        // onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"안내"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            결제 진행 중 입니다. 잠시만 기다려주세요.
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
+      {/* 결제 진행시 dialog */}
+      <DialogMessage />
     </>
   );
 };

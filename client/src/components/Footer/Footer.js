@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 
 // styled components
 const FooterSection = styled.footer`
-  min-height: 200px;
+  min-height: 20vh;
   width: 100%;
   background: #2b2d2e;
   color: #d5d5d5;

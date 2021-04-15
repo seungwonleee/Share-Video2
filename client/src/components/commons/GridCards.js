@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { dbService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
 import { YOUTUBE_API_URL, YOUTUBE_API_KEY } from "../Config";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { dialogState } from "../../features/dialog/dialogSlice";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
@@ -29,7 +28,7 @@ const Image = styled.img`
 `;
 
 const Text = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.base};
+  font-size: ${(props) => props.theme.fontSizes.xsmall};
 `;
 
 // Material UI CSS

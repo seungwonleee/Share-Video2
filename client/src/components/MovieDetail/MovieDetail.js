@@ -14,9 +14,11 @@ import GridCards from "../commons/GridCards";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 85%;
+  height: 80vh;
   margin: 1rem auto;
 `;
 
@@ -35,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
+  },
+  button: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
   },
 }));
 
@@ -93,7 +100,13 @@ const MovieDetail = (props) => {
         <br />
         {/* 출연진 확인하기 버튼 (토글) */}
         <CastToggleButton>
-          <button onClick={actorToggleView}>출연진 보기</button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            onClick={actorToggleView}
+          >
+            출연진 보기
+          </Button>
         </CastToggleButton>
 
         {/* 출연자 list Grid Cards */}

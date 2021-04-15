@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginState, setUid, setEmail } from "../features/auth/authSlice";
 
-export default (SpecificComponent, option) => {
+const auth = (SpecificComponent, option) => {
   //option 미입력    =>  아무나 출입이 가능한 페이지
   //true    =>  로그인한 유저만 출입이 가능한 페이지
   //false   =>  로그인한 유저는 출입 불가능한 페이지
@@ -39,3 +39,5 @@ export default (SpecificComponent, option) => {
   };
   return AuthenticationCheck;
 };
+
+export default auth;

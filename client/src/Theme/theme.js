@@ -3,6 +3,7 @@
 // * 10px ==> 1rem / 14px ==> 1.4rem
 
 const fontSizes = {
+  xsmall: "1.2rem",
   small: "1.4rem",
   base: "1.6rem",
   large: "1.8rem",

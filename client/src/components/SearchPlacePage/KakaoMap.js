@@ -1,12 +1,23 @@
 import React, { useEffect } from "react";
+import styled from "styled-components";
+
+const MapConTainer = styled.div`
+  width: 90%;
+  height: 80vh;
+  border: 1px soild black;
+`;
+
 // **** 중요 빼먹지 말고 작성하기 ****
 const { kakao } = window;
 
 const KakaoMap = ({ searchPlace }) => {
   useEffect(() => {
     const container = document.getElementById("map");
+    const KOREA_CAPITAL_LAT = 37.566536;
+    const KOREA_CAPITAL_LONG = 126.977966;
+
     const options = {
-      center: new kakao.maps.LatLng(37.566536, 126.977966),
+      center: new kakao.maps.LatLng(KOREA_CAPITAL_LAT, KOREA_CAPITAL_LONG),
       level: 7,
     };
     const map = new kakao.maps.Map(container, options);
@@ -50,14 +61,7 @@ const KakaoMap = ({ searchPlace }) => {
   }, [searchPlace]);
   return (
     <>
-      <div
-        id="map"
-        style={{
-          width: "90%",
-          height: "80vh",
-          border: "1px soild black",
-        }}
-      ></div>
+      <MapConTainer id="map"></MapConTainer>
     </>
   );
 };
