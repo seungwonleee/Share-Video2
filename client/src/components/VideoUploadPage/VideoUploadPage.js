@@ -55,14 +55,17 @@ const VideoDescription = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 2rem;
   label {
     margin-top: 2rem;
     font-size: ${(props) => props.theme.fontSizes.base};
+    margin: 0 2rem;
   }
   input {
     height: 3rem;
     font-size: ${(props) => props.theme.fontSizes.base};
     border: solid 1px lightgray;
+    margin: 0 2rem;
     &:focus {
       transition: 0.5s;
       outline: none;
@@ -73,6 +76,7 @@ const VideoDescription = styled.div`
     height: 6rem;
     font-size: ${(props) => props.theme.fontSizes.base};
     border: solid 1px lightgray;
+    margin: 0 2rem;
     &:focus {
       transition: 0.5s;
       outline: none;
@@ -88,6 +92,7 @@ const VideoDescription = styled.div`
     height: 3rem;
     font-size: ${(props) => props.theme.fontSizes.base};
     border: solid 1px lightgray;
+    margin: 0 2rem;
     &:focus {
       transition: 0.5s;
       outline: none;
@@ -95,7 +100,7 @@ const VideoDescription = styled.div`
     }
   }
   Button {
-    margin-top: 2rem;
+    margin: 3rem 2rem;
     span {
       font-size: ${(props) => props.theme.fontSizes.base};
     }
