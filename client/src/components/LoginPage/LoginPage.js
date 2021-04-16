@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { authService, firebaseInstance } from "../../fire_module/fireMain";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -115,6 +115,15 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberId, setRememberId] = useState(false);
+
+  useEffect(() => {
+    //이전에 로그인시 checkbox 아이디 저장을 눌럿으면 해당 계정 정보를 가져온다.
+    const emailId = localStorage.getItem("remember_id");
+    if (emailId) {
+      setEmail(emailId);
+    }
+  }, []);
 
   const handleInput = (event) => {
     switch (event.currentTarget.name) {
@@ -132,6 +141,7 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
+    //firebase auth 로그인
     await authService
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
@@ -151,6 +161,12 @@ const LoginPage = () => {
           })
           .catch((error) => console.log(error));
 
+        //아이디 저장 체크박스에 체크하고 로그인에 성공하면 아이디 저장(기억하기)
+        if (rememberId) {
+          localStorage.setItem("remember_id", email);
+        } else {
+          localStorage.removeItem("remember_id");
+        }
         // 홈으로 이동
         history.push("/");
       })
@@ -235,6 +251,12 @@ const LoginPage = () => {
     history.push("/");
   };
 
+  //아이디 저장(기억하기);
+  const handleRememberId = (event) => {
+    const { checked } = event.target;
+    setRememberId(checked);
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -289,6 +311,8 @@ const LoginPage = () => {
                 <Checkbox
                   value="remember"
                   color="default"
+                  defaultChecked={true}
+                  onChange={handleRememberId}
                   style={{ transform: "scale(1.5)", paddingLeft: "1.5rem" }}
                 />
               }
