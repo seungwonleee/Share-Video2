@@ -115,7 +115,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberId, setRememberId] = useState(false);
+  const [rememberId, setRememberId] = useState(true);
 
   useEffect(() => {
     //이전에 로그인시 checkbox 아이디 저장을 눌럿으면 해당 계정 정보를 가져온다.
