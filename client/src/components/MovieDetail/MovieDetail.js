@@ -18,7 +18,8 @@ import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 85%;
-  height: 80vh;
+  height: 100%;
+  min-height: 80vh;
   margin: 1rem auto;
 `;
 
