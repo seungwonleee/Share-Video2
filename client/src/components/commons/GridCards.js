@@ -35,6 +35,7 @@ const Text = styled.span`
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    width: "100%",
   },
   media: {
     // height: 250,
