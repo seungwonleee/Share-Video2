@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 //Material UI Imports
@@ -44,22 +43,22 @@ const LikePage = () => {
   const [uid, setUid] = useState("");
 
   const getLikeList = async (uid) => {
-    dbService
-      .collection(uid)
-      .doc("like")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        const likeListData = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          return {
-            ...doc.data(),
-            id: Number(doc.data().movieId),
-          };
-        });
-        // console.log("좋아요 목록 ===> ", ...likeListData);
-        setLike([...likeListData]);
-      });
+    // dbService
+    //   .collection(uid)
+    //   .doc("like")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     const likeListData = snapshot.docs.map((doc, index) => {
+    //       // console.log(doc.data());
+    //       return {
+    //         ...doc.data(),
+    //         id: Number(doc.data().movieId),
+    //       };
+    //     });
+    //     // console.log("좋아요 목록 ===> ", ...likeListData);
+    //     setLike([...likeListData]);
+    //   });
   };
 
   const getUid = async () => {
@@ -78,16 +77,16 @@ const LikePage = () => {
     if (ok) {
       // firestore DB delete
       await selection.map((movieId) => {
-        dbService
-          .collection(uid)
-          .doc("like")
-          .collection(uid)
-          .doc(movieId)
-          .delete()
-          .then(() => {
-            console.log("삭제 성공!");
-          })
-          .catch((error) => console.log("삭제 에러 ==> ", error));
+        // dbService
+        //   .collection(uid)
+        //   .doc("like")
+        //   .collection(uid)
+        //   .doc(movieId)
+        //   .delete()
+        //   .then(() => {
+        //     console.log("삭제 성공!");
+        //   })
+        //   .catch((error) => console.log("삭제 에러 ==> ", error));
       });
     }
   };

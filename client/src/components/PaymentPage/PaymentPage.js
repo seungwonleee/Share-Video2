@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { dbService } from "../../fire_module/fireMain";
+// import { dbService } from "../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -101,74 +101,74 @@ const PaymentPage = () => {
   };
 
   const shoppingBasketList = async (uid) => {
-    await dbService
-      .collection(uid)
-      .doc("shoppingBasket")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        const myShoppingBasket = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          return {
-            ...doc.data(),
-            id: doc.data().title,
-          };
-        });
-        // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
-        // setShoppingBasket([...myShoppingBasket]);
-        checkItem(myShoppingBasket);
-      });
+    // await dbService
+    //   .collection(uid)
+    //   .doc("shoppingBasket")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     const myShoppingBasket = snapshot.docs.map((doc, index) => {
+    //       // console.log(doc.data());
+    //       return {
+    //         ...doc.data(),
+    //         id: doc.data().title,
+    //       };
+    //     });
+    //     // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
+    //     // setShoppingBasket([...myShoppingBasket]);
+    //     checkItem(myShoppingBasket);
+    //   });
   };
 
   const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      shoppingBasketList(res.data.uid);
-      // return res.data.uid;
-    });
+    // await axios.get("/api/users/auth").then((res) => {
+    //   setUid(res.data.uid);
+    //   shoppingBasketList(res.data.uid);
+    //   // return res.data.uid;
+    // });
   };
 
   useEffect(() => {
-    getUid();
+    // getUid();
   }, []);
 
   //결제 후 결제내역 DB에 저장
   const saveBuyList = async () => {
     // firestore DB save
-    await buyList.map((item) => {
-      try {
-        dbService
-          .collection(uid)
-          .doc("buyList")
-          .collection(uid)
-          .doc(item.title)
-          .set(item);
-        // showAddMessage();
-      } catch (error) {
-        console.log(error);
-        alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
-      }
-    });
+    // await buyList.map((item) => {
+    //   try {
+    //     dbService
+    //       .collection(uid)
+    //       .doc("buyList")
+    //       .collection(uid)
+    //       .doc(item.title)
+    //       .set(item);
+    //     // showAddMessage();
+    //   } catch (error) {
+    //     console.log(error);
+    //     alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
+    //   }
+    // });
   };
 
   //결제 후 장바구니에서 삭제
   const deleteShoppingList = async () => {
     // firestore DB delete
-    await buyList.map((item) => {
-      dbService
-        .collection(uid)
-        .doc("shoppingBasket")
-        .collection(uid)
-        .doc(item.title)
-        .delete()
-        .then(() => {
-          console.log("삭제 성공!");
-        })
-        .catch((error) => {
-          console.log("삭제 에러 ==> ", error);
-          alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
-        });
-    });
+    // await buyList.map((item) => {
+    //   dbService
+    //     .collection(uid)
+    //     .doc("shoppingBasket")
+    //     .collection(uid)
+    //     .doc(item.title)
+    //     .delete()
+    //     .then(() => {
+    //       console.log("삭제 성공!");
+    //     })
+    //     .catch((error) => {
+    //       console.log("삭제 에러 ==> ", error);
+    //       alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
+    //     });
+    // });
   };
 
   const handlePayment = () => {

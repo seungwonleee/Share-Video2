@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { dbService } from "../../fire_module/fireMain";
+// import { dbService } from "../../fire_module/fireMain";
 import axios from "axios";
 //Import MyPage Navigation
 import LikePage from "./Sections/LikePage";
@@ -56,21 +56,21 @@ const MyPage = () => {
   const [shoppingBasketCount, setShoppingBasketCount] = useState(0);
 
   const getShoppingBasketCount = async (uid) => {
-    await dbService
-      .collection(uid)
-      .doc("shoppingBasket")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        setShoppingBasketCount(snapshot.docs.length);
-      });
+    // await dbService
+    //   .collection(uid)
+    //   .doc("shoppingBasket")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     setShoppingBasketCount(snapshot.docs.length);
+    //   });
   };
 
   const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      getShoppingBasketCount(res.data.uid);
-    });
+    // await axios.get("/api/users/auth").then((res) => {
+    //   setUid(res.data.uid);
+    //   getShoppingBasketCount(res.data.uid);
+    // });
   };
 
   useEffect(() => {

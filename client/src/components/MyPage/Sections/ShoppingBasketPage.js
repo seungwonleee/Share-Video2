@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { dbService } from "../../../fire_module/fireMain";
+// import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router-dom";
 //Material UI Imports
@@ -45,22 +45,22 @@ const ShoppingBasketPage = () => {
   const [uid, setUid] = useState("");
 
   const shoppingBasketList = async (uid) => {
-    dbService
-      .collection(uid)
-      .doc("shoppingBasket")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        const myShoppingBasket = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          return {
-            ...doc.data(),
-            id: doc.data().title,
-          };
-        });
-        // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
-        setShoppingBasket([...myShoppingBasket]);
-      });
+    // dbService
+    //   .collection(uid)
+    //   .doc("shoppingBasket")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     const myShoppingBasket = snapshot.docs.map((doc, index) => {
+    //       // console.log(doc.data());
+    //       return {
+    //         ...doc.data(),
+    //         id: doc.data().title,
+    //       };
+    //     });
+    //     // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
+    //     setShoppingBasket([...myShoppingBasket]);
+    //   });
   };
 
   const getUid = async () => {
@@ -84,21 +84,21 @@ const ShoppingBasketPage = () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
     if (ok) {
       // firestore DB delete
-      await selection.map((videoTitle) => {
-        dbService
-          .collection(uid)
-          .doc("shoppingBasket")
-          .collection(uid)
-          .doc(videoTitle)
-          .delete()
-          .then(() => {
-            console.log("삭제 성공!");
-          })
-          .catch((error) => {
-            console.log("삭제 에러 ==> ", error);
-            alert("삭제하는데 실패했습니다. 나중에 시도해 주세요.");
-          });
-      });
+      // await selection.map((videoTitle) => {
+      //   dbService
+      //     .collection(uid)
+      //     .doc("shoppingBasket")
+      //     .collection(uid)
+      //     .doc(videoTitle)
+      //     .delete()
+      //     .then(() => {
+      //       console.log("삭제 성공!");
+      //     })
+      //     .catch((error) => {
+      //       console.log("삭제 에러 ==> ", error);
+      //       alert("삭제하는데 실패했습니다. 나중에 시도해 주세요.");
+      //     });
+      // });
     }
   };
   return (

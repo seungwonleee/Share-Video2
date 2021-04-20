@@ -206,7 +206,7 @@ const RegisterPage = () => {
                   required
                   fullWidth
                   name="name"
-                  label="name"
+                  label="Name"
                   id="name"
                   value={name}
                   onChange={handleInput}
@@ -222,7 +222,7 @@ const RegisterPage = () => {
                   required
                   fullWidth
                   name="nickname"
-                  label="nickname"
+                  label="Nickname"
                   id="nickname"
                   value={nickname}
                   onChange={handleInput}

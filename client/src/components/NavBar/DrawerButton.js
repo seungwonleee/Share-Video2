@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { authService } from "../../fire_module/fireMain";
+// import { authService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loginState, setUid, setEmail } from "../../features/auth/authSlice";
@@ -43,7 +43,7 @@ const DrawerButton = () => {
   // 로그아웃하기
   let history = useHistory();
   const handleLogout = () => {
-    authService.signOut();
+    // authService.signOut();
     axios
       .get("/api/users/logout")
       .then((res) => {

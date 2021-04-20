@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
-import { dbService, storageService } from "../../fire_module/fireMain";
+// import { dbService, storageService } from "../../fire_module/fireMain";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -171,46 +171,46 @@ const VideoUploadPage = () => {
     }
 
     //해당 계정으로 업로드한 영상의 수가 2개가 넘으면 못올리게 제어
-    const count = await storageService.ref().child(uid).listAll();
+    // const count = await storageService.ref().child(uid).listAll();
     // console.log(count._delegate.items.length);
-    if (count._delegate.items.length >= 3) {
-      return alert("영상은 최대 2개까지 공유할 수 있습니다.");
-    }
+    // if (count._delegate.items.length >= 3) {
+    //   return alert("영상은 최대 2개까지 공유할 수 있습니다.");
+    // }
 
     //영상 업로드 (Firebase Sotrage 와 FireStore DB에 영상 정보 저장)
-    try {
-      const fileRef = storageService.ref().child(`${uid}/${title}`);
-      const response = await fileRef.putString(preview, "data_url");
-      // console.log("업로드 결과", response);
-      const downloadURL = await response.ref.getDownloadURL();
-      // console.log("다운로드용 URL", downloadURL);
-      if (downloadURL) {
-        //FireStore DB에 저장할 video 데이터
-        const video = {
-          creatorUid: uid,
-          email: email,
-          title: title,
-          description: description,
-          genre: genre,
-          cost: cost,
-          createdAt: Date.now(),
-          downloadURL: downloadURL,
-        };
-        // console.log("FireStore 저장 내역 ===> ", video);
+    // try {
+    //   const fileRef = storageService.ref().child(`${uid}/${title}`);
+    //   const response = await fileRef.putString(preview, "data_url");
+    //   // console.log("업로드 결과", response);
+    //   const downloadURL = await response.ref.getDownloadURL();
+    //   // console.log("다운로드용 URL", downloadURL);
+    //   if (downloadURL) {
+    //     //FireStore DB에 저장할 video 데이터
+    //     const video = {
+    //       creatorUid: uid,
+    //       email: email,
+    //       title: title,
+    //       description: description,
+    //       genre: genre,
+    //       cost: cost,
+    //       createdAt: Date.now(),
+    //       downloadURL: downloadURL,
+    //     };
+    //     // console.log("FireStore 저장 내역 ===> ", video);
 
-        await dbService
-          .collection(uid)
-          .doc("video")
-          .collection(uid)
-          .doc(title)
-          .set(video);
-      }
-      history.push("/individualwork");
-      alert("업로드를 완료했습니다.");
-    } catch (error) {
-      console.log(error);
-      return alert("영상을 올리는데 실패했습니다. 나중에 시도해주세요.");
-    }
+    //     await dbService
+    //       .collection(uid)
+    //       .doc("video")
+    //       .collection(uid)
+    //       .doc(title)
+    //       .set(video);
+    //   }
+    //   history.push("/individualwork");
+    //   alert("업로드를 완료했습니다.");
+    // } catch (error) {
+    //   console.log(error);
+    //   return alert("영상을 올리는데 실패했습니다. 나중에 시도해주세요.");
+    // }
   };
 
   const onDrop = (files) => {

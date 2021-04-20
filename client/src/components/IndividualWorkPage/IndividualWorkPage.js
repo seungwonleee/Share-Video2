@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { dbService } from "../../fire_module/fireMain";
+// import { dbService } from "../../fire_module/fireMain";
 import DialogMessage from "../commons/DialogMessage";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
@@ -62,39 +62,39 @@ const IndividualWorkPage = () => {
 
   //user별로 업로드한 영상을 불러와서 배열에 모두 담는다.
   const loadUserVideo = (userUidList) => {
-    const videoList = [];
-    userUidList.map((uid, index) => {
-      dbService
-        .collection(uid)
-        .doc("video")
-        .collection(uid)
-        .onSnapshot((snapshot) => {
-          snapshot.docs.map((doc, index) => {
-            videoList.push(doc.data());
-          });
-          setIndividualWorkVideo([...individualWorkVideoList, ...videoList]);
-        });
-    });
+    // const videoList = [];
+    // userUidList.map((uid, index) => {
+    //   dbService
+    //     .collection(uid)
+    //     .doc("video")
+    //     .collection(uid)
+    //     .onSnapshot((snapshot) => {
+    //       snapshot.docs.map((doc, index) => {
+    //         videoList.push(doc.data());
+    //       });
+    //       setIndividualWorkVideo([...individualWorkVideoList, ...videoList]);
+    //     });
+    // });
   };
 
   //user 리스트를 받아온다.
-  async function loadUserList() {
-    await axios
-      .get("/api/users/list")
-      .then((res) => {
-        const userList = [...res.data.userList];
-        // user들의 uid를 담은 배열
-        const userUidList = userList.map((user, index) => {
-          return user.uid;
-        });
-        console.log(userUidList);
-        loadUserVideo(userUidList);
-      })
-      .catch((error) => console.log(error));
-  }
+  // async function loadUserList() {
+  //   await axios
+  //     .get("/api/users/list")
+  //     .then((res) => {
+  //       const userList = [...res.data.userList];
+  //       // user들의 uid를 담은 배열
+  //       const userUidList = userList.map((user, index) => {
+  //         return user.uid;
+  //       });
+  //       console.log(userUidList);
+  //       loadUserVideo(userUidList);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }
 
   useEffect(() => {
-    loadUserList();
+    // loadUserList();
   }, []);
 
   // individualWorkVideoList 에서 개인작품 검색

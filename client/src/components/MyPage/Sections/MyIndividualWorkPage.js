@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { dbService, storageService } from "../../../fire_module/fireMain";
+// import { dbService, storageService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
@@ -42,29 +42,29 @@ const MyIndividualWorkPage = () => {
   const [refDownloadUrl, setRefDownloadUrl] = useState("");
 
   const getMyIndividualWorkList = async (uid) => {
-    dbService
-      .collection(uid)
-      .doc("video")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        const myIndividualWorkVideo = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          setRefDownloadUrl(doc.data().downloadURL);
-          return {
-            ...doc.data(),
-            id: doc.data().title,
-          };
-        });
-        // console.log("내 작품 목록 ===> ", ...myIndividualWorkVideo);
-        setMyVideo([...myIndividualWorkVideo]);
-      });
+    // dbService
+    //   .collection(uid)
+    //   .doc("video")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     const myIndividualWorkVideo = snapshot.docs.map((doc, index) => {
+    //       // console.log(doc.data());
+    //       setRefDownloadUrl(doc.data().downloadURL);
+    //       return {
+    //         ...doc.data(),
+    //         id: doc.data().title,
+    //       };
+    //     });
+    //     // console.log("내 작품 목록 ===> ", ...myIndividualWorkVideo);
+    //     setMyVideo([...myIndividualWorkVideo]);
+    //   });
   };
 
   const getUid = async () => {
     await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      getMyIndividualWorkList(res.data.uid);
+      // setUid(res.data.uid);
+      // getMyIndividualWorkList(res.data.uid);
     });
   };
 
@@ -76,20 +76,20 @@ const MyIndividualWorkPage = () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
     if (ok) {
       // firestore DB delete
-      await selection.map((videoTitle) => {
-        dbService
-          .collection(uid)
-          .doc("video")
-          .collection(uid)
-          .doc(videoTitle)
-          .delete()
-          .then(() => {
-            console.log("삭제 성공!");
-          })
-          .catch((error) => console.log("삭제 에러 ==> ", error));
-      });
-      //firebase Storage data delete
-      await storageService.refFromURL(refDownloadUrl).delete();
+      // await selection.map((videoTitle) => {
+      //   dbService
+      //     .collection(uid)
+      //     .doc("video")
+      //     .collection(uid)
+      //     .doc(videoTitle)
+      //     .delete()
+      //     .then(() => {
+      //       console.log("삭제 성공!");
+      //     })
+      //     .catch((error) => console.log("삭제 에러 ==> ", error));
+      // });
+      // //firebase Storage data delete
+      // await storageService.refFromURL(refDownloadUrl).delete();
     }
   };
   return (

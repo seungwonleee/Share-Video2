@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { dbService } from "../../../fire_module/fireMain";
+// import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 //Material UI Imports
@@ -40,29 +40,29 @@ const PurchaseHistoryPage = () => {
   const [uid, setUid] = useState("");
 
   const getLikeList = async (uid) => {
-    dbService
-      .collection(uid)
-      .doc("buyList")
-      .collection(uid)
-      .onSnapshot((snapshot) => {
-        // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-        const likeListData = snapshot.docs.map((doc, index) => {
-          // console.log(doc.data());
-          return {
-            ...doc.data(),
-            id: doc.data().title,
-          };
-        });
-        // console.log("좋아요 목록 ===> ", ...likeListData);
-        setLike([...likeListData]);
-      });
+    // dbService
+    //   .collection(uid)
+    //   .doc("buyList")
+    //   .collection(uid)
+    //   .onSnapshot((snapshot) => {
+    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
+    //     const likeListData = snapshot.docs.map((doc, index) => {
+    //       // console.log(doc.data());
+    //       return {
+    //         ...doc.data(),
+    //         id: doc.data().title,
+    //       };
+    //     });
+    //     // console.log("좋아요 목록 ===> ", ...likeListData);
+    //     setLike([...likeListData]);
+    //   });
   };
 
   const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      getLikeList(res.data.uid);
-    });
+    // await axios.get("/api/users/auth").then((res) => {
+    //   setUid(res.data.uid);
+    //   getLikeList(res.data.uid);
+    // });
   };
 
   useEffect(() => {
@@ -71,21 +71,21 @@ const PurchaseHistoryPage = () => {
 
   const handleLikeListRemove = async () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
-    if (ok) {
-      // firestore DB delete
-      await selection.map((videoTitle) => {
-        dbService
-          .collection(uid)
-          .doc("buyList")
-          .collection(uid)
-          .doc(videoTitle)
-          .delete()
-          .then(() => {
-            console.log("삭제 성공!");
-          })
-          .catch((error) => console.log("삭제 에러 ==> ", error));
-      });
-    }
+    // if (ok) {
+    //   // firestore DB delete
+    //   await selection.map((videoTitle) => {
+    //     dbService
+    //       .collection(uid)
+    //       .doc("buyList")
+    //       .collection(uid)
+    //       .doc(videoTitle)
+    //       .delete()
+    //       .then(() => {
+    //         console.log("삭제 성공!");
+    //       })
+    //       .catch((error) => console.log("삭제 에러 ==> ", error));
+    //   });
+    // }
   };
 
   return (

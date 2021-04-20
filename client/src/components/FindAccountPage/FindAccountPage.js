@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { authService } from "../../fire_module/fireMain";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 //Material UI 로그인 Form 관련 Imports
+import Avatar from "@material-ui/core/Avatar";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "#A5292A",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -74,115 +76,194 @@ const useStyles = makeStyles((theme) => ({
 const FindAccountPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
+
+  let history = useHistory();
+
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [resetPasswordState, setResetPasswordState] = useState(false);
+  const [responseUserData, setResponseUserData] = useState(null);
+  const [resetPassword, setResetPassword] = useState("");
 
   const handleInput = (event) => {
-    setEmail(event.currentTarget.value);
+    const { name, value } = event.currentTarget;
+    // setEmail(event.currentTarget.value);
+    console.log(name);
+    console.log(value);
+    switch (name) {
+      case "email":
+        setEmail(value);
+        break;
+      case "name":
+        setName(value);
+        break;
+      case "resetPassword":
+        setResetPassword(value);
+        break;
+      default:
+        break;
+    }
   };
 
+  //비밀번호 찾기(변경)
   const handleFindAccount = async (event) => {
     event.preventDefault();
 
-    await authService
-      .sendPasswordResetEmail(email)
-      .then(function () {
-        // Password reset email sent.
-        alert("해당 이메일로 비밀번호 관련 이메일을 보냈습니다.");
-      })
-      .catch(function (error) {
-        // Error occurred. Inspect error.code.
-        // 에러 코드에 따라 처리 필요
-        // 만약 에러코드 find2 와 함께 문의가 오면, 문제가 되는 해당 이메일의 도메인 주소를 확인하고 firebase 콘솔로가서 Authentication 메뉴 ==> Sign-in-method 탭 ==> 아래에 승인된 도메인 추가하기
-        // console.log(error);
-        // console.log(error.code);
-        switch (error.code) {
-          case "auth/user-not-found":
-            alert("가입된 계정이 아니거나 삭제되었을 수 있습니다.");
-            break;
-          case "auth/unauthorized-continue-uri":
-            alert(
-              "에러 코드와 함께 관리자에게 문의가 필요합니다. 에러코드: find2"
-            );
-            break;
-          case "auth/invalid-continue-uri":
-            alert(
-              "에러 코드와 함께 관리자에게 문의가 필요합니다. 에러코드: find3"
-            );
-            break;
-          case "auth/missing-ios-bundle-id":
-            alert(
-              "에러 코드와 함께 관리자에게 문의가 필요합니다. 에러코드: find4"
-            );
-            break;
-          case "auth/missing-continue-uri":
-            alert(
-              "에러 코드와 함께 관리자에게 문의가 필요합니다. 에러코드: find5"
-            );
-            break;
-          case "auth/missing-android-pkg-name":
-            alert(
-              "에러 코드와 함께 관리자에게 문의가 필요합니다. 에러코드: find6"
-            );
-            break;
-          case "auth/invalid-email":
-            alert("잘못된 형식의 이메일 주소입니다.");
-            break;
-          default:
-            break;
-        }
-      });
+    let body = {
+      email,
+      name,
+    };
+
+    await axios.post("/api/users/findaccount", body).then((response) => {
+      const userInfo = response.data.user;
+      console.log(userInfo);
+      if (response.data.findAccount) {
+        setResetPasswordState(true);
+        setResponseUserData(userInfo);
+      } else {
+        alert(response.data.message);
+      }
+    });
+  };
+
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
+
+    if (resetPassword.length < 6) {
+      return alert("비밀번호는 6자리 이상이어야 합니다.");
+    }
+
+    let body = {
+      ...responseUserData,
+      password: resetPassword,
+    };
+    //
+    await axios.post("/api/users/resetpassword", body).then((response) => {
+      if (response.data.resetPassword) {
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+        history.push("/login");
+      } else {
+        alert("비밀번호를 변경하는데 실패했습니다. 나중에 시도해 주세요.");
+      }
+    });
   };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Typography component="h1" variant="h5" className={classes.title}>
           Share-Video
         </Typography>
         <br />
         <Typography className={classes.text}>(계정 찾기)</Typography>
         <br />
-        <Typography className={classes.text}>
-          작성하신 이메일로 로그인 가능한 링크를 보내드립니다.
-        </Typography>
-        <form className={classes.form} onSubmit={handleFindAccount}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                variant="outlined"
-                required
+        {resetPasswordState ? (
+          <>
+            <Typography className={classes.text}>
+              새롭게 설정하실 비밀번호를 입력해주세요.
+            </Typography>
+            <form className={classes.form} onSubmit={handleResetPassword}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="resetPassword"
+                    label="Password"
+                    name="resetPassword"
+                    autoFocus
+                    value={resetPassword}
+                    onChange={handleInput}
+                    inputProps={{ className: classes.text }} // font size of input text
+                    InputLabelProps={{ className: classes.text }} // font size of input label
+                    className={classes.textField}
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={handleInput}
-                inputProps={{ className: classes.text }} // font size of input text
-                InputLabelProps={{ className: classes.text }} // font size of input label
-                className={classes.textField}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            <span className={classes.text}>계정 찾기</span>
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link to="/login" variant="body2" className={classes.text}>
-                이미 계정이 있으신가요? 로그인 하기
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                <span className={classes.text}>비밀번호 변경</span>
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link to="/login" variant="body2" className={classes.text}>
+                    비밀번호가 기억나셨나요? 로그인 하기
+                  </Link>
+                </Grid>
+              </Grid>
+            </form>
+          </>
+        ) : (
+          <>
+            <Typography className={classes.text}>
+              가입 시 이메일 주소와 이름을 작성해 주세요.
+            </Typography>
+            <form className={classes.form} onSubmit={handleFindAccount}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="email"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    onChange={handleInput}
+                    inputProps={{ className: classes.text }} // font size of input text
+                    InputLabelProps={{ className: classes.text }} // font size of input label
+                    className={classes.textField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    name="name"
+                    value={name}
+                    onChange={handleInput}
+                    inputProps={{ className: classes.text }} // font size of input text
+                    InputLabelProps={{ className: classes.text }} // font size of input label
+                    className={classes.textField}
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                <span className={classes.text}>계정 찾기</span>
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link to="/login" variant="body2" className={classes.text}>
+                    비밀번호가 기억나셨나요? 로그인 하기
+                  </Link>
+                </Grid>
+              </Grid>
+            </form>
+          </>
+        )}
       </div>
     </Container>
   );

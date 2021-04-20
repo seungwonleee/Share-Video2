@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { dbService } from "../../fire_module/fireMain";
+// import { dbService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
 import { YOUTUBE_API_URL, YOUTUBE_API_KEY } from "../Config";
 import axios from "axios";
@@ -86,24 +86,24 @@ const GridCards = ({
     //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
     const addLikeItem = async () => {
       //로그인 하지 않은 사용자는 장바구니 기능x
-      if (!uid) {
-        alert("로그인 후 사용 가능합니다.");
-        history.push("/login");
-        return;
-      }
-      await dbService
-        .collection(uid)
-        .doc("like")
-        .collection(uid)
-        .doc(movieId)
-        .set({
-          movieId,
-          image,
-          movieNameKorean,
-          movieNameEnglish,
-          voteAverage,
-          createdAt: Date.now(),
-        });
+      // if (!uid) {
+      //   alert("로그인 후 사용 가능합니다.");
+      //   history.push("/login");
+      //   return;
+      // }
+      // await dbService
+      //   .collection(uid)
+      //   .doc("like")
+      //   .collection(uid)
+      //   .doc(movieId)
+      //   .set({
+      //     movieId,
+      //     image,
+      //     movieNameKorean,
+      //     movieNameEnglish,
+      //     voteAverage,
+      //     createdAt: Date.now(),
+      //   });
 
       // 좋아요 (like) 목록에 추가 dialog 안내 후 Dialog 제거
       dispatch(
@@ -258,33 +258,33 @@ const GridCards = ({
     // 장바구니에 추가 (fireStore에 저장)
     const addShoppingbasket = async () => {
       //로그인 하지 않은 사용자는 장바구니 기능x
-      if (!uid) {
-        alert("로그인 후 사용 가능합니다.");
-        history.push("/login");
-        return;
-      }
-      try {
-        await dbService
-          .collection(uid)
-          .doc("shoppingBasket")
-          .collection(uid)
-          .doc(title)
-          .set({
-            title,
-            description,
-            genre,
-            cost,
-            creatorUid,
-            email,
-            createdAt,
-            downloadURL,
-          });
-        //dialog 메세지
-        showAddMessage();
-      } catch (error) {
-        console.log(error);
-        alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
-      }
+      // if (!uid) {
+      //   alert("로그인 후 사용 가능합니다.");
+      //   history.push("/login");
+      //   return;
+      // }
+      // try {
+      //   await dbService
+      //     .collection(uid)
+      //     .doc("shoppingBasket")
+      //     .collection(uid)
+      //     .doc(title)
+      //     .set({
+      //       title,
+      //       description,
+      //       genre,
+      //       cost,
+      //       creatorUid,
+      //       email,
+      //       createdAt,
+      //       downloadURL,
+      //     });
+      //   //dialog 메세지
+      //   showAddMessage();
+      // } catch (error) {
+      //   console.log(error);
+      //   alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
+      // }
     };
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
