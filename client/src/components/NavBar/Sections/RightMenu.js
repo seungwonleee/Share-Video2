@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { loginState, setUid, setEmail } from "../../../features/auth/authSlice";
-import { authService } from "../../../fire_module/fireMain";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./MenuFont.css";
@@ -30,11 +29,9 @@ const RightMenu = () => {
 
   // 로그아웃하기
   const handleLogout = () => {
-    authService.signOut();
     axios
       .get("/api/users/logout")
       .then((res) => {
-        console.log(res.data.removeCookie);
         if (res.data.removeCookie) {
           history.push("/");
           // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화

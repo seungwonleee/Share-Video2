@@ -22,14 +22,14 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("MongoDB Connected..."))
-  .catch((err) => console.log(err));
+  .catch((error) => console.log(error));
 
 app.post("/api/users/register", (req, res) => {
-  //회원가입시 입력한 email과 firebase로부터 받은 uid를 DB에 저장한다.
+  //회원가입시 입력한 email과 password 등의 회원정보를 DB에 저장한다.
   const user = new User(req.body);
 
-  user.save((err, userInfo) => {
-    if (err) return res.json({ success: false, err });
+  user.save((error, userInfo) => {
+    if (error) return res.json({ success: false, error });
     return res.status(200).json({
       success: true,
     });
@@ -37,27 +37,33 @@ app.post("/api/users/register", (req, res) => {
 });
 
 app.post("/api/users/login", (req, res) => {
-  // console.log(req.body.uid);
-  //사용자 uid를 DB에서 검색
-  User.findOne({ uid: req.body.uid }, (err, user) => {
-    // console.log('user', user)
-    //해당 uid 유저가 없으면
+  // 입력받은 이메일을 DB에서 찾는다.
+  User.findOne({ email: req.body.email }, (error, user) => {
     if (!user) {
       return res.json({
         loginSuccess: false,
-        message: "제공된 uid에 해당하는 사용자가 없습니다.",
+        message: "가입되어 있지 않은 계정입니다.",
       });
     }
+    //요청된 이메일이 데이터 베이스에 있다면 비밀번호가 맞는지 확인한다.
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch)
+        return res.json({
+          loginSuccess: false,
+          message: "비밀번호가 틀렸습니다.",
+        });
 
-    //uid가 있다면 토큰 생성
-    user.generateToken((err, user) => {
-      if (err) return res.status(400).send(err);
+      //비밀번호 까지 맞다면 토큰을 생성하기.
+      user.generateToken((err, user) => {
+        if (err) return res.status(400).send(err);
 
-      // cookie에 토큰을 저장한다.
-      res
-        .cookie("x_auth", user.token)
-        .status(200)
-        .json({ loginSuccess: true, userId: user._id, userUid: user.uid });
+        // 토큰을 쿠키에 저장한다.
+        res.cookie("x_auth", user.token).status(200).json({
+          loginSuccess: true,
+          userId: user._id,
+          userNickname: user.nickname,
+        });
+      });
     });
   });
 });
@@ -74,9 +80,9 @@ app.get("/api/users/auth", auth, (req, res) => {
 });
 
 app.get("/api/users/logout", auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
-    if (err) {
-      return res.json({ logout: false, removeCookie: false, err });
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (error, user) => {
+    if (error) {
+      return res.json({ logout: false, removeCookie: false, error });
     }
     // 저장된 Cookie 삭제
     res
@@ -88,8 +94,8 @@ app.get("/api/users/logout", auth, (req, res) => {
 
 app.get("/api/users/list", async (req, res) => {
   //등록된 사용자 목록 전체
-  const userList = await User.find((err, docs) => {
-    if (err) return res.json({ loadUser: "fail" });
+  const userList = await User.find((error, docs) => {
+    if (error) return res.json({ loadUser: "fail" });
   });
   res.status(200).json({ loadUser: "success", userList });
 });

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { authService, firebaseInstance } from "../../fire_module/fireMain";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginState, setUid } from "../../features/auth/authSlice";
@@ -140,116 +139,98 @@ const LoginPage = () => {
   //이메일 주소 로그인
   const handleLogin = async (event) => {
     event.preventDefault();
-
-    //firebase auth 로그인
-    await authService
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        let body = {
-          uid: user.user.uid,
-        };
-        //로그인 user token 생성 및 cookie에 저장
-        axios
-          .post("/api/users/login", body)
-          .then((response) => {
-            // console.log(response.data);
-            if (response.data.loginSuccess) {
-              alert("로그인 성공! 환영합니다.");
-            }
-            dispatch(loginState(response.data.loginSuccess));
-            dispatch(setUid(response.data.userUid));
-          })
-          .catch((error) => console.log(error));
-
-        //아이디 저장 체크박스에 체크하고 로그인에 성공하면 아이디 저장(기억하기)
-        if (rememberId) {
-          localStorage.setItem("remember_id", email);
-        } else {
-          localStorage.removeItem("remember_id");
-        }
-        // 홈으로 이동
-        history.push("/");
-      })
-      .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // firebase auth 오류 처리
-        switch (errorCode) {
-          case "auth/invalid-email":
-            alert("유효하지 않은 이메일 입니다.");
-            break;
-          case "auth/user-disabled":
-            alert("사용이 불가능한 계정 입니다.");
-            break;
-          case "auth/user-not-found":
-            alert("없는 사용자 입니다.");
-            break;
-          case "auth/wrong-password":
-            alert("비밀번호를 다시 확인해주세요.");
-            break;
-        }
-      });
-  };
-
-  //Social 로그인 (Google, Github)
-  const onSocialClick = async (event) => {
-    const { name } = event.currentTarget;
-
-    let provider;
-
-    switch (name) {
-      case "google":
-        provider = new firebaseInstance.auth.GoogleAuthProvider();
-        break;
-      case "github":
-        provider = new firebaseInstance.auth.GithubAuthProvider();
-        break;
+    if (password.length < 6) {
+      return alert("비밀번호를 6자리 이상 입력해주세요.");
     }
 
-    const data = await authService.signInWithPopup(provider);
-
     let body = {
-      uid: data.user.uid,
-      email: data.additionalUserInfo.profile.email,
+      email,
+      password,
     };
-
-    //회원가입시 uid mongoDB에 저장
+    //로그인 user token 생성 및 cookie에 저장
     axios
-      .post("/api/users/register", body)
+      .post("/api/users/login", body)
       .then((response) => {
-        if (response.data.success) {
-          // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
-          axios
-            .post("/api/users/login", body)
-            .then((response) => {
-              if (response.data.loginSuccess) {
-                alert("회원가입을 축하합니다. 환영합니다.");
-              }
-              dispatch(loginState(response.data.loginSuccess));
-              dispatch(setUid(response.data.userUid));
-            })
-            .catch((error) => console.log(error));
+        console.log(response.data);
+        if (response.data.loginSuccess) {
+          alert(`${response.data.userNickname}님 환영합니다.`);
+          dispatch(loginState(response.data.loginSuccess));
+          dispatch(setUid(response.data.userUid));
+          // 홈으로 이동
+          history.push("/");
         } else {
-          //이미 DB에 회원 정보가 있는 경우 바로 로그인
-          axios
-            .post("/api/users/login", body)
-            .then((response) => {
-              if (response.data.loginSuccess) {
-                alert("로그인 성공! 환영합니다.");
-              }
-              dispatch(loginState(response.data.loginSuccess));
-              dispatch(setUid(response.data.userUid));
-            })
-            .catch((error) => console.log(error));
+          alert(response.data.message);
         }
       })
       .catch((error) => console.log(error));
 
-    // LandingPage로 이동
-    history.push("/");
+    //아이디 저장 체크박스에 체크하고 로그인에 성공하면 아이디 저장(기억하기)
+    if (rememberId) {
+      localStorage.setItem("remember_id", email);
+    } else {
+      localStorage.removeItem("remember_id");
+    }
   };
+
+  //Social 로그인 (Google, Github)
+  // const onSocialClick = async (event) => {
+  //   const { name } = event.currentTarget;
+
+  //   let provider;
+
+  //   switch (name) {
+  //     case "google":
+  //       provider = new firebaseInstance.auth.GoogleAuthProvider();
+  //       break;
+  //     case "github":
+  //       provider = new firebaseInstance.auth.GithubAuthProvider();
+  //       break;
+  //   }
+
+  //   const data = await authService.signInWithPopup(provider);
+  //   // console.log(data.additionalUserInfo.providerId);
+  //   // console.log(data.user.email);
+  //   let body = {
+  //     email: data.user.email,
+  //     google: data.additionalUserInfo.providerId,
+  //     createdAt: Date.now(),
+  //   };
+
+  //   //회원가입시 uid mongoDB에 저장
+  //   axios
+  //     .post("/api/users/register", body)
+  //     .then((response) => {
+  //       if (response.data.success) {
+  //         // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
+  //         axios
+  //           .post("/api/users/login", body)
+  //           .then((response) => {
+  //             if (response.data.loginSuccess) {
+  //               alert("회원가입을 축하합니다. 환영합니다.");
+  //             }
+  //             dispatch(loginState(response.data.loginSuccess));
+  //             dispatch(setUid(response.data.userUid));
+  //           })
+  //           .catch((error) => console.log(error));
+  //       } else {
+  //         //이미 DB에 회원 정보가 있는 경우 바로 로그인
+  //         axios
+  //           .post("/api/users/login", body)
+  //           .then((response) => {
+  //             if (response.data.loginSuccess) {
+  //               alert("로그인 성공! 환영합니다.");
+  //             }
+  //             dispatch(loginState(response.data.loginSuccess));
+  //             dispatch(setUid(response.data.userUid));
+  //           })
+  //           .catch((error) => console.log(error));
+  //       }
+  //     })
+  //     .catch((error) => console.log(error));
+
+  //   // LandingPage로 이동
+  //   history.push("/");
+  // };
 
   //아이디 저장(기억하기);
   const handleRememberId = (event) => {
@@ -344,10 +325,10 @@ const LoginPage = () => {
           <br />
           <h4 className={classes.text}>Social Login</h4>
           <SocialLoginSection>
-            <GoogleLoginSection name="google" onClick={onSocialClick}>
+            <GoogleLoginSection name="google">
               <FontAwesomeIcon icon={faGoogle} size="2x" />
             </GoogleLoginSection>
-            <GithubLoginSection name="github" onClick={onSocialClick}>
+            <GithubLoginSection name="github">
               <FontAwesomeIcon icon={faGithub} size="2x" />
             </GithubLoginSection>
           </SocialLoginSection>

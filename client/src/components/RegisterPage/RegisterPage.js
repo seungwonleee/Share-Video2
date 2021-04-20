@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { authService } from "../../fire_module/fireMain";
 import { useDispatch } from "react-redux";
-import { loginState, setUid } from "../../features/auth/authSlice";
 import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 //회원가입 Form Material UI Imports
@@ -84,10 +82,12 @@ const RegisterPage = () => {
   const classes = useStyles();
 
   let history = useHistory();
-  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [eventAgreement, setEventAgreement] = useState(true);
 
   const handleInput = (event) => {
     switch (event.currentTarget.name) {
@@ -97,69 +97,58 @@ const RegisterPage = () => {
       case "password":
         setPassword(event.currentTarget.value);
         break;
+      case "name":
+        setName(event.currentTarget.value);
+        break;
+      case "nickname":
+        setNickname(event.currentTarget.value);
+        break;
       default:
         break;
     }
   };
 
-  //회원가입하기 ( 회원가입에 성공하면 바로 로그인 된다. )
+  //아이디 저장(기억하기)
+  const handleEventAgreement = (event) => {
+    const { checked } = event.target;
+    setEventAgreement(checked);
+  };
+
+  //회원가입
   const handleCreateAccount = async (event) => {
     event.preventDefault();
+    if (password.length < 6) {
+      return alert("비밀번호를 6자리 이상 입력해주세요.");
+    }
 
-    await authService
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        // console.log("회원가입", user.user.uid);
+    let body = {
+      email,
+      password,
+      name,
+      nickname,
+      eventAgreement,
+      createdAt: Date.now(),
+      profile: null,
+    };
 
-        let body = {
-          uid: user.user.uid,
-          email,
-        };
-
-        //회원가입시 uid mongoDB에 저장
-        axios
-          .post("/api/users/register", body)
-          .then((response) => {
-            if (response.data.success) {
-              // 회원가입과 동시에 로그인 되기때문에 바로 login token 생성
-              axios
-                .post("/api/users/login", body)
-                .then((response) => {
-                  if (response.data.loginSuccess) {
-                    alert("회원가입을 축하합니다. 환영합니다.");
-                  }
-                  dispatch(loginState(response.data.loginSuccess));
-                  dispatch(setUid(response.data.userUid));
-                })
-                .catch((error) => console.log(error));
-            }
-          })
-          .catch((error) => console.log(error));
-
-        // LandingPage로 이동
-        history.push("/");
-      })
-      .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // firebase auth 오류 처리
-        switch (errorCode) {
-          case "auth/email-already-in-use":
-            alert("이미 사용중인 이메일 입니다.");
-            break;
-          case "auth/invalid-email":
-            alert("유효하지 않은 형태의 이메일 입니다.");
-            break;
-          case "auth/operation-not-allowed":
-            alert("관리자의 인증이 필요합니다.");
-            break;
-          case "auth/weak-password":
-            alert("비밀번호는 6자 이상 입력해야 합니다.");
-            break;
+    //DB에 저장
+    axios
+      .post("/api/users/register", body)
+      .then((response) => {
+        if (response.data.success) {
+          alert("회원가입에 성공했습니다.");
+          // LandingPage로 이동
+          history.push("/login");
+        } else {
+          if (response.data.error.keyPattern.email === 1) {
+            alert("이미 회원가입 되어있는 계정입니다.");
+          }
+          if (response.data.error.keyPattern.nickname === 1) {
+            alert("이미 사용중인 nickname 입니다.");
+          }
         }
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -186,7 +175,6 @@ const RegisterPage = () => {
                   id="email"
                   label="Email"
                   name="email"
-                  autoComplete="email"
                   autoFocus
                   value={email}
                   onChange={handleInput}
@@ -204,8 +192,39 @@ const RegisterPage = () => {
                   name="password"
                   label="Password"
                   id="password"
-                  autoComplete="current-password"
                   value={password}
+                  onChange={handleInput}
+                  inputProps={{ className: classes.text }} // font size of input text
+                  InputLabelProps={{ className: classes.text }} // font size of input label
+                  className={classes.textField}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="name"
+                  label="name"
+                  id="name"
+                  value={name}
+                  onChange={handleInput}
+                  inputProps={{ className: classes.text }} // font size of input text
+                  InputLabelProps={{ className: classes.text }} // font size of input label
+                  className={classes.textField}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="nickname"
+                  label="nickname"
+                  id="nickname"
+                  value={nickname}
                   onChange={handleInput}
                   inputProps={{ className: classes.text }} // font size of input text
                   InputLabelProps={{ className: classes.text }} // font size of input label
@@ -218,6 +237,8 @@ const RegisterPage = () => {
                     <Checkbox
                       value="allowExtraEmails"
                       color="default"
+                      defaultChecked={true}
+                      onChange={handleEventAgreement}
                       style={{ transform: "scale(1.5)", paddingLeft: "1.5rem" }}
                     />
                   }

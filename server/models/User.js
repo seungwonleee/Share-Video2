@@ -1,15 +1,38 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
-  uid: {
-    type: String,
-    maxlength: 80,
-    unique: 1,
-  },
   email: {
     type: String,
     unique: 1,
+  },
+  name: {
+    type: String,
+  },
+  nickname: {
+    type: String,
+    unique: 1,
+  },
+  password: {
+    type: String,
+    minlength: 6,
+  },
+  eventAgreement: {
+    type: Boolean,
+  },
+  createdAt: {
+    type: Number,
+  },
+  google: {
+    type: String,
+  },
+  github: {
+    type: String,
+  },
+  profile: {
+    type: String,
   },
   token: {
     type: String,
@@ -19,9 +42,34 @@ const userSchema = mongoose.Schema({
   },
 });
 
+userSchema.pre("save", function (next) {
+  var user = this;
+  if (user.isModified("password")) {
+    //사용자 비밀번호를 암호화 시킨다.
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) return next(err);
+
+      bcrypt.hash(user.password, salt, function (err, hash) {
+        if (err) return next(err);
+        user.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
+});
+
+userSchema.methods.comparePassword = function (plainPassword, cb) {
+  //일반 비밀번호 1234567    암호회된 비밀번호 $2b$10$l492vQ0M4s9YUBfwYkkaZOgWHExahjWC
+  bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+    if (err) return cb(err);
+    cb(null, isMatch);
+  });
+};
+
 userSchema.methods.generateToken = function (cb) {
   var user = this;
-
   // jsonwebtoken을 이용해서 token을 생성
   var token = jwt.sign(user._id.toHexString(), "secretToken");
 
