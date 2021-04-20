@@ -61,7 +61,7 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.methods.comparePassword = function (plainPassword, cb) {
-  //일반 비밀번호 1234567    암호회된 비밀번호 $2b$10$l492vQ0M4s9YUBfwYkkaZOgWHExahjWC
+  //일반 비밀번호 123456    bcrypt로 암호회된 비밀번호 $2b$10$l492vQ0M4s9YUBfwYkkaZOgWHExahjWC
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
@@ -90,6 +90,18 @@ userSchema.statics.findByToken = function (token, cb) {
     user.findOne({ _id: decoded, token: token }, function (err, user) {
       if (err) return cb(err);
       cb(null, user);
+    });
+  });
+};
+
+userSchema.methods.resetPassword = function (newPassword, cb) {
+  //새로 입력받은 비밀번호를 암호화 한다.
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    if (err) return cb(err);
+
+    bcrypt.hash(newPassword, salt, function (err, hash) {
+      if (err) return cb(err);
+      cb(null, hash);
     });
   });
 };

@@ -68,6 +68,72 @@ app.post("/api/users/login", (req, res) => {
   });
 });
 
+app.post("/api/users/findaccount", (req, res) => {
+  // 입력받은 이메일을 DB에서 찾는다.
+  // console.log(req.body);
+  User.findOne({ email: req.body.email }, (error, user) => {
+    if (!user) {
+      return res.json({
+        findAccount: false,
+        message: "가입되어 있지 않은 Email 입니다.",
+      });
+    }
+    // 이메일이 있다면 이름을 찾는다.
+    User.findOne({ name: req.body.name }, (error, user) => {
+      if (!user) {
+        return res.json({
+          findAccount: false,
+          message: "가입되어 있지 않은 이름 입니다.",
+        });
+      }
+      // 이메일과 닉네임이 일치한 경우
+      return res.json({
+        findAccount: true,
+        user: user,
+      });
+    });
+  });
+});
+
+app.post("/api/users/resetpassword", (req, res) => {
+  const newPassword = req.body.password;
+  // console.log("=====>", newPassword);
+  // 입력받은 이메일을 DB에서 찾는다.
+  User.findOne({ email: req.body.email }, (error, user) => {
+    if (!user) {
+      return res.json({
+        loginSuccess: false,
+        message: "가입되어 있지 않은 계정입니다.",
+      });
+    }
+    // 새로입력 된 비밀번호를 bcrypt로 암호화
+    user.resetPassword(newPassword, (err, reset) => {
+      if (err) {
+        return res.json({
+          reset: false,
+          message: "비밀번호 초기화 실패",
+        });
+      }
+      // 새로운 비밀번호 암호화에 성공하면 해당 계정 비밀번호 업데이트
+      User.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { password: reset } },
+        { new: true },
+        (err, doc) => {
+          if (error) {
+            res.json({
+              resetPassword: "false",
+            });
+          }
+        }
+      );
+    });
+  });
+  res.json({
+    resetPassword: true,
+  });
+});
+
 app.get("/api/users/auth", auth, (req, res) => {
   //auth 미들웨어가 true이면 아래 응답
   //auth 미들웨어가 false이면 auth 미들웨어에서 응답처리
