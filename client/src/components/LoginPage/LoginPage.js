@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginState, setUid } from "../../features/auth/authSlice";
+import {
+  loginState,
+  setId,
+  setEmail,
+  setNickname,
+} from "../../features/auth/authSlice";
 import axios from "axios";
 import styled, { css } from "styled-components";
 //Material UI 로그인 Form 관련 Imports
@@ -154,8 +159,6 @@ const LoginPage = () => {
         console.log(response.data);
         if (response.data.loginSuccess) {
           alert(`${response.data.userNickname}님 환영합니다.`);
-          dispatch(loginState(response.data.loginSuccess));
-          dispatch(setUid(response.data.userUid));
           // 홈으로 이동
           history.push("/");
         } else {

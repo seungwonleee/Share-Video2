@@ -2,7 +2,12 @@ import React, { useState } from "react";
 // import { authService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loginState, setUid, setEmail } from "../../features/auth/authSlice";
+import {
+  setLoginState,
+  setId,
+  setEmail,
+  setNickname,
+} from "../../features/auth/authSlice";
 import axios from "axios";
 // Drawer 관련 Material UI Imports
 import clsx from "clsx";
@@ -50,10 +55,11 @@ const DrawerButton = () => {
         console.log(res.data.removeCookie);
         if (res.data.removeCookie) {
           history.push("/");
-          // 로그아웃시 Redux의 사용자 로그인 상태와 식별 uid 초기화
-          dispatch(loginState(false));
-          dispatch(setUid(null));
+          // 로그아웃시 Redux의 사용자 로그인 상태와 식별 id 초기화
+          dispatch(setLoginState(false));
+          dispatch(setId(null));
           dispatch(setEmail(null));
+          dispatch(setNickname(null));
         }
       })
       .catch((error) => {
