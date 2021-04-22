@@ -4,24 +4,14 @@ import { useParams } from "react-router-dom";
 import IndividualWorkDetailInfo from "./Sections/IndividualWorkDetailInfo";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
+import SideVideo from "./Sections/SideVideo";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 
-const Video = styled.video`
-  /* width: 100%; */
-  /* height: 100%; */
-  /* max-width: 600px; */
-  /* max-height: 500px; */
-`;
-
-/////////////////////////////////////////
 const Container = styled.div`
-  width: 85%;
-  height: 100%;
   min-height: 80vh;
-  margin: 1rem auto;
+  height: 100%;
 `;
 
 // Material UI CSS
@@ -43,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const IndividualWorkDetailPage = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: "(min-width:1280px)",
   });
   //:videoId url을 가져온다.
   let { videoId } = useParams();
@@ -73,37 +63,57 @@ const IndividualWorkDetailPage = () => {
     event.preventDefault();
   };
   return (
-    <div>
+    <Container>
       {breakPoint ? (
         //데스크탑 버전
-        <>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Video
-              src={`http://localhost:5000/${video.filePath}`}
-              controls
-              controlsList="nodownload"
-              onContextMenu={hanldeDisabledRightClick}
-              style={{ minWidth: "768px", maxWidth: "1400px", width: "100%" }}
-            />
-          </div>
-          <Container
-            style={{
-              minWidth: "768px",
-              maxWidth: "1400px",
-              width: "85%",
-              margin: "1rem auto",
-            }}
-          >
-            {/* video Info (제목, 장르, 재생시간, 평점 출시일) */}
-            <IndividualWorkDetailInfo video={video} />
+        <Grid container spacing={2}>
+          <Grid item md={8} lg={8}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "2rem 1rem",
+                width: "100%",
+              }}
+            >
+              <video
+                src={`http://localhost:5000/${video.filePath}`}
+                controls
+                controlsList="nodownload"
+                onContextMenu={hanldeDisabledRightClick}
+                style={{
+                  width: "100%",
+                  minWidth: "768px",
+                  maxWidth: "1400px",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                minWidth: "768px",
+                maxWidth: "960px",
+                width: "85%",
+                margin: "1rem auto",
+                // height: "80vh",
+              }}
+            >
+              {/* video Info (제목, 장르, 재생시간, 평점 출시일) */}
+              <IndividualWorkDetailInfo video={video} />
 
-            {/* 후기 Comments 목록*/}
-          </Container>
-        </>
+              {/* 후기 Comments */}
+            </div>
+          </Grid>
+          <Grid item md={4} lg={4}>
+            {/* 사이드바 영상 추천 목록 */}
+            <div style={{ borderLeft: "1px solid #D3D3D3D3" }}>
+              <SideVideo />
+            </div>
+          </Grid>
+        </Grid>
       ) : (
         //모바일 버전
         <>
-          <Video
+          <video
             src={`http://localhost:5000/${video.filePath}`}
             controls
             controlsList="nodownload"
@@ -111,15 +121,15 @@ const IndividualWorkDetailPage = () => {
             style={{ width: "100%" }}
           />
 
-          <Container style={{ width: "85%", margin: "1rem auto" }}>
+          <div style={{ width: "85%", margin: "1rem auto" }}>
             {/* video Info (제목, 장르, 재생시간, 평점 출시일) */}
             <IndividualWorkDetailInfo video={video} />
 
-            {/* 후기 Comments 목록*/}
-          </Container>
+            {/* 후기 Comments */}
+          </div>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

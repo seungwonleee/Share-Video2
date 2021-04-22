@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import DialogMessage from "../commons/DialogMessage";
-import moment from "moment";
+import { useMediaQuery } from "react-responsive";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -24,8 +24,7 @@ const H1 = styled.h1`
 const SearchInputBox = styled.div`
   margin: 3rem;
   display: flex;
-  justify-content: flex-end;
-  margin: 1rem auto;
+  justify-content: center;
 `;
 
 const Input = styled.input`
@@ -54,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const IndividualWorkPage = () => {
+  const breakPoint = useMediaQuery({
+    query: "(min-width:768px)",
+  });
   // Material UI 디자인 사용
   const classes = useStyles();
 
@@ -68,7 +70,7 @@ const IndividualWorkPage = () => {
         console.log(response.data.videos);
         setVideos(response.data.videos);
       } else {
-        alert("Failed to get Videos");
+        alert("영상을 불러오는데 실패했습니다.");
       }
     });
   };
@@ -79,30 +81,48 @@ const IndividualWorkPage = () => {
 
   // individualWorkVideoList 에서 개인작품 검색
   const handleSearch = (event) => {
-    // const { value } = event.currentTarget;
-    // setSearchVideo(value);
-    // let pattern = value;
+    const { value } = event.currentTarget;
+    setSearchVideo(value);
+    let pattern = value;
     // //정규표현식 리터럴 객체 (모든 패턴을 찾는다.)
-    // let regexAll = new RegExp(pattern, "gim");
-    // const result = individualWorkVideoList.filter((video) => {
-    //   if (regexAll.test(video.title)) {
-    //     return video;
-    //   }
-    // });
-    // setSearchResult([...result]);
+    let regexAll = new RegExp(pattern, "gim");
+    const result = videos.filter((video) => {
+      if (regexAll.test(video.title)) {
+        return video;
+      }
+      if (regexAll.test(video.writer.nickname)) {
+        return video;
+      }
+    });
+    setSearchResult([...result]);
   };
 
   return (
     <Container>
       <H1>개인 작품</H1>
-      <SearchInputBox>
-        <Input
-          type="text"
-          placeholder="영상을 검색하세요."
-          value={searchVideo}
-          onChange={handleSearch}
-        />
-      </SearchInputBox>
+      {breakPoint ? (
+        // 데스크탑 버전
+        <SearchInputBox>
+          <Input
+            type="text"
+            placeholder="제목 또는 작가로 검색"
+            value={searchVideo}
+            onChange={handleSearch}
+            style={{ width: "100%", maxWidth: "768px" }}
+          />
+        </SearchInputBox>
+      ) : (
+        // 모바일 버전
+        <SearchInputBox>
+          <Input
+            type="text"
+            placeholder="제목 또는 작가로 검색"
+            value={searchVideo}
+            onChange={handleSearch}
+            style={{ width: "100%" }}
+          />
+        </SearchInputBox>
+      )}
       {/* 개인작품 목록 Grid Cards */}
       {searchResult.length >= 1 ? (
         <div className={classes.root}>
@@ -149,7 +169,6 @@ const IndividualWorkPage = () => {
           </Grid>
         </div>
       )}
-
       {/* 장바구니 버튼 클릭시 dialog 메시지 호출 */}
       <DialogMessage />
     </Container>

@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
+import { useHistory, Link } from "react-router-dom";
 import { dialogState } from "../../features/dialog/dialogSlice";
 import moment from "moment";
 import "moment/locale/ko";
@@ -18,8 +17,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
-import Button from "@material-ui/core/Button";
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 // styled-components
 const Image = styled.img`
@@ -149,7 +151,7 @@ const GridCards = ({
 
     return (
       // 인기 영화 목록 Grid Cards (LandingPage)
-      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.center}>
         <Card className={classes.root}>
           <a href={`/movie/${movieId}`}>
             <CardMedia>
@@ -210,7 +212,7 @@ const GridCards = ({
   } else if (castList) {
     return (
       // 출연진 목록 Grid Cards (MovieDetialPage)
-      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.center}>
         <Card className={classes.root}>
           <CardMedia>
             <Image src={image ? image : noImage} />
@@ -281,7 +283,7 @@ const GridCards = ({
     };
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
-      <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.center}>
         <Card className={classes.root}>
           <CardMedia>
             <div style={{ position: "relative" }}>
@@ -322,6 +324,9 @@ const GridCards = ({
               <Text>제작자: {writer}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
+              <Text>가격: {cost} 원</Text>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
               <Text>업로드: {moment({ createdAt }).format("LL")}</Text>
             </Typography>
             <Typography
@@ -330,34 +335,23 @@ const GridCards = ({
               component="p"
             ></Typography>
           </CardContent>
-          <div style={{ textAlign: "center", margin: "1rem" }}>
-            <Button
-              variant="contained"
-              style={{ margin: "0.5rem" }}
-              onClick={addShoppingbasket}
-            >
-              <Text>상세보기</Text>
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{ margin: "0.5rem" }}
-            >
-              <a
-                // href={downloadURL}
-                style={{
-                  color: "#FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <PlayCircleOutlineIcon />
-                <p style={{ paddingLeft: "0.5rem", fontSize: "1.4rem" }}>
-                  예고편
-                </p>
-              </a>
-            </Button>
-          </div>
+          <BottomNavigation showLabels>
+            <BottomNavigationAction
+              label="상세보기"
+              component={Link}
+              to={`/individualwork/${_id}`}
+              icon={<DescriptionIcon />}
+            />
+
+            <BottomNavigationAction
+              label="미리보기"
+              icon={<PlayCircleOutlineIcon />}
+            />
+            <BottomNavigationAction
+              label="장바구니"
+              icon={<ShoppingBasketIcon />}
+            />
+          </BottomNavigation>
         </Card>
       </Grid>
     );
