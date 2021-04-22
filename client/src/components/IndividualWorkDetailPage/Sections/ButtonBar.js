@@ -8,8 +8,9 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
 const ButtonBar = ({ userTo, userFrom, video }) => {
   //   console.log("=====>", video);
+  //   console.log("=====>", userFrom);
   const shoppingBasketData = {
-    writer: video._id,
+    writer: video.writer._id,
     userFrom,
     title: video.title,
     description: video.description,

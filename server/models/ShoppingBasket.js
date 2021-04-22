@@ -5,7 +5,7 @@ const shoppingBasketSchema = mongoose.Schema(
   {
     writer: {
       type: Schema.Types.ObjectId,
-      ref: "Video",
+      ref: "User",
     },
     userFrom: {
       type: String,

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
-import axios from "axios";
 
 const ControlButton = styled(Button)`
   span {
@@ -18,11 +18,12 @@ const ControlButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "title", headerName: "작품 제목", width: 130 },
-  { field: "description", headerName: "설명", width: 130 },
-  { field: "genre", headerName: "장르", width: 100 },
+  { field: "id", headerName: "No", width: 60 },
+  { field: "title", headerName: "작품 제목", width: 190 },
+  { field: "genre", headerName: "장르", width: 110 },
+  { field: "nickname", headerName: "제작자", width: 110 },
+  { field: "runningTime", headerName: "재생 시간", width: 130 },
   { field: "cost", headerName: "가격", width: 100 },
-  { field: "createdAt", headerName: "업로드 날짜", width: 130 },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -40,38 +41,48 @@ const ShoppingBasketPage = () => {
 
   let history = useHistory();
 
+  const loginUser = useSelector((state) => state.auth.userId);
+
   const [selection, setSelection] = useState([]);
-  const [myShoppingBasket, setShoppingBasket] = useState([]);
-  const [uid, setUid] = useState("");
+  const [myShoppingBasketList, setMyShoppingBasketList] = useState([]);
 
-  const shoppingBasketList = async (uid) => {
-    // dbService
-    //   .collection(uid)
-    //   .doc("shoppingBasket")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     const myShoppingBasket = snapshot.docs.map((doc, index) => {
-    //       // console.log(doc.data());
-    //       return {
-    //         ...doc.data(),
-    //         id: doc.data().title,
-    //       };
-    //     });
-    //     // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
-    //     setShoppingBasket([...myShoppingBasket]);
-    //   });
+  const userData = {
+    loginUser,
   };
+  // 장바구니 목록 불러오기
+  const loadShoppingBasketList = () => {
+    axios
+      .post("/api/shoppingBasket/getShoppingBasketList", userData)
+      .then((response) => {
+        if (response.data.success) {
+          const resultBasketList = response.data.shoppingbaskets.map(
+            (item, index) => {
+              const minutes = Math.floor(Number(item.duration) / 60);
+              const seconds = Math.floor(Number(item.duration) - minutes * 60);
+              const runningTime = {
+                runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+              };
 
-  const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      shoppingBasketList(res.data.uid);
-    });
+              return {
+                id: index,
+                ...runningTime,
+                ...item,
+                ...item.writer,
+              };
+            }
+          );
+          // console.log(resultBasketList);
+          setMyShoppingBasketList(resultBasketList);
+        } else {
+          alert(
+            "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."
+          );
+        }
+      });
   };
 
   useEffect(() => {
-    getUid();
+    loadShoppingBasketList();
   }, []);
 
   //결제 페이지로 넘어가기 (장바구니에서 선택한 목록 localstorage 저장)
@@ -106,7 +117,7 @@ const ShoppingBasketPage = () => {
       {breakPoint ? (
         <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
-            rows={myShoppingBasket}
+            rows={myShoppingBasketList}
             columns={columns}
             pageSize={5}
             checkboxSelection
@@ -116,7 +127,7 @@ const ShoppingBasketPage = () => {
       ) : (
         <div style={{ height: "400px", width: "100%" }}>
           <DataGrid
-            rows={myShoppingBasket}
+            rows={myShoppingBasketList}
             columns={columns}
             pageSize={5}
             checkboxSelection
