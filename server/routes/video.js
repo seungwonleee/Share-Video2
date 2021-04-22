@@ -39,6 +39,7 @@ router.post("/uploadfiles", (req, res) => {
   });
 });
 
+// 영상에대한 thumbnail 생성
 router.post("/thumbnail", (req, res) => {
   let thumbsFilePath = "";
   let fileDuration = "";
@@ -72,6 +73,7 @@ router.post("/thumbnail", (req, res) => {
     });
 });
 
+// 영상 전체 데이터 저장(작성자, 파일 경로, thumbnail 경로 등등)
 router.post("/uploadVideo", (req, res) => {
   const video = new Video(req.body);
 
@@ -81,6 +83,26 @@ router.post("/uploadVideo", (req, res) => {
       success: true,
     });
   });
+});
+
+// video collection 모두 호출
+router.get("/getVideos", (req, res) => {
+  Video.find()
+    .populate("writer")
+    .exec((err, videos) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, videos });
+    });
+});
+
+// 개인작품 영상 상세 정보 (individualWorkPage detail info)
+router.post("/getVideo", (req, res) => {
+  Video.findOne({ _id: req.body.videoId })
+    .populate("writer")
+    .exec((err, video) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, video });
+    });
 });
 
 module.exports = router;

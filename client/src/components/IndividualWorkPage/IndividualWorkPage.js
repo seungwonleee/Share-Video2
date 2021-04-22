@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-// import { dbService } from "../../fire_module/fireMain";
 import DialogMessage from "../commons/DialogMessage";
+import moment from "moment";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +11,8 @@ import GridCards from "../commons/GridCards";
 const Container = styled.div`
   margin: 1rem auto;
   width: 85%;
-  height: 100vh;
+  min-height: 80vh;
+  height: 100%;
 `;
 
 const H1 = styled.h1`
@@ -56,62 +57,39 @@ const IndividualWorkPage = () => {
   // Material UI 디자인 사용
   const classes = useStyles();
 
-  const [individualWorkVideoList, setIndividualWorkVideo] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [searchVideo, setSearchVideo] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
   //user별로 업로드한 영상을 불러와서 배열에 모두 담는다.
-  const loadUserVideo = (userUidList) => {
-    // const videoList = [];
-    // userUidList.map((uid, index) => {
-    //   dbService
-    //     .collection(uid)
-    //     .doc("video")
-    //     .collection(uid)
-    //     .onSnapshot((snapshot) => {
-    //       snapshot.docs.map((doc, index) => {
-    //         videoList.push(doc.data());
-    //       });
-    //       setIndividualWorkVideo([...individualWorkVideoList, ...videoList]);
-    //     });
-    // });
+  const getUserVideo = () => {
+    axios.get("/api/video/getVideos").then((response) => {
+      if (response.data.success) {
+        console.log(response.data.videos);
+        setVideos(response.data.videos);
+      } else {
+        alert("Failed to get Videos");
+      }
+    });
   };
 
-  //user 리스트를 받아온다.
-  // async function loadUserList() {
-  //   await axios
-  //     .get("/api/users/list")
-  //     .then((res) => {
-  //       const userList = [...res.data.userList];
-  //       // user들의 uid를 담은 배열
-  //       const userUidList = userList.map((user, index) => {
-  //         return user.uid;
-  //       });
-  //       console.log(userUidList);
-  //       loadUserVideo(userUidList);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }
-
   useEffect(() => {
-    // loadUserList();
+    getUserVideo();
   }, []);
 
   // individualWorkVideoList 에서 개인작품 검색
   const handleSearch = (event) => {
-    const { value } = event.currentTarget;
-    setSearchVideo(value);
-    let pattern = value;
-    //정규표현식 리터럴 객체 (모든 패턴을 찾는다.)
-    let regexAll = new RegExp(pattern, "gim");
-
-    const result = individualWorkVideoList.filter((video) => {
-      if (regexAll.test(video.title)) {
-        return video;
-      }
-    });
-
-    setSearchResult([...result]);
+    // const { value } = event.currentTarget;
+    // setSearchVideo(value);
+    // let pattern = value;
+    // //정규표현식 리터럴 객체 (모든 패턴을 찾는다.)
+    // let regexAll = new RegExp(pattern, "gim");
+    // const result = individualWorkVideoList.filter((video) => {
+    //   if (regexAll.test(video.title)) {
+    //     return video;
+    //   }
+    // });
+    // setSearchResult([...result]);
   };
 
   return (
@@ -129,18 +107,20 @@ const IndividualWorkPage = () => {
       {searchResult.length >= 1 ? (
         <div className={classes.root}>
           <Grid container spacing={2}>
-            {searchResult.map((movie, index) => (
+            {searchResult.map((video, index) => (
               <GridCards
                 individualWork
                 key={index}
-                title={movie.title}
-                description={movie.description}
-                genre={movie.genre}
-                cost={movie.cost}
-                email={movie.email}
-                createdAt={movie.createdAt}
-                creatorUid={movie.creatorUid}
-                downloadURL={movie.downloadURL}
+                title={video.title}
+                description={video.description}
+                genre={video.genre}
+                cost={video.cost}
+                duration={video.duration}
+                writer={video.writer.nickname}
+                createdAt={video.createdAt}
+                views={video.views}
+                downloadPath={video.filePath}
+                thumbnail={video.thumbnail}
               />
             ))}
           </Grid>
@@ -148,19 +128,22 @@ const IndividualWorkPage = () => {
       ) : (
         <div className={classes.root}>
           <Grid container spacing={2}>
-            {individualWorkVideoList &&
-              individualWorkVideoList.map((movie, index) => (
+            {videos &&
+              videos.map((video, index) => (
                 <GridCards
                   individualWork
                   key={index}
-                  title={movie.title}
-                  description={movie.description}
-                  genre={movie.genre}
-                  cost={movie.cost}
-                  email={movie.email}
-                  createdAt={movie.createdAt}
-                  creatorUid={movie.creatorUid}
-                  downloadURL={movie.downloadURL}
+                  title={video.title}
+                  description={video.description}
+                  genre={video.genre}
+                  cost={video.cost}
+                  duration={video.duration}
+                  writer={video.writer.nickname}
+                  createdAt={video.createdAt}
+                  views={video.views}
+                  downloadPath={video.filePath}
+                  thumbnail={video.thumbnail}
+                  _id={video._id}
                 />
               ))}
           </Grid>

@@ -21,8 +21,8 @@ import IndividualWorkPage from "../components/IndividualWorkPage/IndividualWorkP
 import VideoUploadPage from "../components/VideoUploadPage/VideoUploadPage";
 import PaymentPage from "../components/PaymentPage/PaymentPage";
 import CompletePaymentPage from "../components/PaymentPage/CompletePaymentPage";
-//movie imports
 import MovieDetail from "../components/MovieDetail/MovieDetail";
+import IndividualWorkDetailPage from "../components/IndividualWorkDetailPage/IndividualWorkDetailPage";
 
 const MainSection = styled.section`
   background: #f7f7f7;
@@ -60,6 +60,11 @@ const Routes = () => {
             exact
             path="/individualwork"
             component={Auth(IndividualWorkPage)}
+          />
+          <Route
+            exact
+            path="/individualwork/:videoId"
+            component={Auth(IndividualWorkDetailPage)}
           />
           <Route exact path="/payment" component={Auth(PaymentPage, true)} />
           <Route

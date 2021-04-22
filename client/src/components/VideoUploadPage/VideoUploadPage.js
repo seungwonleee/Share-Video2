@@ -245,7 +245,7 @@ const VideoUploadPage = () => {
       return alert("모든 항목을 입력해주세요.");
     }
 
-    //영상 DB 저장(파일, 썸네일, 작성 내용)
+    //영상 DB 저장(파일, 썸네일, 작성 내용) uploadfiles => thumbnail => uploadVideo 순서
     saveVideoFile();
   };
 

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import noImage from "../../images/No_image.svg";
 import { useSelector, useDispatch } from "react-redux";
-// import { dbService } from "../../fire_module/fireMain";
 import { useHistory } from "react-router-dom";
-import { YOUTUBE_API_URL, YOUTUBE_API_KEY } from "../Config";
 import axios from "axios";
 import { dialogState } from "../../features/dialog/dialogSlice";
+import moment from "moment";
+import "moment/locale/ko";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -56,7 +56,6 @@ const GridCards = ({
   // movie, movieDetail 관련 props
   landingPage,
   castList,
-  individualWork,
   image,
   movieId,
   movieNameEnglish,
@@ -65,14 +64,18 @@ const GridCards = ({
   castName,
   character,
   //individualWork 관련 props
+  individualWork,
   title,
   description,
+  createdAt,
   genre,
   cost,
-  creatorUid,
-  email,
-  createdAt,
-  downloadURL,
+  duration,
+  writer,
+  views,
+  downloadPath,
+  thumbnail,
+  _id,
 }) => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
@@ -224,18 +227,8 @@ const GridCards = ({
       </Grid>
     );
   } else if (individualWork) {
-    //업로드 몇 분 전
-    const uploadTimeMinutes = Math.floor(
-      ((Date.now() - createdAt) * 0.1) / 60 / 60
-    );
-    //업로드 몇 시간 전
-    const uploadTimeHour = Math.floor(
-      ((Date.now() - createdAt) * 0.1) / 60 / 60 / 60
-    );
-    // 업로드 몇 일 전
-    const uploadTimeDay = Math.floor(
-      ((Date.now() - createdAt) * 0.1) / 60 / 60 / 60 / 60
-    );
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration - minutes * 60);
 
     // 장바구니에 상품을 담으면 Dialog 안내 후 Dialog 제거
     const showAddMessage = () => {
@@ -291,39 +284,51 @@ const GridCards = ({
       <Grid item xs={12} sm={6} md={4} lg={3} className={classes.center}>
         <Card className={classes.root}>
           <CardMedia>
-            <video
-              src={downloadURL ? downloadURL : noImage}
-              style={{ width: "100%", height: "100%" }}
-            />
+            <div style={{ position: "relative" }}>
+              <a href={`/individualwork/${_id}`}>
+                <img
+                  src={`http://localhost:5000/${thumbnail}`}
+                  alt={`thumbnail-${title}`}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </a>
+              <div
+                style={{
+                  bottom: 0,
+                  right: 0,
+                  position: "absolute",
+                  margin: "1rem",
+                  padding: "0.5rem",
+                  background: "black",
+                  color: "#FFFFFF",
+                  borderRadius: "5px",
+                  lineHeight: "1rem",
+                }}
+              >
+                <span
+                  style={{ fontSize: "1.4rem" }}
+                >{`${minutes} : ${seconds}`}</span>
+              </div>
+            </div>
           </CardMedia>
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
               <Text>제목: {title}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <Text>설명: {description}</Text>
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
               <Text>장르: {genre}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <Text>가격: {cost === 0 ? "무료" : cost}</Text>
+              <Text>제작자: {writer}</Text>
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              <Text>제작자: {email}</Text>
+              <Text>업로드: {moment({ createdAt }).format("LL")}</Text>
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              <Text>
-                업로드일:{" "}
-                {uploadTimeMinutes > 60
-                  ? `${
-                      uploadTimeHour > 24
-                        ? `${uploadTimeDay ? uploadTimeDay : 1} 일 전`
-                        : `${uploadTimeHour} 시간 전`
-                    }`
-                  : `${uploadTimeMinutes} 분 전`}
-              </Text>
-            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            ></Typography>
           </CardContent>
           <div style={{ textAlign: "center", margin: "1rem" }}>
             <Button
@@ -331,7 +336,7 @@ const GridCards = ({
               style={{ margin: "0.5rem" }}
               onClick={addShoppingbasket}
             >
-              <Text>장바구니</Text>
+              <Text>상세보기</Text>
             </Button>
             <Button
               variant="contained"
@@ -339,7 +344,7 @@ const GridCards = ({
               style={{ margin: "0.5rem" }}
             >
               <a
-                href={downloadURL}
+                // href={downloadURL}
                 style={{
                   color: "#FFFFFF",
                   display: "flex",
