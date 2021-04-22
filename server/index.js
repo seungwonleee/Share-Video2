@@ -22,6 +22,7 @@ app.use(cookieParser());
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/video", require("./routes/video"));
+app.use("/api/shoppingBasket", require("./routes/shoppingBasket"));
 
 //node js server에 저장된 image를 client로 전달
 //참고: https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client

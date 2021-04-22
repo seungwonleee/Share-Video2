@@ -22,6 +22,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import DescriptionIcon from "@material-ui/icons/Description";
+import PaymentIcon from "@material-ui/icons/Payment";
 
 // styled-components
 const Image = styled.img`
@@ -342,15 +343,11 @@ const GridCards = ({
               to={`/individualwork/${_id}`}
               icon={<DescriptionIcon />}
             />
-
-            <BottomNavigationAction
-              label="미리보기"
-              icon={<PlayCircleOutlineIcon />}
-            />
             <BottomNavigationAction
               label="장바구니"
               icon={<ShoppingBasketIcon />}
             />
+            <BottomNavigationAction label="구매하기" icon={<PaymentIcon />} />
           </BottomNavigation>
         </Card>
       </Grid>

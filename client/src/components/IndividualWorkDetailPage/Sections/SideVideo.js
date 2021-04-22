@@ -60,7 +60,7 @@ const SideVideo = () => {
       return;
     } else {
       return (
-        <Container>
+        <Container key={index}>
           <Image>
             <a href={`/video/${video._id}`}>
               <img
