@@ -3,9 +3,12 @@ const Schema = mongoose.Schema;
 
 const shoppingBasketSchema = mongoose.Schema(
   {
-    writer: {
+    video: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Video",
+    },
+    nickname: {
+      type: String,
     },
     userFrom: {
       type: String,

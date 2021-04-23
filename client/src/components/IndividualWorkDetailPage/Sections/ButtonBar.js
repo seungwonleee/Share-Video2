@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
@@ -8,10 +8,11 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
 const ButtonBar = ({ userTo, userFrom, video }) => {
   //   console.log("=====>", video);
-  //   console.log("=====>", userFrom);
+  // console.log("=====>", userFrom);
   const shoppingBasketData = {
-    writer: video.writer._id,
+    video: video._id,
     userFrom,
+    nickname: video.nickname,
     title: video.title,
     description: video.description,
     duration: video.duration,
@@ -21,11 +22,11 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
     cost: video.cost,
   };
 
-  const handleShoppingBasket = () => {
+  const addShoppingBasket = () => {
     axios
       .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.data.success) {
           alert("장바구니에 담았습니다.");
         } else {
@@ -49,7 +50,7 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
         label="장바구니"
         icon={<ShoppingBasketIcon />}
         style={{ color: "#FFFFFF" }}
-        onClick={handleShoppingBasket}
+        onClick={addShoppingBasket}
       />
       <BottomNavigationAction
         label="구매하기"

@@ -54,6 +54,7 @@ const ShoppingBasketPage = () => {
     axios
       .post("/api/shoppingBasket/getShoppingBasketList", userData)
       .then((response) => {
+        // console.log(" ====> ", response.data);
         if (response.data.success) {
           const resultBasketList = response.data.shoppingbaskets.map(
             (item, index) => {
@@ -71,13 +72,16 @@ const ShoppingBasketPage = () => {
               };
             }
           );
-          // console.log(resultBasketList);
+          console.log(resultBasketList);
           setMyShoppingBasketList(resultBasketList);
         } else {
           alert(
             "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."
           );
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -93,23 +97,33 @@ const ShoppingBasketPage = () => {
 
   const handleShoppingBasketListRemove = async () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
+
     if (ok) {
-      // firestore DB delete
-      // await selection.map((videoTitle) => {
-      //   dbService
-      //     .collection(uid)
-      //     .doc("shoppingBasket")
-      //     .collection(uid)
-      //     .doc(videoTitle)
-      //     .delete()
-      //     .then(() => {
-      //       console.log("삭제 성공!");
-      //     })
-      //     .catch((error) => {
-      //       console.log("삭제 에러 ==> ", error);
-      //       alert("삭제하는데 실패했습니다. 나중에 시도해 주세요.");
-      //     });
-      // });
+      let list = [];
+      myShoppingBasketList.map((item, index) => {
+        selection.map((selectValue, index) => {
+          if (item.id === Number(selectValue)) {
+            list.push(item);
+          }
+        });
+      });
+
+      let deleteData = {
+        deleteList: list,
+      };
+      // console.log(deleteData);
+      axios
+        .post("/api/shoppingBasket/deleteShoppingBasketList", deleteData)
+        .then((response) => {
+          if (response.data.success) {
+            alert("장바구니 목록에서 삭제하였습니다.");
+          } else {
+            alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
   return (

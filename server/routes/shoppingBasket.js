@@ -18,11 +18,23 @@ router.post("/addShoppingBasket", (req, res) => {
 router.post("/getShoppingBasketList", (req, res) => {
   //로그인한 사용자 장바구니 목록
   ShoppingBasket.find({ userFrom: req.body.loginUser })
-    .populate("writer")
+    .populate("video")
     .exec((err, shoppingbaskets) => {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, shoppingbaskets });
     });
+});
+
+router.post("/deleteShoppingBasketList", (req, res) => {
+  //장바구니 목록 삭제
+  const deleteItemList = req.body.deleteList;
+  deleteItemList.map((item, index) => {
+    ShoppingBasket.findOneAndDelete({ _id: item._id }).exec((err, result) => {
+      if (err) return res.status(400).json({ success: false, err });
+      //   res.status(200).json({ success: true });
+    });
+  });
+  res.status(200).json({ success: true });
 });
 
 module.exports = router;

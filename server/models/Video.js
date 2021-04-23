@@ -7,6 +7,9 @@ const videoSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    nickname: {
+      type: String,
+    },
     title: {
       type: String,
       maxlength: 50,
