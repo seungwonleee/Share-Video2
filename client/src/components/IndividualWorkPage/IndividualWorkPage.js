@@ -141,6 +141,8 @@ const IndividualWorkPage = () => {
                 views={video.views}
                 downloadPath={video.filePath}
                 thumbnail={video.thumbnail}
+                _id={video._id}
+                filePath={video.filePath}
               />
             ))}
           </Grid>
@@ -164,6 +166,7 @@ const IndividualWorkPage = () => {
                   downloadPath={video.filePath}
                   thumbnail={video.thumbnail}
                   _id={video._id}
+                  filePath={video.filePath}
                 />
               ))}
           </Grid>

@@ -6,6 +6,7 @@ import { useHistory, Link } from "react-router-dom";
 import { dialogState } from "../../features/dialog/dialogSlice";
 import moment from "moment";
 import "moment/locale/ko";
+import axios from "axios";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -79,6 +80,7 @@ const GridCards = ({
   downloadPath,
   thumbnail,
   _id,
+  filePath,
 }) => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
@@ -86,7 +88,8 @@ const GridCards = ({
   let history = useHistory();
   const dispatch = useDispatch();
 
-  const uid = useSelector((state) => state.auth.uid);
+  const userId = useSelector((state) => state.auth.userId);
+  const userNickname = useSelector((state) => state.auth.nickname);
 
   if (landingPage) {
     //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
@@ -251,36 +254,33 @@ const GridCards = ({
       }, 1300);
     };
 
-    // 장바구니에 추가 (fireStore에 저장)
-    const addShoppingbasket = async () => {
-      //로그인 하지 않은 사용자는 장바구니 기능x
-      // if (!uid) {
-      //   alert("로그인 후 사용 가능합니다.");
-      //   history.push("/login");
-      //   return;
-      // }
-      // try {
-      //   await dbService
-      //     .collection(uid)
-      //     .doc("shoppingBasket")
-      //     .collection(uid)
-      //     .doc(title)
-      //     .set({
-      //       title,
-      //       description,
-      //       genre,
-      //       cost,
-      //       creatorUid,
-      //       email,
-      //       createdAt,
-      //       downloadURL,
-      //     });
-      //   //dialog 메세지
-      //   showAddMessage();
-      // } catch (error) {
-      //   console.log(error);
-      //   alert("장바구니에 추가하는데 실패했습니다. 나중에 시도해 주세요.");
-      // }
+    const shoppingBasketData = {
+      video: _id,
+      userFrom: userId,
+      nickname: userNickname,
+      title: title,
+      description: description,
+      duration: duration,
+      thumbnail: thumbnail,
+      genre: genre,
+      filePath: filePath,
+      cost: cost,
+    };
+    // 장바구니 목록에 추가
+    const addShoppingBasket = () => {
+      axios
+        .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
+        .then((response) => {
+          // console.log(response);
+          if (response.data.success) {
+            alert("장바구니에 담았습니다.");
+          } else {
+            if (response.data.err.keyPattern.filePath) {
+              return alert("이미 장바구니에 담겼습니다.");
+            }
+            alert("오류가 발생했습니다. 나중에 시도해주세요.");
+          }
+        });
     };
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
@@ -346,6 +346,7 @@ const GridCards = ({
             <BottomNavigationAction
               label="장바구니"
               icon={<ShoppingBasketIcon />}
+              onClick={addShoppingBasket}
             />
             <BottomNavigationAction label="구매하기" icon={<PaymentIcon />} />
           </BottomNavigation>

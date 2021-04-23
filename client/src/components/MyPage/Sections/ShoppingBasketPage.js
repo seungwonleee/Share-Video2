@@ -65,7 +65,7 @@ const ShoppingBasketPage = () => {
               };
 
               return {
-                id: index,
+                id: index + 1,
                 ...runningTime,
                 ...item,
                 ...item.writer,
@@ -117,6 +117,7 @@ const ShoppingBasketPage = () => {
         .then((response) => {
           if (response.data.success) {
             alert("장바구니 목록에서 삭제하였습니다.");
+            loadShoppingBasketList();
           } else {
             alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
           }
