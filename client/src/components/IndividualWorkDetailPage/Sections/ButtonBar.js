@@ -12,7 +12,7 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
   const shoppingBasketData = {
     video: video._id,
     userFrom,
-    nickname: video.nickname,
+    userNickname: video.nickname,
     title: video.title,
     description: video.description,
     duration: video.duration,
@@ -22,6 +22,7 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
     cost: video.cost,
   };
 
+  // 장바구니 목록에 추가
   const addShoppingBasket = () => {
     axios
       .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
@@ -30,7 +31,7 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
         if (response.data.success) {
           alert("장바구니에 담았습니다.");
         } else {
-          if (response.data.err.keyPattern.filePath) {
+          if (response.data.message) {
             return alert("이미 장바구니에 담겼습니다.");
           }
           alert("오류가 발생했습니다. 나중에 시도해주세요.");

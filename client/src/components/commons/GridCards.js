@@ -257,7 +257,7 @@ const GridCards = ({
     const shoppingBasketData = {
       video: _id,
       userFrom: userId,
-      nickname: userNickname,
+      userNickname: userNickname,
       title: title,
       description: description,
       duration: duration,
@@ -266,6 +266,7 @@ const GridCards = ({
       filePath: filePath,
       cost: cost,
     };
+
     // 장바구니 목록에 추가
     const addShoppingBasket = () => {
       axios
@@ -275,7 +276,7 @@ const GridCards = ({
           if (response.data.success) {
             alert("장바구니에 담았습니다.");
           } else {
-            if (response.data.err.keyPattern.filePath) {
+            if (response.data.message) {
               return alert("이미 장바구니에 담겼습니다.");
             }
             alert("오류가 발생했습니다. 나중에 시도해주세요.");

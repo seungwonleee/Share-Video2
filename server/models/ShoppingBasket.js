@@ -7,15 +7,15 @@ const shoppingBasketSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Video",
     },
-    nickname: {
-      type: String,
-    },
     userFrom: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    userNickname: {
       type: String,
     },
     title: {
       type: String,
-      maxlength: 50,
     },
     description: {
       type: String,
@@ -29,11 +29,8 @@ const shoppingBasketSchema = mongoose.Schema(
     genre: {
       type: String,
     },
-    //다른것들은 중복될 수 있으므로 filePath로 중복 저장을 필터링 한다.
-    //filePath 형식 (uploads/날짜_파일명)
     filePath: {
       type: String,
-      unique: 1,
     },
     cost: {
       type: Number,
