@@ -7,11 +7,12 @@ import PaymentIcon from "@material-ui/icons/Payment";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
 const ButtonBar = ({ userTo, userFrom, video }) => {
-  //   console.log("=====>", video);
+  // console.log("=====>", video);
   // console.log("=====>", userFrom);
   const shoppingBasketData = {
     video: video._id,
     userFrom,
+    madeFrom: video.writer._id,
     userNickname: video.nickname,
     title: video.title,
     description: video.description,

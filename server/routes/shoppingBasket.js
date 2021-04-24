@@ -32,7 +32,7 @@ router.post("/addShoppingBasket", (req, res) => {
 router.post("/getShoppingBasketList", (req, res) => {
   //로그인한 사용자 장바구니 목록
   ShoppingBasket.find({ userFrom: req.body.loginUser })
-    .populate(["video", "userFrom"])
+    .populate(["video", "userFrom", "madeFrom"])
     .exec((err, shoppingbaskets) => {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, shoppingbaskets });

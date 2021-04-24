@@ -76,11 +76,10 @@ const GridCards = ({
   cost,
   duration,
   writer,
-  views,
-  downloadPath,
   thumbnail,
   _id,
   filePath,
+  madeFrom,
 }) => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
@@ -257,6 +256,7 @@ const GridCards = ({
     const shoppingBasketData = {
       video: _id,
       userFrom: userId,
+      madeFrom: madeFrom,
       userNickname: userNickname,
       title: title,
       description: description,

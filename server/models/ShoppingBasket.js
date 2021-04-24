@@ -11,6 +11,10 @@ const shoppingBasketSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    madeFrom: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     userNickname: {
       type: String,
     },

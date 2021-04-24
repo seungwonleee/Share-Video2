@@ -143,6 +143,7 @@ const IndividualWorkPage = () => {
                 thumbnail={video.thumbnail}
                 _id={video._id}
                 filePath={video.filePath}
+                madeFrom={video.writer._id}
               />
             ))}
           </Grid>
@@ -162,11 +163,10 @@ const IndividualWorkPage = () => {
                   duration={video.duration}
                   writer={video.writer.nickname}
                   createdAt={video.createdAt}
-                  views={video.views}
-                  downloadPath={video.filePath}
                   thumbnail={video.thumbnail}
                   _id={video._id}
                   filePath={video.filePath}
+                  madeFrom={video.writer._id}
                 />
               ))}
           </Grid>

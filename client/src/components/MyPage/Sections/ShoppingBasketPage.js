@@ -21,7 +21,7 @@ const columns = [
   { field: "id", headerName: "No", width: 60 },
   { field: "title", headerName: "작품 제목", width: 190 },
   { field: "genre", headerName: "장르", width: 110 },
-  { field: "nickname", headerName: "제작자", width: 110 },
+  { field: "madeFrom", headerName: "제작자", width: 110 },
   { field: "runningTime", headerName: "재생 시간", width: 130 },
   { field: "cost", headerName: "가격", width: 100 },
 ];
@@ -58,21 +58,21 @@ const ShoppingBasketPage = () => {
         if (response.data.success) {
           const resultBasketList = response.data.shoppingbaskets.map(
             (item, index) => {
+              const madeFrom = { madeFrom: item.madeFrom.nickname };
               const minutes = Math.floor(Number(item.duration) / 60);
               const seconds = Math.floor(Number(item.duration) - minutes * 60);
               const runningTime = {
                 runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
               };
-
               return {
                 id: index + 1,
-                ...runningTime,
                 ...item,
-                ...item.writer,
+                ...runningTime,
+                ...madeFrom,
               };
             }
           );
-          console.log(resultBasketList);
+          // console.log(resultBasketList);
           setMyShoppingBasketList(resultBasketList);
         } else {
           alert(
