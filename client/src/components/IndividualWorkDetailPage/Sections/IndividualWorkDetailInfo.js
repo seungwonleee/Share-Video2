@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
+import { useSelector } from "react-redux";
 //Material UI Imports
 import { makeStyles, styled } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -53,6 +55,8 @@ const IndividualWorkDetailInfo = ({ video }) => {
   });
   const classes = useStyles();
 
+  const likeCountNum = useSelector((state) => state.like.count);
+
   const title = video.title;
   const description = video.description;
   const genre = video.genre;
@@ -63,6 +67,25 @@ const IndividualWorkDetailInfo = ({ video }) => {
   const hour = parseInt(duration / 3600);
   const min = parseInt((duration % 3600) / 60);
   const sec = duration % 60;
+
+  const [likeCount, setLikeCount] = useState(0);
+
+  const likeData = {
+    videoId: video._id,
+  };
+
+  useEffect(() => {
+    axios.post("/api/like/getLikes", likeData).then((response) => {
+      // console.log("getLikes", response.data.likes);
+      if (response.data.success) {
+        setLikeCount(response.data.likes.length);
+      } else {
+        alert(
+          "좋아요 수를 불러오는데 문제가 발생했습니다. 나중에 시도해주세요."
+        );
+      }
+    });
+  }, [likeCountNum]);
 
   return (
     <>
@@ -79,7 +102,7 @@ const IndividualWorkDetailInfo = ({ video }) => {
                     재생 시간
                   </TableCell>
                   <TableCell className={classes.desktopThCell}>
-                    조회수
+                    좋아요
                   </TableCell>
                   <TableCell className={classes.desktopThCell}>
                     업로드
@@ -98,7 +121,7 @@ const IndividualWorkDetailInfo = ({ video }) => {
                     min ? `${min}분` : ""
                   }${sec ? `${sec}초` : ""}`}</TableCell>
                   <TableCell className={classes.desktopTdCell}>
-                    {views}
+                    {likeCount}
                   </TableCell>
                   <TableCell className={classes.desktopTdCell}>
                     {createdAt}
@@ -144,8 +167,8 @@ const IndividualWorkDetailInfo = ({ video }) => {
               }`}</td>
             </tr>
             <tr>
-              <th className={classes.mobileTh}>평점</th>
-              <td className={classes.mobileTd}>{views}</td>
+              <th className={classes.mobileTh}>좋아요</th>
+              <td className={classes.mobileTd}>{likeCount}</td>
             </tr>
             <tr>
               <th className={classes.mobileTh}>업로드</th>

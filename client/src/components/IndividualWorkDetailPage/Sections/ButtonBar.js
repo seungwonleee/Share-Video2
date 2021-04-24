@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import PaymentIcon from "@material-ui/icons/Payment";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+import { useDispatch } from "react-redux";
+import { setCount } from "../../../features/like/likeSlice";
 
-const ButtonBar = ({ userTo, userFrom, video }) => {
-  // console.log("=====>", video);
-  // console.log("=====>", userFrom);
+const ButtonBar = ({ userFrom, video }) => {
+  const dispatch = useDispatch();
+
   const shoppingBasketData = {
     video: video._id,
     userFrom,
@@ -39,6 +41,33 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
         }
       });
   };
+
+  const likeData = {
+    userId: userFrom,
+    videoId: video._id,
+  };
+
+  const handleLike = () => {
+    axios.post("/api/like/upLike", likeData).then((response) => {
+      console.log(response.data);
+      if (response.data.success) {
+        alert("좋아요 했습니다.");
+        dispatch(setCount(1));
+      } else if (response.data.message) {
+        //upLike 에서 해당 영상이 이미 좋아요한 목록에 있으면 unlike 하도록 한다.
+        axios.post("/api/like/unLike", likeData).then((response) => {
+          if (response.data.success) {
+            alert("좋아요를 취소 했습니다.");
+            dispatch(setCount(-1));
+          } else {
+            alert("좋아요 취소를 실패 했습니다. 나중에 시도해주세요.");
+          }
+        });
+      } else {
+        alert("좋아요를 실패 했습니다. 나중에 시도해주세요.");
+      }
+    });
+  };
   return (
     <BottomNavigation showLabels style={{ background: "#424242" }}>
       <BottomNavigationAction
@@ -47,6 +76,7 @@ const ButtonBar = ({ userTo, userFrom, video }) => {
         //   to={`/individualwork/${_id}`}
         icon={<ThumbUpAltIcon />}
         style={{ color: "#FFFFFF" }}
+        onClick={handleLike}
       />
       <BottomNavigationAction
         label="장바구니"
