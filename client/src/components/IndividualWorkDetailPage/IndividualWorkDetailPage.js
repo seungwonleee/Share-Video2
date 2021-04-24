@@ -7,6 +7,7 @@ import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 import SideVideo from "./Sections/SideVideo";
 import ButtonBar from "./Sections/ButtonBar";
+import Comment from "./Sections/Comment";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -111,7 +112,8 @@ const IndividualWorkDetailPage = () => {
                   userFrom={loginUser}
                   video={video}
                 />
-                {/* 후기 Comments */}
+                {/* Comments */}
+                <Comment />
               </div>
             </Grid>
             <Grid item md={4} lg={4}>
@@ -137,8 +139,13 @@ const IndividualWorkDetailPage = () => {
               <IndividualWorkDetailInfo video={video} />
 
               {/* 좋아요, 장바구니, 구매하기 Button*/}
-              <ButtonBar />
-              {/* 후기 Comments */}
+              <ButtonBar
+                userTo={video.writer._id}
+                userFrom={loginUser}
+                video={video}
+              />
+              {/* Comments */}
+              <Comment />
             </div>
           </>
         )}
