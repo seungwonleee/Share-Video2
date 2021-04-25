@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import { useSelector } from "react-redux";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,14 +16,12 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "id", headerName: "영화 코드", width: 130 },
-  { field: "movieNameEnglish", headerName: "오리지널 제목", width: 130 },
-  { field: "movieNameKorean", headerName: "한국어 제목", width: 130 },
-  {
-    field: "voteAverage",
-    headerName: "영화 평점",
-    width: 130,
-  },
+  { field: "id", headerName: "No", width: 60 },
+  { field: "title", headerName: "작품 제목", width: 190 },
+  { field: "genre", headerName: "장르", width: 110 },
+  { field: "madeFrom", headerName: "제작자", width: 110 },
+  { field: "runningTime", headerName: "재생 시간", width: 130 },
+  { field: "cost", headerName: "가격", width: 100 },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -39,55 +38,86 @@ const LikePage = () => {
   const classes = useStyles();
 
   const [selection, setSelection] = useState([]);
-  const [like, setLike] = useState([]);
-  const [uid, setUid] = useState("");
+  const [myLiketList, setMyLiketList] = useState([]);
+  const loginUser = useSelector((state) => state.auth.userId);
 
-  const getLikeList = async (uid) => {
-    // dbService
-    //   .collection(uid)
-    //   .doc("like")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     const likeListData = snapshot.docs.map((doc, index) => {
-    //       // console.log(doc.data());
-    //       return {
-    //         ...doc.data(),
-    //         id: Number(doc.data().movieId),
-    //       };
-    //     });
-    //     // console.log("좋아요 목록 ===> ", ...likeListData);
-    //     setLike([...likeListData]);
-    //   });
+  const likeData = {
+    userId: loginUser,
   };
+  //MyPage 좋아요 목록에 현재 로그인한 유저의 좋아요 목록 가져온다.
+  const getLikeList = () => {
+    axios.post("/api/like/getLikes", likeData).then((response) => {
+      if (response.data.success) {
+        const resultLikeList = response.data.likes.map((item, index) => {
+          const videoData = {
+            title: item.videoId.title,
+            genre: item.videoId.genre,
+            madeFrom: item.videoId.nickname,
+            cost: item.videoId.cost,
+          };
+          const minutes = Math.floor(Number(item.videoId.duration) / 60);
+          const seconds = Math.floor(
+            Number(item.videoId.duration) - minutes * 60
+          );
+          const runningTime = {
+            runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+          };
+          return {
+            id: index + 1,
+            ...videoData,
+            ...runningTime,
+            ...item,
+          };
+        });
 
-  const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      setUid(res.data.uid);
-      getLikeList(res.data.uid);
+        setMyLiketList(resultLikeList);
+      } else {
+        alert(
+          "좋아요 목록을 불러오는데 문제가 발생했습니다. 나중에 시도해주세요."
+        );
+      }
     });
   };
 
   useEffect(() => {
-    getUid();
+    getLikeList();
   }, []);
 
-  const handleLikeListRemove = async () => {
+  //MyPage 좋아요 목록 삭제
+  const handleLikeListRemove = () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
     if (ok) {
-      // firestore DB delete
-      await selection.map((movieId) => {
-        // dbService
-        //   .collection(uid)
-        //   .doc("like")
-        //   .collection(uid)
-        //   .doc(movieId)
-        //   .delete()
-        //   .then(() => {
-        //     console.log("삭제 성공!");
-        //   })
-        //   .catch((error) => console.log("삭제 에러 ==> ", error));
-      });
+      if (ok) {
+        let list = [];
+        myLiketList.map((item, index) => {
+          selection.map((selectValue, index) => {
+            if (item.id === Number(selectValue)) {
+              list.push({
+                userId: loginUser,
+                videoId: item.videoId._id,
+              });
+            }
+          });
+        });
+
+        let deleteData = {
+          list,
+        };
+
+        axios
+          .post("/api/like/unLike", deleteData)
+          .then((response) => {
+            if (response.data.success) {
+              alert("장바구니 목록에서 삭제하였습니다.");
+              getLikeList();
+            } else {
+              alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   };
 
@@ -96,7 +126,7 @@ const LikePage = () => {
       {breakPoint ? (
         <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
-            rows={like}
+            rows={myLiketList}
             columns={columns}
             pageSize={5}
             checkboxSelection
@@ -106,7 +136,7 @@ const LikePage = () => {
       ) : (
         <div style={{ height: "400px", width: "100%" }}>
           <DataGrid
-            rows={like}
+            rows={myLiketList}
             columns={columns}
             pageSize={5}
             checkboxSelection
