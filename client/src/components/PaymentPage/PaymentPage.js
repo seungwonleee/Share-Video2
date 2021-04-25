@@ -67,14 +67,20 @@ const PaymentPage = () => {
   let history = useHistory();
   const dispatch = useDispatch();
 
+  const userId = useSelector((state) => state.auth.userId);
+  const userNickname = useSelector((state) => state.auth.nickname);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  console.log(isLoggedIn);
+
   const [uid, setUid] = useState("");
   const [buyList, setBuyList] = useState([]);
   const [totalCost, setTotalCost] = useState([]);
-  // console.log("buy list ===>", buyList);
+
+  console.log("@@@@@@@@@", buyList);
 
   // 주문금액 총 합계
-  const calculateTotalCost = (items) => {
-    const costList = items.map((item, index) => {
+  const calculateTotalCost = (video) => {
+    const costList = video.map((item, index) => {
       return item.cost;
     });
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -82,23 +88,53 @@ const PaymentPage = () => {
     setTotalCost(total);
   };
 
-  // 구매하고자하는 아이템 title과
-  const checkItem = (myShoppingBasket) => {
-    //장바구니에서 구매하고자한 상품
-    const selectionItems = JSON.parse(localStorage.getItem("buy"));
+  //개인 작품 페이지에서 하나만 구매할 때 하나의 비디오만 불러온다.
+  const getSelectVideo = () => {
+    const getBuyItem = localStorage.getItem("buyItem");
+    const videoId = JSON.parse(getBuyItem);
 
-    const result = [];
-    myShoppingBasket.map((basketItem, index) => {
-      selectionItems.map((selectionItem, index) => {
-        if (basketItem.title === selectionItem) {
-          result.push(basketItem);
-          // console.log(result);
-        }
-      });
+    const videoData = {
+      ...videoId,
+    };
+
+    axios.post("/api/video/getVideo", videoData).then((response) => {
+      if (response.data.success) {
+        setBuyList([response.data.video]);
+        calculateTotalCost([response.data.video]);
+        localStorage.removeItem("buyItem");
+      } else {
+        alert("해당 상품을 불러오는데 실패했습니다. 나중에 시도해 주세요.");
+      }
     });
-    setBuyList([...result]);
-    calculateTotalCost(result);
   };
+
+  useEffect(() => {
+    //TODO 로컬 스토리지에 buyItem이 있는 경우만 결제 가능하도록 제한
+    if (localStorage.getItem("buyItem")) {
+      getSelectVideo();
+    } else {
+      alert("결제를 처음부터 다시 시도해주세요.");
+      return history.push("/individualwork");
+    }
+  }, []);
+
+  // 구매하고자하는 아이템 title과
+  // const checkItem = (myShoppingBasket) => {
+  //   //장바구니에서 구매하고자한 상품
+  //   const selectionItems = JSON.parse(localStorage.getItem("buy"));
+
+  //   const result = [];
+  //   myShoppingBasket.map((basketItem, index) => {
+  //     selectionItems.map((selectionItem, index) => {
+  //       if (basketItem.title === selectionItem) {
+  //         result.push(basketItem);
+  //         // console.log(result);
+  //       }
+  //     });
+  //   });
+  //   setBuyList([...result]);
+  //   calculateTotalCost(result);
+  // };
 
   const shoppingBasketList = async (uid) => {
     // await dbService
@@ -120,62 +156,7 @@ const PaymentPage = () => {
     //   });
   };
 
-  const getUid = async () => {
-    // await axios.get("/api/users/auth").then((res) => {
-    //   setUid(res.data.uid);
-    //   shoppingBasketList(res.data.uid);
-    //   // return res.data.uid;
-    // });
-  };
-
-  useEffect(() => {
-    // getUid();
-  }, []);
-
-  //결제 후 결제내역 DB에 저장
-  const saveBuyList = async () => {
-    // firestore DB save
-    // await buyList.map((item) => {
-    //   try {
-    //     dbService
-    //       .collection(uid)
-    //       .doc("buyList")
-    //       .collection(uid)
-    //       .doc(item.title)
-    //       .set(item);
-    //     // showAddMessage();
-    //   } catch (error) {
-    //     console.log(error);
-    //     alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
-    //   }
-    // });
-  };
-
-  //결제 후 장바구니에서 삭제
-  const deleteShoppingList = async () => {
-    // firestore DB delete
-    // await buyList.map((item) => {
-    //   dbService
-    //     .collection(uid)
-    //     .doc("shoppingBasket")
-    //     .collection(uid)
-    //     .doc(item.title)
-    //     .delete()
-    //     .then(() => {
-    //       console.log("삭제 성공!");
-    //     })
-    //     .catch((error) => {
-    //       console.log("삭제 에러 ==> ", error);
-    //       alert("결제 중 문제가 발생했습니다. 나중에 시도해 주세요.");
-    //     });
-    // });
-  };
-
-  const handlePayment = () => {
-    //결제 후 결제내역 DB에 저장
-    saveBuyList();
-    //결제 후 장바구니에서 삭제
-    deleteShoppingList();
+  const messageDialog = () => {
     //DB 작업동안 안내 Dialog 표시
     dispatch(
       dialogState({
@@ -193,6 +174,74 @@ const PaymentPage = () => {
       //결제 완료 페이지로 이동
       history.push("/completepayment");
     }, 1300);
+  };
+
+  //최종적으로 videoId를 받와와 장바구니 목록에서 삭제
+  const deleteShoppingList = (filterdList) => {
+    const buyListData = {
+      deleteList: filterdList,
+    };
+    axios
+      .post("/api/shoppingBasket/deleteShoppingBasketList", buyListData)
+      .then((response) => {
+        if (response.data.success) {
+          console.log("장바구니 목록에서 삭제 성공!");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //사용자 장바구니 목록 불러오기
+  const getShoppingBasketList = () => {
+    const loginUser = {
+      loginUser: userId,
+    };
+    axios
+      .post("/api/shoppingBasket/getShoppingBasketList", loginUser)
+      .then((response) => {
+        let filterdList = [];
+        //장바구니가 아닌 개인 작품 페이지에서 구매할 경우 사용자의 video ObjectId를 알 수 없기 때문에 사용자의 장바구니 목록을 불러온다.
+        if (response.data.success) {
+          response.data.shoppingbaskets.map((basketList, index) => {
+            buyList.map((item, index) => {
+              if (basketList.video._id === item._id) {
+                filterdList.push(basketList);
+              }
+            });
+          });
+        }
+        //videoId를 가진 video 목록을 가지고 장바구니 목록 삭제
+        deleteShoppingList(filterdList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //결제내역 DB에 저장
+  const saveBuyList = () => {
+    const buyListData = {
+      userId: userId,
+      videoList: buyList,
+    };
+
+    axios.post("/api/buyList/saveBuyList", buyListData).then((response) => {
+      if (response.data.success) {
+        //DB에 구매목록 저장 후 장바구니에서 삭제
+        getShoppingBasketList();
+        //DB 작업동안 안내 Dialog 표시
+        messageDialog();
+      } else {
+        return alert("결제 도중에 문제가 생겼습니다. 나중에 시도해 주세요.");
+      }
+    });
+  };
+
+  const handlePayment = () => {
+    //결제내역 DB에 저장
+    saveBuyList();
   };
 
   return (
@@ -217,6 +266,7 @@ const PaymentPage = () => {
                     <TableCell>작품 제목</TableCell>
                     <TableCell>설명</TableCell>
                     <TableCell>장르</TableCell>
+                    <TableCell>제작자</TableCell>
                     <TableCell>가격</TableCell>
                   </TableRow>
                 </TableHead>
@@ -226,8 +276,13 @@ const PaymentPage = () => {
                       <TableCell component="th" scope="row">
                         {row.title}
                       </TableCell>
-                      <TableCell>{row.description}</TableCell>
+                      <TableCell>
+                        {row.description.length >= 8
+                          ? row.description.substr(0, 9) + "..."
+                          : row.description}
+                      </TableCell>
                       <TableCell>{row.genre}</TableCell>
+                      <TableCell>{row.writer.nickname}</TableCell>
                       <TableCell>{row.cost}</TableCell>
                     </TableRow>
                   ))}
@@ -236,6 +291,7 @@ const PaymentPage = () => {
                   <TableRow>
                     <TableCell> 수량: {buyList.length}개</TableCell>
                     <TableCell> 주문금액: {totalCost}원</TableCell>
+                    <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                   </TableRow>

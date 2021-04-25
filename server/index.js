@@ -25,6 +25,7 @@ app.use("/api/video", require("./routes/video"));
 app.use("/api/shoppingBasket", require("./routes/shoppingBasket"));
 app.use("/api/comment", require("./routes/comment"));
 app.use("/api/like", require("./routes/like"));
+app.use("/api/buyList", require("./routes/buyList"));
 
 //node js server에 저장된 image를 client로 전달
 //참고: https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client

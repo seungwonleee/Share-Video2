@@ -289,6 +289,18 @@ const GridCards = ({
         history.push("/login");
       }
     };
+
+    const handlePayMent = () => {
+      if (isLoggedIn) {
+        const videoItem = JSON.stringify({ videoId: _id });
+        localStorage.setItem("buyItem", videoItem);
+        history.push("/payment");
+      } else {
+        alert("로그인 후 구매 가능합니다.");
+        history.push("/login");
+      }
+    };
+
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.center}>
@@ -355,7 +367,11 @@ const GridCards = ({
               icon={<ShoppingBasketIcon />}
               onClick={addShoppingBasket}
             />
-            <BottomNavigationAction label="구매하기" icon={<PaymentIcon />} />
+            <BottomNavigationAction
+              label="구매하기"
+              icon={<PaymentIcon />}
+              onClick={handlePayMent}
+            />
           </BottomNavigation>
         </Card>
       </Grid>
