@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/ko";
+import { useHistory } from "react-router-dom";
 //material ui imports
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -42,9 +43,11 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleComment = ({ comment, refreshComment }) => {
   const classes = useStyles();
+  let history = useHistory();
   //:videoId url을 가져온다.
   let { videoId } = useParams();
   const loginUser = useSelector((state) => state.auth.userId);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const [commentValue, setCommentValue] = useState("");
   const [openReply, setOpenReply] = useState(false);
@@ -56,24 +59,32 @@ const SingleComment = ({ comment, refreshComment }) => {
   //댓글 저장
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    const commentData = {
-      writer: loginUser,
-      videoId: videoId,
-      content: commentValue,
-      responseTo: comment._id,
-    };
-
-    axios.post("/api/comment/saveComment", commentData).then((response) => {
-      if (response.data.success) {
-        setCommentValue("");
-        setOpenReply(!openReply);
-        refreshComment(response.data.result);
-        // console.log(response.data.result);
-      } else {
-        alert("현재 댓글을 작성할 수 없습니다. 나중에 시도해주세요.");
+    if (isLoggedIn) {
+      if (commentValue.length === 0) {
+        return alert("댓글을 작성해주세요.");
       }
-    });
+
+      const commentData = {
+        writer: loginUser,
+        videoId: videoId,
+        content: commentValue,
+        responseTo: comment._id,
+      };
+
+      axios.post("/api/comment/saveComment", commentData).then((response) => {
+        if (response.data.success) {
+          setCommentValue("");
+          setOpenReply(!openReply);
+          refreshComment(response.data.result);
+          // console.log(response.data.result);
+        } else {
+          alert("현재 댓글을 작성할 수 없습니다. 나중에 시도해주세요.");
+        }
+      });
+    } else {
+      alert("로그인 후 사용 가능합니다.");
+      history.push("/login");
+    }
   };
 
   //대댓글 열기/닫기

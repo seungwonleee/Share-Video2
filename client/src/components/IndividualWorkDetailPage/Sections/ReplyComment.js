@@ -48,11 +48,8 @@ const useStyles = makeStyles((theme) => ({
 const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
   const classes = useStyles();
 
-  //:videoId url을 가져온다.
-  // let { videoId } = useParams();
-
   const loginUser = useSelector((state) => state.auth.userId);
-  //   const [openReply, setOpenReply] = useState(false);
+
   const [childCommentNumber, setChildCommentNumber] = useState(0);
   const [openReplyComments, setOpenReplyComments] = useState(false);
 
@@ -70,11 +67,6 @@ const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
   const handleChange = () => {
     setOpenReplyComments(!openReplyComments);
   };
-
-  //대댓글 열기/닫기
-  //   const handleReply = () => {
-  //     setOpenReply(!openReply);
-  //   };
 
   return (
     <ReplyCommentContainer>
@@ -117,12 +109,7 @@ const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
                           >
                             {moment(comment.createdAt).format("LL")}
                           </div>
-                          {/* <span
-                          style={{ fontSize: "1.3rem" }}
-                          onClick={handleReply}
-                        >
-                          {"답글쓰기"}
-                        </span> */}
+
                           <span
                             style={{ paddingLeft: "1rem", fontSize: "1.3rem" }}
                           >

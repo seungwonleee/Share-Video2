@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { refresh } from "../../../features/refresh/refreshSlice";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -39,6 +40,7 @@ const ShoppingBasketPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
+  const dispatch = useDispatch();
   let history = useHistory();
 
   const loginUser = useSelector((state) => state.auth.userId);
@@ -54,7 +56,6 @@ const ShoppingBasketPage = () => {
     axios
       .post("/api/shoppingBasket/getShoppingBasketList", userData)
       .then((response) => {
-        // console.log(" ====> ", response.data);
         if (response.data.success) {
           const resultBasketList = response.data.shoppingbaskets.map(
             (item, index) => {
@@ -74,6 +75,8 @@ const ShoppingBasketPage = () => {
           );
           // console.log(resultBasketList);
           setMyShoppingBasketList(resultBasketList);
+          //새로고침용
+          dispatch(refresh(1));
         } else {
           alert(
             "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."

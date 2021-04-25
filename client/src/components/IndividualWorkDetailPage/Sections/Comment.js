@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import SingleComment from "./SingleComment";
 import ReplyComment from "./ReplyComment";
 
@@ -19,9 +19,11 @@ const H1 = styled.h1`
 `;
 
 const Comment = () => {
+  let history = useHistory();
   //:videoId url을 가져온다.
   let { videoId } = useParams();
   const loginUser = useSelector((state) => state.auth.userId);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const [commentValue, setCommentValue] = useState("");
   const [commentLists, setCommentLists] = useState([]);
@@ -51,25 +53,33 @@ const Comment = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (commentValue.length === 0) {
-      return alert("댓글을 작성해주세요.");
-    }
 
-    const commentData = {
-      content: commentValue,
-      writer: loginUser,
-      videoId: videoId,
-    };
-
-    axios.post("/api/comment/saveComment", commentData).then((response) => {
-      if (response.data.success) {
-        setCommentValue("");
-        // console.log(response.data.result);
-        setCommentLists([...commentLists, ...response.data.result]);
-      } else {
-        alert("댓글을 작성하는데 문제가 발생하였습닌다. 나중에 시도해주세요.");
+    if (isLoggedIn) {
+      if (commentValue.length === 0) {
+        return alert("댓글을 작성해주세요.");
       }
-    });
+
+      const commentData = {
+        content: commentValue,
+        writer: loginUser,
+        videoId: videoId,
+      };
+
+      axios.post("/api/comment/saveComment", commentData).then((response) => {
+        if (response.data.success) {
+          setCommentValue("");
+          // console.log(response.data.result);
+          setCommentLists([...commentLists, ...response.data.result]);
+        } else {
+          alert(
+            "댓글을 작성하는데 문제가 발생하였습닌다. 나중에 시도해주세요."
+          );
+        }
+      });
+    } else {
+      alert("로그인 후 사용 가능합니다.");
+      history.push("/login");
+    }
   };
 
   // console.log("====>", commentLists);

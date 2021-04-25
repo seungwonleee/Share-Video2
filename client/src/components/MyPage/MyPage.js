@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { dbService } from "../../fire_module/fireMain";
+import { useSelector } from "react-redux";
 import axios from "axios";
 //Import MyPage Navigation
 import LikePage from "./Sections/LikePage";
@@ -45,37 +45,55 @@ const NavButton = styled(Button)`
 `;
 
 const MyPage = () => {
-  const [uid, setUid] = useState("");
   const [title, setTitle] = useState("좋아요 목록");
   const [visible, setVisible] = useState({
     likeVisible: true,
-    shoppingBasketVisible: false,
-    purchaseHistoryVisible: false,
-    myIndividualWorkVisible: false,
   });
   const [shoppingBasketCount, setShoppingBasketCount] = useState(0);
 
-  const getShoppingBasketCount = async (uid) => {
-    // await dbService
-    //   .collection(uid)
-    //   .doc("shoppingBasket")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     setShoppingBasketCount(snapshot.docs.length);
-    //   });
+  const loginUser = useSelector((state) => state.auth.userId);
+  const refresh = useSelector((state) => state.refresh.count);
+
+  const userData = {
+    loginUser,
   };
 
-  const getUid = async () => {
-    // await axios.get("/api/users/auth").then((res) => {
-    //   setUid(res.data.uid);
-    //   getShoppingBasketCount(res.data.uid);
-    // });
+  const loadShoppingBasketList = () => {
+    axios
+      .post("/api/shoppingBasket/getShoppingBasketList", userData)
+      .then((response) => {
+        if (response.data.success) {
+          const resultBasketList = response.data.shoppingbaskets.map(
+            (item, index) => {
+              const madeFrom = { madeFrom: item.madeFrom.nickname };
+              const minutes = Math.floor(Number(item.duration) / 60);
+              const seconds = Math.floor(Number(item.duration) - minutes * 60);
+              const runningTime = {
+                runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+              };
+              return {
+                id: index + 1,
+                ...item,
+                ...runningTime,
+                ...madeFrom,
+              };
+            }
+          );
+          setShoppingBasketCount(resultBasketList.length);
+        } else {
+          alert(
+            "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getUid();
-  }, []);
+    loadShoppingBasketList();
+  }, [loginUser, refresh]);
 
   const handleVisible = (event) => {
     // 새로고침시 likeVisible state 값이 true 이기때문에 좋아요 목록으로 고정된다.
