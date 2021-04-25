@@ -5,11 +5,14 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import PaymentIcon from "@material-ui/icons/Payment";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { setCount } from "../../../features/like/likeSlice";
 
 const ButtonBar = ({ userFrom, video }) => {
+  let history = useHistory();
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const shoppingBasketData = {
     video: video._id,
@@ -27,19 +30,24 @@ const ButtonBar = ({ userFrom, video }) => {
 
   // 장바구니 목록에 추가
   const addShoppingBasket = () => {
-    axios
-      .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
-      .then((response) => {
-        // console.log(response);
-        if (response.data.success) {
-          alert("장바구니에 담았습니다.");
-        } else {
-          if (response.data.message) {
-            return alert("이미 장바구니에 담겼습니다.");
+    if (isLoggedIn) {
+      axios
+        .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
+        .then((response) => {
+          // console.log(response);
+          if (response.data.success) {
+            alert("장바구니에 담았습니다.");
+          } else {
+            if (response.data.message) {
+              return alert("이미 장바구니에 담겼습니다.");
+            }
+            alert("오류가 발생했습니다. 나중에 시도해주세요.");
           }
-          alert("오류가 발생했습니다. 나중에 시도해주세요.");
-        }
-      });
+        });
+    } else {
+      alert("로그인 후 사용가능 합니다.");
+      history.push("/login");
+    }
   };
 
   const likeData = {

@@ -89,6 +89,7 @@ const GridCards = ({
 
   const userId = useSelector((state) => state.auth.userId);
   const userNickname = useSelector((state) => state.auth.nickname);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   if (landingPage) {
     //사용자 식별 uid 와 좋아요 누른 항목 DB에 저장
@@ -269,19 +270,24 @@ const GridCards = ({
 
     // 장바구니 목록에 추가
     const addShoppingBasket = () => {
-      axios
-        .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
-        .then((response) => {
-          // console.log(response);
-          if (response.data.success) {
-            alert("장바구니에 담았습니다.");
-          } else {
-            if (response.data.message) {
-              return alert("이미 장바구니에 담겼습니다.");
+      if (isLoggedIn) {
+        axios
+          .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
+          .then((response) => {
+            // console.log(response);
+            if (response.data.success) {
+              alert("장바구니에 담았습니다.");
+            } else {
+              if (response.data.message) {
+                return alert("이미 장바구니에 담겼습니다.");
+              }
+              alert("오류가 발생했습니다. 나중에 시도해주세요.");
             }
-            alert("오류가 발생했습니다. 나중에 시도해주세요.");
-          }
-        });
+          });
+      } else {
+        alert("로그인 후 사용가능 합니다.");
+        history.push("/login");
+      }
     };
     return (
       // 개인 작품 목록 Grid Cards (IndividualWorkPage)

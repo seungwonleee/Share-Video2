@@ -68,7 +68,7 @@ const IndividualWorkDetailPage = () => {
     event.preventDefault();
   };
 
-  if (video && loginUser) {
+  if (video) {
     return (
       <Container>
         {breakPoint ? (
@@ -146,6 +146,10 @@ const IndividualWorkDetailPage = () => {
               />
               {/* Comments */}
               <Comment />
+              {/* 사이드바 영상 추천 목록 */}
+              <div style={{ margin: "3rem 0 " }}>
+                <SideVideo />
+              </div>
             </div>
           </>
         )}

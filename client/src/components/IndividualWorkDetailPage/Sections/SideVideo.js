@@ -62,7 +62,7 @@ const SideVideo = () => {
       return (
         <Container key={index}>
           <Image>
-            <a href={`/video/${video._id}`}>
+            <a href={`/individualwork/${video._id}`}>
               <img
                 src={`http://localhost:5000/${video.thumbnail}`}
                 alt={`thumbnail-${video.title}`}
@@ -70,7 +70,7 @@ const SideVideo = () => {
             </a>
           </Image>
           <Description>
-            <a href={`/video/${video._id}`}>
+            <a href={`/individualwork/${video._id}`}>
               <p>{video.title}</p>
               <p>제작자: {video.writer.name}</p>
               <p>조회수: {video.views}</p>
