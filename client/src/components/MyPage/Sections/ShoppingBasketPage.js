@@ -93,9 +93,26 @@ const ShoppingBasketPage = () => {
   }, []);
 
   //결제 페이지로 넘어가기 (장바구니에서 선택한 목록 localstorage 저장)
-  const buyItem = () => {
-    history.push("/payment");
-    localStorage.setItem("buy", JSON.stringify(selection));
+  const purchaseItem = () => {
+    if (selection.length < 1) {
+      return alert("구매하실 목록을 선택해주세요.");
+    }
+
+    let videoList = [];
+    myShoppingBasketList.map((item, index) => {
+      selection.map((selectValue, index) => {
+        if (item.id === Number(selectValue)) {
+          videoList.push(item.video);
+        }
+      });
+    });
+
+    const videoListData = JSON.stringify(videoList);
+    localStorage.setItem("purchaseItem", videoListData);
+    history.push({
+      pathname: "/payment",
+      from: "shoppingBasketPage",
+    });
   };
 
   const handleShoppingBasketListRemove = async () => {
@@ -168,7 +185,7 @@ const ShoppingBasketPage = () => {
           className={classes.Button}
           color="secondary"
           startIcon={<ShoppingBasketIcon />}
-          onClick={buyItem}
+          onClick={purchaseItem}
           size="large"
         >
           <span>구매하기</span>

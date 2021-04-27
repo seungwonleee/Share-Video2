@@ -88,7 +88,7 @@ const PurchaseHistoryPage = () => {
           });
           setPurchaseList(resultBuyLists);
         } else {
-          alert("구매내력을 불러오는데 실패했습니다. 나중에 시도해주세요.");
+          alert("구매내역을 불러오는데 실패했습니다. 나중에 시도해주세요.");
         }
       })
       .catch((error) => {
@@ -122,7 +122,7 @@ const PurchaseHistoryPage = () => {
         .post("/api/purchaseList/deletePurchaseList", deleteData)
         .then((response) => {
           if (response.data.success) {
-            alert("장바구니 목록에서 삭제하였습니다.");
+            alert("구매내역에서 삭제하였습니다.");
             getPurchaseList();
           } else {
             alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");

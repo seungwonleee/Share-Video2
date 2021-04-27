@@ -15,12 +15,12 @@ router.post("/savePurchaseList", (req, res) => {
       userId: userId,
       videoId: video._id,
     });
-
     buyList.save((err, buyListResult) => {
       if (err) return res.json({ success: false, err });
-      res.status(200).json({ success: true });
+      // res.status(200).json({ success: true });
     });
   });
+  res.status(200).json({ success: true });
 });
 
 //구매 목록 가져오기 (userId 별로 가져온다.)

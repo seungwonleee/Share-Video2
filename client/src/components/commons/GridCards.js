@@ -236,24 +236,6 @@ const GridCards = ({
     const minutes = Math.floor(duration / 60);
     const seconds = Math.floor(duration - minutes * 60);
 
-    // 장바구니에 상품을 담으면 Dialog 안내 후 Dialog 제거
-    const showAddMessage = () => {
-      dispatch(
-        dialogState({
-          dialogState: true,
-          message: "장바구니에 상품을 담았습니다.",
-        })
-      );
-      setTimeout(() => {
-        dispatch(
-          dialogState({
-            dialogState: false,
-            message: null,
-          })
-        );
-      }, 1300);
-    };
-
     const shoppingBasketData = {
       video: _id,
       userFrom: userId,
@@ -290,10 +272,10 @@ const GridCards = ({
       }
     };
 
-    const handlePayMent = () => {
+    const handlePayment = () => {
       if (isLoggedIn) {
         const videoItem = JSON.stringify({ videoId: _id });
-        localStorage.setItem("buyItem", videoItem);
+        localStorage.setItem("purchaseItem", videoItem);
         history.push("/payment");
       } else {
         alert("로그인 후 구매 가능합니다.");
@@ -370,7 +352,7 @@ const GridCards = ({
             <BottomNavigationAction
               label="구매하기"
               icon={<PaymentIcon />}
-              onClick={handlePayMent}
+              onClick={handlePayment}
             />
           </BottomNavigation>
         </Card>

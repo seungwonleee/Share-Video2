@@ -19,11 +19,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import PaymentIcon from "@material-ui/icons/Payment";
-//Material UI dialog Imports
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 
 const ControlButton = styled(Button)`
   span {
@@ -68,19 +63,13 @@ const PaymentPage = () => {
   const dispatch = useDispatch();
 
   const userId = useSelector((state) => state.auth.userId);
-  const userNickname = useSelector((state) => state.auth.nickname);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  console.log(isLoggedIn);
 
-  const [uid, setUid] = useState("");
-  const [buyList, setBuyList] = useState([]);
+  const [purchaseList, setPurchaseList] = useState([]);
   const [totalCost, setTotalCost] = useState([]);
 
-  console.log("@@@@@@@@@", buyList);
-
   // 주문금액 총 합계
-  const calculateTotalCost = (video) => {
-    const costList = video.map((item, index) => {
+  const calculateTotalCost = (purchaseItemList) => {
+    const costList = purchaseItemList.map((item, index) => {
       return item.cost;
     });
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -90,8 +79,8 @@ const PaymentPage = () => {
 
   //개인 작품 페이지에서 하나만 구매할 때 하나의 비디오만 불러온다.
   const getSelectVideo = () => {
-    const getBuyItem = localStorage.getItem("buyItem");
-    const videoId = JSON.parse(getBuyItem);
+    const getPurchaseItem = localStorage.getItem("purchaseItem");
+    const videoId = JSON.parse(getPurchaseItem);
 
     const videoData = {
       ...videoId,
@@ -99,9 +88,9 @@ const PaymentPage = () => {
 
     axios.post("/api/video/getVideo", videoData).then((response) => {
       if (response.data.success) {
-        setBuyList([response.data.video]);
+        setPurchaseList([response.data.video]);
         calculateTotalCost([response.data.video]);
-        localStorage.removeItem("buyItem");
+        localStorage.removeItem("purchaseItem");
       } else {
         alert("해당 상품을 불러오는데 실패했습니다. 나중에 시도해 주세요.");
       }
@@ -109,52 +98,21 @@ const PaymentPage = () => {
   };
 
   useEffect(() => {
-    //TODO 로컬 스토리지에 buyItem이 있는 경우만 결제 가능하도록 제한
-    if (localStorage.getItem("buyItem")) {
-      getSelectVideo();
+    if (localStorage.getItem("purchaseItem")) {
+      if (history.location.from === "shoppingBasketPage") {
+        //장바구니 목록에서 구매하는 경우
+        const list = JSON.parse(localStorage.getItem("purchaseItem"));
+        setPurchaseList(list);
+        calculateTotalCost(list);
+        localStorage.removeItem("purchaseItem");
+      } else {
+        //개인 작품 목록에서 구매하는 경우
+        getSelectVideo();
+      }
     } else {
-      alert("결제를 처음부터 다시 시도해주세요.");
-      return history.push("/individualwork");
+      alert("결제 목록이 초기화 되었습니다. 다시 시도해주세요.");
     }
   }, []);
-
-  // 구매하고자하는 아이템 title과
-  // const checkItem = (myShoppingBasket) => {
-  //   //장바구니에서 구매하고자한 상품
-  //   const selectionItems = JSON.parse(localStorage.getItem("buy"));
-
-  //   const result = [];
-  //   myShoppingBasket.map((basketItem, index) => {
-  //     selectionItems.map((selectionItem, index) => {
-  //       if (basketItem.title === selectionItem) {
-  //         result.push(basketItem);
-  //         // console.log(result);
-  //       }
-  //     });
-  //   });
-  //   setBuyList([...result]);
-  //   calculateTotalCost(result);
-  // };
-
-  const shoppingBasketList = async (uid) => {
-    // await dbService
-    //   .collection(uid)
-    //   .doc("shoppingBasket")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     const myShoppingBasket = snapshot.docs.map((doc, index) => {
-    //       // console.log(doc.data());
-    //       return {
-    //         ...doc.data(),
-    //         id: doc.data().title,
-    //       };
-    //     });
-    //     // console.log("내 작품 목록 ===> ", ...myShoppingBasket);
-    //     // setShoppingBasket([...myShoppingBasket]);
-    //     checkItem(myShoppingBasket);
-    //   });
-  };
 
   const messageDialog = () => {
     //DB 작업동안 안내 Dialog 표시
@@ -205,7 +163,7 @@ const PaymentPage = () => {
         //장바구니가 아닌 개인 작품 페이지에서 구매할 경우 사용자의 video ObjectId를 알 수 없기 때문에 사용자의 장바구니 목록을 불러온다.
         if (response.data.success) {
           response.data.shoppingbaskets.map((basketList, index) => {
-            buyList.map((item, index) => {
+            purchaseList.map((item, index) => {
               if (basketList.video._id === item._id) {
                 filterdList.push(basketList);
               }
@@ -224,7 +182,7 @@ const PaymentPage = () => {
   const savePurchaseList = () => {
     const buyListData = {
       userId: userId,
-      videoList: buyList,
+      videoList: purchaseList,
     };
 
     axios
@@ -242,6 +200,9 @@ const PaymentPage = () => {
   };
 
   const handlePayment = () => {
+    if (purchaseList.length < 1) {
+      return alert("구매할 목록이 없습니다.");
+    }
     //결제내역 DB에 저장
     savePurchaseList();
   };
@@ -273,7 +234,7 @@ const PaymentPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {buyList.map((row) => (
+                  {purchaseList.map((row) => (
                     <TableRow key={row.title}>
                       <TableCell component="th" scope="row">
                         {row.title}
@@ -284,14 +245,16 @@ const PaymentPage = () => {
                           : row.description}
                       </TableCell>
                       <TableCell>{row.genre}</TableCell>
-                      <TableCell>{row.writer.nickname}</TableCell>
+                      <TableCell>
+                        {row.writer.nickname || row.nickname}
+                      </TableCell>
                       <TableCell>{row.cost}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell> 수량: {buyList.length}개</TableCell>
+                    <TableCell> 수량: {purchaseList.length}개</TableCell>
                     <TableCell> 주문금액: {totalCost}원</TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
@@ -318,7 +281,7 @@ const PaymentPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {buyList.map((row) => (
+                  {purchaseList.map((row) => (
                     <TableRow key={row.title}>
                       <TableCell component="th" scope="row">
                         {row.title}
@@ -331,7 +294,7 @@ const PaymentPage = () => {
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell> 수량: {buyList.length}개</TableCell>
+                    <TableCell> 수량: {purchaseList.length}개</TableCell>
                     <TableCell> 주문금액: {totalCost}원</TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
