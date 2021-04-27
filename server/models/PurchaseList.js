@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const buyListSchema = mongoose.Schema(
+const purchaseListSchema = mongoose.Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -15,6 +15,6 @@ const buyListSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const BuyList = mongoose.model("BuyList", buyListSchema);
+const PurchaseList = mongoose.model("PurchaseList", purchaseListSchema);
 
-module.exports = { BuyList };
+module.exports = { PurchaseList };

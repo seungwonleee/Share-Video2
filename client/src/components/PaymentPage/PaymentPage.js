@@ -221,27 +221,29 @@ const PaymentPage = () => {
   };
 
   //결제내역 DB에 저장
-  const saveBuyList = () => {
+  const savePurchaseList = () => {
     const buyListData = {
       userId: userId,
       videoList: buyList,
     };
 
-    axios.post("/api/buyList/saveBuyList", buyListData).then((response) => {
-      if (response.data.success) {
-        //DB에 구매목록 저장 후 장바구니에서 삭제
-        getShoppingBasketList();
-        //DB 작업동안 안내 Dialog 표시
-        messageDialog();
-      } else {
-        return alert("결제 도중에 문제가 생겼습니다. 나중에 시도해 주세요.");
-      }
-    });
+    axios
+      .post("/api/purchaseList/savePurchaseList", buyListData)
+      .then((response) => {
+        if (response.data.success) {
+          //DB에 구매목록 저장 후 장바구니에서 삭제
+          getShoppingBasketList();
+          //DB 작업동안 안내 Dialog 표시
+          messageDialog();
+        } else {
+          return alert("결제 도중에 문제가 생겼습니다. 나중에 시도해 주세요.");
+        }
+      });
   };
 
   const handlePayment = () => {
     //결제내역 DB에 저장
-    saveBuyList();
+    savePurchaseList();
   };
 
   return (

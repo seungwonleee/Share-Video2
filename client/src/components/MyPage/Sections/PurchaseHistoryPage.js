@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { dbService } from "../../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import { useSelector } from "react-redux";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,10 +16,23 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "id", headerName: "작품 제목", width: 130 },
+  { field: "id", headerName: "No", width: 60 },
+  { field: "title", headerName: "작품 제목", width: 190 },
   { field: "genre", headerName: "장르", width: 100 },
-  { field: "downloadURL", headerName: "다운로드 및 스트리밍 URL", width: 390 },
-  { field: "cost", headerName: "가격", width: 100 },
+  { field: "madeFrom", headerName: "제작자", width: 100 },
+  { field: "runningTime", headerName: "재생 시간", width: 100 },
+  {
+    field: "filePath",
+    headerName: "미리보기 / 다운로드",
+    width: 130,
+    renderCell: (params) => (
+      <a href={params.getValue("filePath")} target="_blank">
+        <Button variant="contained" color="default" size="small">
+          미리보기 / 다운로드
+        </Button>
+      </a>
+    ),
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -35,57 +48,90 @@ const PurchaseHistoryPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
+  const loginUser = useSelector((state) => state.auth.userId);
+
   const [selection, setSelection] = useState([]);
-  const [like, setLike] = useState([]);
-  const [uid, setUid] = useState("");
+  const [purchaseList, setPurchaseList] = useState([]);
 
-  const getLikeList = async (uid) => {
-    // dbService
-    //   .collection(uid)
-    //   .doc("buyList")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     const likeListData = snapshot.docs.map((doc, index) => {
-    //       // console.log(doc.data());
-    //       return {
-    //         ...doc.data(),
-    //         id: doc.data().title,
-    //       };
-    //     });
-    //     // console.log("좋아요 목록 ===> ", ...likeListData);
-    //     setLike([...likeListData]);
-    //   });
-  };
-
-  const getUid = async () => {
-    // await axios.get("/api/users/auth").then((res) => {
-    //   setUid(res.data.uid);
-    //   getLikeList(res.data.uid);
-    // });
+  //구매내역 가져오기
+  const getPurchaseList = () => {
+    const userData = {
+      userId: loginUser,
+    };
+    axios
+      .post("/api/purchaseList/getPurchaseList", userData)
+      .then((response) => {
+        if (response.data.success) {
+          const resultBuyLists = response.data.buyLists.map((item, index) => {
+            const title = { title: item.videoId.title };
+            const genre = { genre: item.videoId.genre };
+            const filePath = {
+              filePath: `http://localhost:5000/${item.videoId.filePath}`,
+            };
+            const madeFrom = { madeFrom: item.videoId.nickname };
+            const minutes = Math.floor(Number(item.videoId.duration) / 60);
+            const seconds = Math.floor(
+              Number(item.videoId.duration) - minutes * 60
+            );
+            const runningTime = {
+              runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+            };
+            return {
+              id: index + 1,
+              ...title,
+              ...genre,
+              ...filePath,
+              ...item,
+              ...runningTime,
+              ...madeFrom,
+            };
+          });
+          setPurchaseList(resultBuyLists);
+        } else {
+          alert("구매내력을 불러오는데 실패했습니다. 나중에 시도해주세요.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getUid();
+    getPurchaseList();
   }, []);
 
-  const handleLikeListRemove = async () => {
+  //구매내역 삭제
+  const handlePurchaseListRemove = async () => {
     const ok = window.confirm("정말로 삭제하시겠습니까?");
-    // if (ok) {
-    //   // firestore DB delete
-    //   await selection.map((videoTitle) => {
-    //     dbService
-    //       .collection(uid)
-    //       .doc("buyList")
-    //       .collection(uid)
-    //       .doc(videoTitle)
-    //       .delete()
-    //       .then(() => {
-    //         console.log("삭제 성공!");
-    //       })
-    //       .catch((error) => console.log("삭제 에러 ==> ", error));
-    //   });
-    // }
+
+    if (ok) {
+      let list = [];
+      purchaseList.map((item, index) => {
+        selection.map((selectValue, index) => {
+          if (item.id === Number(selectValue)) {
+            list.push(item);
+          }
+        });
+      });
+
+      let deleteData = {
+        deleteList: list,
+      };
+
+      axios
+        .post("/api/purchaseList/deletePurchaseList", deleteData)
+        .then((response) => {
+          if (response.data.success) {
+            alert("장바구니 목록에서 삭제하였습니다.");
+            getPurchaseList();
+          } else {
+            alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -93,7 +139,7 @@ const PurchaseHistoryPage = () => {
       {breakPoint ? (
         <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
-            rows={like}
+            rows={purchaseList}
             columns={columns}
             pageSize={5}
             checkboxSelection
@@ -103,7 +149,7 @@ const PurchaseHistoryPage = () => {
       ) : (
         <div style={{ height: "400px", width: "100%" }}>
           <DataGrid
-            rows={like}
+            rows={purchaseList}
             columns={columns}
             pageSize={5}
             checkboxSelection
@@ -116,7 +162,7 @@ const PurchaseHistoryPage = () => {
         variant="contained"
         className={classes.Button}
         startIcon={<DeleteIcon />}
-        onClick={handleLikeListRemove}
+        onClick={handlePurchaseListRemove}
         size="large"
       >
         <span>구매내역 삭제</span>

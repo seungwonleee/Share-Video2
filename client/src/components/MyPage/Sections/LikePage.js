@@ -47,7 +47,6 @@ const LikePage = () => {
   //MyPage 좋아요 목록에 현재 로그인한 유저의 좋아요 목록 가져온다.
   const getLikeList = () => {
     axios.post("/api/like/getLikes", likeData).then((response) => {
-      console.log(response.data);
       if (response.data.success) {
         const resultLikeList = response.data.likes.map((item, index) => {
           const videoData = {
@@ -109,7 +108,7 @@ const LikePage = () => {
           .post("/api/like/unLike", deleteData)
           .then((response) => {
             if (response.data.success) {
-              alert("장바구니 목록에서 삭제하였습니다.");
+              alert("좋아요 목록에서 삭제하였습니다.");
               getLikeList();
             } else {
               alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
