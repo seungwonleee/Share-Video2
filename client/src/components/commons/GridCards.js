@@ -16,7 +16,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import ShareIcon from "@material-ui/icons/Share";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
@@ -176,10 +176,6 @@ const GridCards = ({
             }}
           >
             <div>
-              {/* 좋아요 목록 추가 버튼  */}
-              <IconButton aria-label="add to favorites" onClick={addLikeItem}>
-                <FavoriteIcon />
-              </IconButton>
               {/* 영화 예고편 youtube list 로 이동 버튼  * Youtube API 호출 가능 횟수가 적어서 대체 */}
               <a
                 href={`https://www.youtube.com/results?search_query=${movieNameKorean} 공식 예고편`}
@@ -196,7 +192,7 @@ const GridCards = ({
                 name={movieNameKorean}
                 onClick={copyMovieTitle}
               >
-                <ShareIcon />
+                <FileCopyIcon />
               </IconButton>
             </div>
             <div>

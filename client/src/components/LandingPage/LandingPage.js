@@ -61,6 +61,7 @@ const LandingPage = () => {
 
   const [Movies, setMovies] = useState([]);
   const [mainMovieImage, setMainMovieImage] = useState([]);
+  console.log(mainMovieImage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getMovies = (endpoint) => {
@@ -104,7 +105,9 @@ const LandingPage = () => {
                 <Item
                   key={i}
                   image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${image.backdrop_path}`}
-                  name={image.title}
+                  title={image.title}
+                  original_title={image.original_title}
+                  overview={image.overview}
                 />
               );
             })}

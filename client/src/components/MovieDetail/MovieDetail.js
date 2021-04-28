@@ -8,13 +8,12 @@ import {
   ORIGINAL_SIZE,
   POSTER_SIZE,
 } from "../Config";
-import MainImage from "../LandingPage/Sections/MainImage";
+import MainImage from "./Sections/MainImage";
 import MovieInfo from "./Sections/MovieInfo";
 import GridCards from "../commons/GridCards";
 // Material UI Imports
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 85%;
@@ -27,6 +26,7 @@ const CastToggleButton = styled.div`
   display: flex;
   justify-content: center;
   margin: 2rem;
+  font-size: ${(props) => props.theme.fontSizes.xlarge};
 `;
 
 // Material UI CSS
@@ -53,11 +53,6 @@ const MovieDetail = (props) => {
 
   const [Movie, setMovie] = useState([]);
   const [Casts, setCasts] = useState([]);
-  const [ActorToggle, setActorToggle] = useState(false);
-
-  const actorToggleView = () => {
-    setActorToggle(!ActorToggle);
-  };
 
   const getMovieDetailInfo = async (endpointMovieInfo) => {
     // 영화 상세 정보
@@ -89,7 +84,7 @@ const MovieDetail = (props) => {
         image={`${IMAGE_BASE_URL}${ORIGINAL_SIZE}${Movie.backdrop_path}`}
         titleEnglish={Movie.original_title}
         titleKorean={Movie.title}
-        text={Movie.overview}
+        overview={Movie.overview}
       />
       {/* Movie Detail InFormation */}
       <Container style={{ width: "85%", margin: "1rem auto" }}>
@@ -97,38 +92,29 @@ const MovieDetail = (props) => {
         <MovieInfo movie={Movie} />
         <br />
         {/* 출연진 확인하기 버튼 (토글) */}
-        <CastToggleButton>
-          <Button
-            className={classes.button}
-            variant="contained"
-            onClick={actorToggleView}
-          >
-            출연진 보기
-          </Button>
-        </CastToggleButton>
+        <CastToggleButton>출연진 보기</CastToggleButton>
 
         {/* 출연자 list Grid Cards */}
-        {ActorToggle && (
-          <div className={classes.root}>
-            <Grid container spacing={2}>
-              {Casts &&
-                Casts.map((cast, index) => (
-                  <GridCards
-                    castList
-                    key={index}
-                    image={
-                      cast.profile_path
-                        ? `${IMAGE_BASE_URL}${POSTER_SIZE}${cast.profile_path}`
-                        : null
-                    }
-                    castName={cast.name}
-                    //   movieId={cast.id}
-                    character={cast.character}
-                  />
-                ))}
-            </Grid>
-          </div>
-        )}
+
+        <div className={classes.root}>
+          <Grid container spacing={2}>
+            {Casts &&
+              Casts.map((cast, index) => (
+                <GridCards
+                  castList
+                  key={index}
+                  image={
+                    cast.profile_path
+                      ? `${IMAGE_BASE_URL}${POSTER_SIZE}${cast.profile_path}`
+                      : null
+                  }
+                  castName={cast.name}
+                  //   movieId={cast.id}
+                  character={cast.character}
+                />
+              ))}
+          </Grid>
+        </div>
 
         <br />
 

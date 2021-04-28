@@ -25,11 +25,18 @@ const useStyles = makeStyles({
     border: "1px solid gray",
     borderRadius: "4px",
     background: "gray",
+    minWidth: "6rem",
   },
   mobileTd: {
     fontSize: "1.4rem",
     border: "1px solid gray",
     borderRadius: "4px",
+  },
+  tableHead: {
+    background: "gray",
+  },
+  tableCell: {
+    fontSize: "1.4rem",
   },
 });
 
@@ -46,32 +53,71 @@ const MovieInfo = ({ movie }) => {
   return (
     <>
       {breakPoint ? (
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead style={{ background: "gray" }}>
-              <TableRow>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">장르</TableCell>
-                <TableCell align="center">재생 시간</TableCell>
-                <TableCell align="center">평점</TableCell>
-                <TableCell align="center">출시현황 / 출시일</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell align="center">
-                  {movie.original_title} <br /> {movie.title}
-                </TableCell>
-                <TableCell align="center">{genresCollection}</TableCell>
-                <TableCell align="center">{movie.runtime} 분</TableCell>
-                <TableCell align="center">{movie.vote_average}</TableCell>
-                <TableCell align="center">
-                  {movie.status} / {movie.release_date}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead className={classes.tableHead}>
+                <TableRow>
+                  <TableCell className={classes.tableCell} align="center">
+                    제목
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    장르
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    재생 시간
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    평점
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    출시현황 / 출시일
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell className={classes.tableCell} align="center">
+                    {movie.original_title} <br /> {movie.title}
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    {genresCollection}
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    {movie.runtime} 분
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    {movie.vote_average}
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    {movie.status} / {movie.release_date}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead className={classes.tableHead}>
+                <TableRow>
+                  <TableCell
+                    className={classes.tableCell}
+                    style={{ textAlign: "center" }}
+                  >
+                    줄거리
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell className={classes.tableCell}>
+                    {movie.overview}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
       ) : (
         <table className={classes.mobileTable}>
           <tr>
@@ -97,6 +143,10 @@ const MovieInfo = ({ movie }) => {
             <td className={classes.mobileTd}>
               {movie.status} / {movie.release_date}
             </td>
+          </tr>
+          <tr>
+            <th className={classes.mobileTh}>줄거리</th>
+            <td className={classes.mobileTd}>{movie.overview}</td>
           </tr>
         </table>
       )}
