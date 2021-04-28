@@ -91,6 +91,37 @@ const SingleComment = ({ comment, refreshComment }) => {
     setOpenReply(!openReply);
   };
 
+  //댓글 새로고침
+  const refreshCommentList = () => {
+    const videoData = {
+      videoId: videoId,
+    };
+
+    axios.post("/api/comment/getComments", videoData).then((response) => {
+      if (response.data.success) {
+        refreshComment([]);
+      } else {
+        alert("댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.");
+      }
+    });
+  };
+
+  //댓글 삭제
+  const removeComment = (event) => {
+    const commentData = {
+      commentId: event.currentTarget.getAttribute("_id"),
+    };
+
+    axios.post("/api/comment/removeComment", commentData).then((response) => {
+      if (response.data.success) {
+        alert("댓글을 삭제했습니다.");
+        refreshCommentList();
+      } else {
+        alert("댓글을 삭제하는데 실패했습니다. 나중에 시도해주세요.");
+      }
+    });
+  };
+
   return (
     <div>
       <List className={classes.root}>
@@ -110,16 +141,17 @@ const SingleComment = ({ comment, refreshComment }) => {
             primary={comment.content}
             secondary={
               <div>
-                <div style={{ fontSize: "1.2rem", padding: "1rem 0 0.3rem" }}>
+                <span style={{ fontSize: "1.2rem", padding: "1rem 0 0.3rem" }}>
                   {moment(comment.createdAt).format("LL")}
-                </div>
-                <span style={{ fontSize: "1.3rem" }} onClick={handleReply}>
+                </span>
+                {/* <span style={{ fontSize: "1.3rem" }} onClick={handleReply}>
                   {"답글쓰기"}
-                </span>
-                <span style={{ paddingLeft: "1rem", fontSize: "1.3rem" }}>
-                  {loginUser === comment.writer._id ? "수정" : ""}
-                </span>
-                <span style={{ paddingLeft: "1rem", fontSize: "1.3rem" }}>
+                </span> */}
+                <span
+                  _id={comment._id}
+                  style={{ marginLeft: "1rem", fontSize: "1.3rem" }}
+                  onClick={removeComment}
+                >
                   {loginUser === comment.writer._id ? "삭제" : ""}
                 </span>
               </div>

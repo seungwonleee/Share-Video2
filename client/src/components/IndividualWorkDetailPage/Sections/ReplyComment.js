@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
+  // console.log("reply", commentLists);
   const classes = useStyles();
 
   const loginUser = useSelector((state) => state.auth.userId);
@@ -66,6 +67,10 @@ const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
   const handleChange = () => {
     setOpenReplyComments(!openReplyComments);
   };
+
+  // const removeComment = () => {
+  //   console.log("reply remove!!");
+  // };
 
   return (
     <ReplyCommentContainer>
@@ -108,14 +113,9 @@ const ReplyComment = ({ commentLists, parentCommentId, refreshComment }) => {
                           >
                             {moment(comment.createdAt).format("LL")}
                           </div>
-
                           <span
-                            style={{ paddingLeft: "1rem", fontSize: "1.3rem" }}
-                          >
-                            {loginUser === comment.writer._id ? "수정" : ""}
-                          </span>
-                          <span
-                            style={{ paddingLeft: "1rem", fontSize: "1.3rem" }}
+                            style={{ fontSize: "1.3rem" }}
+                            // onClick={removeComment}
                           >
                             {loginUser === comment.writer._id ? "삭제" : ""}
                           </span>

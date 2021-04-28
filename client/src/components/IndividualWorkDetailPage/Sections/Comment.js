@@ -43,7 +43,7 @@ const Comment = () => {
   };
   useEffect(() => {
     getComments();
-  }, []);
+  }, [commentLists]);
 
   const handleCommentText = (event) => {
     const { value } = event.currentTarget;
@@ -101,12 +101,12 @@ const Comment = () => {
                   comment={comment}
                   refreshComment={refreshComment}
                 />
-                <ReplyComment
+                {/* <ReplyComment
                   key={`replyComment-${index}`}
                   commentLists={commentLists}
                   parentCommentId={comment._id}
                   refreshComment={refreshComment}
-                />
+                /> */}
               </>
             )
         )}
