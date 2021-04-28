@@ -51,6 +51,12 @@ const useStyles = makeStyles((theme) => ({
   fontsize: {
     fontSize: "1.6rem !important",
   },
+  tableHead: {
+    fontSize: "1.6rem",
+  },
+  tableCell: {
+    fontSize: "1.4rem",
+  },
 }));
 
 const PaymentPage = () => {
@@ -211,6 +217,7 @@ const PaymentPage = () => {
       <Container>
         <h1>결제 페이지</h1>
         {breakPoint ? (
+          //데스크톱
           <div
             style={{
               height: "400px",
@@ -225,36 +232,52 @@ const PaymentPage = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell>작품 제목</TableCell>
-                    <TableCell>설명</TableCell>
-                    <TableCell>장르</TableCell>
-                    <TableCell>제작자</TableCell>
-                    <TableCell>가격</TableCell>
+                    <TableCell className={classes.tableHead}>
+                      작품 제목
+                    </TableCell>
+                    <TableCell className={classes.tableHead}>설명</TableCell>
+                    <TableCell className={classes.tableHead}>장르</TableCell>
+                    <TableCell className={classes.tableHead}>제작자</TableCell>
+                    <TableCell className={classes.tableHead}>가격</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {purchaseList.map((row) => (
                     <TableRow key={row.title}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        className={classes.tableCell}
+                      >
                         {row.title}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className={classes.tableCell}>
                         {row.description.length >= 8
                           ? row.description.substr(0, 9) + "..."
                           : row.description}
                       </TableCell>
-                      <TableCell>{row.genre}</TableCell>
-                      <TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {row.genre}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
                         {row.writer.nickname || row.nickname}
                       </TableCell>
-                      <TableCell>{row.cost}</TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {row.cost}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell> 수량: {purchaseList.length}개</TableCell>
-                    <TableCell> 주문금액: {totalCost}원</TableCell>
+                    <TableCell className={classes.tableHead}>
+                      {" "}
+                      수량: {purchaseList.length}개
+                    </TableCell>
+                    <TableCell className={classes.tableHead}>
+                      {" "}
+                      주문금액: {totalCost}원
+                    </TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
@@ -264,7 +287,8 @@ const PaymentPage = () => {
             </TableContainer>
           </div>
         ) : (
-          <div style={{ height: "400px", width: "100%" }}>
+          //모바일, 테블릿
+          <div style={{ height: "400px", width: "100%", padding: "0 1rem" }}>
             <TableContainer component={Paper} style={{ height: "100%" }}>
               <Table
                 className={classes.table}
@@ -273,32 +297,50 @@ const PaymentPage = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell>작품 제목</TableCell>
-                    <TableCell>설명</TableCell>
-                    <TableCell>장르</TableCell>
-                    <TableCell>제작자</TableCell>
-                    <TableCell>가격</TableCell>
+                    <TableCell className={classes.tableHead}>
+                      작품 제목
+                    </TableCell>
+                    <TableCell className={classes.tableHead}>설명</TableCell>
+                    <TableCell className={classes.tableHead}>장르</TableCell>
+                    <TableCell className={classes.tableHead}>제작자</TableCell>
+                    <TableCell className={classes.tableHead}>가격</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {purchaseList.map((row) => (
                     <TableRow key={row.title}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        className={classes.tableCell}
+                      >
                         {row.title}
                       </TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.genre}</TableCell>
-                      <TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {row.description}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {row.genre}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
                         {row.writer.nickname || row.nickname}
                       </TableCell>
-                      <TableCell>{row.cost}</TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {row.cost}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell> 수량: {purchaseList.length}개</TableCell>
-                    <TableCell> 주문금액: {totalCost}원</TableCell>
+                    <TableCell className={classes.tableHead}>
+                      {" "}
+                      수량: {purchaseList.length}개
+                    </TableCell>
+                    <TableCell className={classes.tableHead}>
+                      {" "}
+                      주문금액: {totalCost}원
+                    </TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
