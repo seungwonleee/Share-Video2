@@ -35,7 +35,6 @@ const Routes = () => {
   //false   =>  로그인한 유저는 출입 불가능한 페이지
   // 라우팅 경로 확인
   const { pathname } = useLocation();
-  // console.log(pathname);
   return (
     <>
       {pathname !== "/login" &&
