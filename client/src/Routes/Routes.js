@@ -38,7 +38,9 @@ const Routes = () => {
   // console.log(pathname);
   return (
     <>
-      {pathname !== "/login" && pathname !== "/register" && <NavBar />}
+      {pathname !== "/login" &&
+        pathname !== "/register" &&
+        pathname !== "/findaccount" && <NavBar />}
       <MainSection>
         <Switch>
           <Route exact path="/" component={Auth(LandingPage)} />
@@ -80,7 +82,8 @@ const Routes = () => {
       </MainSection>
       {pathname !== "/login" &&
         pathname !== "/register" &&
-        pathname !== "/videoupload" && <Footer />}
+        pathname !== "/videoupload" &&
+        pathname !== "/findaccount" && <Footer />}
     </>
   );
 };

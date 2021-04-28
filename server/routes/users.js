@@ -29,7 +29,7 @@ router.post("/login", (req, res) => {
       if (!isMatch)
         return res.json({
           loginSuccess: false,
-          message: "비밀번호가 틀렸습니다.",
+          message: "비밀번호가 일치하지 않습니다.",
         });
 
       //비밀번호 까지 맞다면 토큰을 생성하기.

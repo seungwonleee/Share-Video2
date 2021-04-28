@@ -11,7 +11,6 @@ export const dialogSlice = createSlice({
     // dialog 상태 업데이트
     dialogState: (state, action) => {
       state.dialogState = action.payload;
-      //   console.log("action====>", action.payload);
       state.dialogState = action.payload.dialogState;
       state.message = action.payload.message;
     },

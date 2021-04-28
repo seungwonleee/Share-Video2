@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
@@ -34,7 +34,6 @@ const ButtonBar = ({ userFrom, video }) => {
       axios
         .post("/api/shoppingBasket/addShoppingBasket", shoppingBasketData)
         .then((response) => {
-          // console.log(response);
           if (response.data.success) {
             alert("장바구니에 담았습니다.");
           } else {
@@ -59,7 +58,6 @@ const ButtonBar = ({ userFrom, video }) => {
   const handleLike = () => {
     if (isLoggedIn) {
       axios.post("/api/like/upLike", likeData).then((response) => {
-        console.log(response.data);
         if (response.data.success) {
           alert("좋아요 했습니다.");
           dispatch(setCount(1));
@@ -82,12 +80,21 @@ const ButtonBar = ({ userFrom, video }) => {
       history.push("/login");
     }
   };
+  //영상 구매하기
+  const handlePayment = () => {
+    if (isLoggedIn) {
+      const videoItem = JSON.stringify({ videoId: video._id });
+      localStorage.setItem("purchaseItem", videoItem);
+      history.push("/payment");
+    } else {
+      alert("로그인 후 구매 가능합니다.");
+      history.push("/login");
+    }
+  };
   return (
     <BottomNavigation showLabels style={{ background: "#424242" }}>
       <BottomNavigationAction
         label="좋아요"
-        //   component={Link}
-        //   to={`/individualwork/${_id}`}
         icon={<ThumbUpAltIcon />}
         style={{ color: "#FFFFFF" }}
         onClick={handleLike}
@@ -102,6 +109,7 @@ const ButtonBar = ({ userFrom, video }) => {
         label="구매하기"
         icon={<PaymentIcon />}
         style={{ color: "#FFFFFF" }}
+        onClick={handlePayment}
       />
     </BottomNavigation>
   );

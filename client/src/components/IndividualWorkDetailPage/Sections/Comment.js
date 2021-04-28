@@ -35,7 +35,6 @@ const Comment = () => {
   const getComments = () => {
     axios.post("/api/comment/getComments", videoData).then((response) => {
       if (response.data.success) {
-        console.log("response.data.comments", response.data.comments);
         setCommentLists(response.data.comments);
       } else {
         alert("댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.");
@@ -68,7 +67,6 @@ const Comment = () => {
       axios.post("/api/comment/saveComment", commentData).then((response) => {
         if (response.data.success) {
           setCommentValue("");
-          // console.log(response.data.result);
           setCommentLists([...commentLists, ...response.data.result]);
         } else {
           alert(
@@ -82,10 +80,7 @@ const Comment = () => {
     }
   };
 
-  // console.log("====>", commentLists);
-
   const refreshComment = (newComment) => {
-    console.log([...commentLists, ...newComment]);
     setCommentLists([...commentLists, ...newComment]);
   };
 

@@ -47,12 +47,13 @@ const ShoppingBasketPage = () => {
 
   const [selection, setSelection] = useState([]);
   const [myShoppingBasketList, setMyShoppingBasketList] = useState([]);
-  console.log(myShoppingBasketList);
-  const userData = {
-    loginUser,
-  };
+
   // 장바구니 목록 불러오기
   const loadShoppingBasketList = () => {
+    const userData = {
+      loginUser,
+    };
+
     axios
       .post("/api/shoppingBasket/getShoppingBasketList", userData)
       .then((response) => {
@@ -73,10 +74,8 @@ const ShoppingBasketPage = () => {
               };
             }
           );
-          // console.log(resultBasketList);
+
           setMyShoppingBasketList(resultBasketList);
-          //새로고침용
-          dispatch(refresh(1));
         } else {
           alert(
             "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."
@@ -139,6 +138,8 @@ const ShoppingBasketPage = () => {
           if (response.data.success) {
             alert("장바구니 목록에서 삭제하였습니다.");
             loadShoppingBasketList();
+            //새로고침용
+            dispatch(refresh(1));
           } else {
             alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
           }

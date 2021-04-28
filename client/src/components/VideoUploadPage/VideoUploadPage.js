@@ -180,7 +180,7 @@ const VideoUploadPage = () => {
       duration: fileDurationAndThumbnail.fileDuration,
       thumbnail: fileDurationAndThumbnail.fileThumbnail,
     };
-    console.log(data);
+
     //영상 관련 모든 데이터 저장
     axios.post("/api/video/uploadVideo", data).then((response) => {
       if (response.data.success) {
@@ -200,7 +200,6 @@ const VideoUploadPage = () => {
           fileDuration: response.data.fileDuration,
           fileThumbnail: response.data.thumbsFilePath,
         };
-        console.log("thumbnails 생성 및 저장 성공");
         //최종적으로 video file 과 thumbnail에 대한 정보를 하나의 document에 저장
         saveVideoData(filePathAndName, fileDurationAndThumbnail);
       } else {
@@ -219,12 +218,10 @@ const VideoUploadPage = () => {
     //동영상 파일을 저장
     axios.post("/api/video/uploadfiles", formData, config).then((response) => {
       if (response.data.success) {
-        console.log(response);
         let filePathAndName = {
           filePath: response.data.filePath,
           fileName: response.data.fileName,
         };
-        console.log("영상 저장 완료");
 
         //영상에대한 thumbnail과 파일 경로(filepath) 생성
         saveThumbnail(filePathAndName);
@@ -254,7 +251,6 @@ const VideoUploadPage = () => {
   const onDrop = (files) => {
     const theFile = files[0];
     setDropFile(theFile);
-    // console.log(theFile);
 
     // 100mb 이상 업로드 불가
     if (theFile.size >= 100000000) {

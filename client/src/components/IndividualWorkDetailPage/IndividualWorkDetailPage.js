@@ -9,30 +9,12 @@ import SideVideo from "./Sections/SideVideo";
 import ButtonBar from "./Sections/ButtonBar";
 import Comment from "./Sections/Comment";
 // Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 const Container = styled.div`
   min-height: 80vh;
   height: 100%;
 `;
-
-// Material UI CSS
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-  button: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 
 const IndividualWorkDetailPage = () => {
   const breakPoint = useMediaQuery({
@@ -45,11 +27,10 @@ const IndividualWorkDetailPage = () => {
 
   const [video, setVideo] = useState("");
 
-  const videoData = {
-    videoId: videoId,
-  };
-
   const getVideoDetailInfo = () => {
+    const videoData = {
+      videoId: videoId,
+    };
     axios.post("/api/video/getVideo", videoData).then((response) => {
       if (response.data.success) {
         console.log(response.data.video);

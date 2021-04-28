@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    height: "100vh",
+    height: "100%",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -67,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: "3.4rem",
+    color: "#000000",
   },
   text: {
     fontSize: "1.6rem",
@@ -87,9 +88,7 @@ const FindAccountPage = () => {
 
   const handleInput = (event) => {
     const { name, value } = event.currentTarget;
-    // setEmail(event.currentTarget.value);
-    console.log(name);
-    console.log(value);
+
     switch (name) {
       case "email":
         setEmail(value);
@@ -137,7 +136,7 @@ const FindAccountPage = () => {
       ...responseUserData,
       password: resetPassword,
     };
-    //
+
     await axios.post("/api/users/resetpassword", body).then((response) => {
       if (response.data.resetPassword) {
         alert("비밀번호가 성공적으로 변경되었습니다.");
@@ -154,12 +153,14 @@ const FindAccountPage = () => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5" className={classes.title}>
-          Share-Video
+        <a href="/">
+          <Typography component="h1" variant="h5" className={classes.title}>
+            Share-Video
+          </Typography>
+        </a>
+        <Typography className={classes.text} style={{ padding: "1rem 0 " }}>
+          (계정 찾기)
         </Typography>
-        <br />
-        <Typography className={classes.text}>(계정 찾기)</Typography>
-        <br />
         {resetPasswordState ? (
           <>
             <Typography className={classes.text}>

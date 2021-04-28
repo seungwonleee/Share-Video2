@@ -5,7 +5,7 @@ import moment from "moment";
 import "moment/locale/ko";
 import { useSelector } from "react-redux";
 //Material UI Imports
-import { makeStyles, styled } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -61,7 +61,6 @@ const IndividualWorkDetailInfo = ({ video }) => {
   const description = video.description;
   const genre = video.genre;
 
-  const views = video.views;
   const createdAt = moment(video.createdAt).format("LL");
   const duration = Math.floor(Number(video.duration));
   const hour = parseInt(duration / 3600);

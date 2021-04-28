@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-// import { dbService } from "../../fire_module/fireMain";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -277,6 +276,7 @@ const PaymentPage = () => {
                     <TableCell>작품 제목</TableCell>
                     <TableCell>설명</TableCell>
                     <TableCell>장르</TableCell>
+                    <TableCell>제작자</TableCell>
                     <TableCell>가격</TableCell>
                   </TableRow>
                 </TableHead>
@@ -288,6 +288,9 @@ const PaymentPage = () => {
                       </TableCell>
                       <TableCell>{row.description}</TableCell>
                       <TableCell>{row.genre}</TableCell>
+                      <TableCell>
+                        {row.writer.nickname || row.nickname}
+                      </TableCell>
                       <TableCell>{row.cost}</TableCell>
                     </TableRow>
                   ))}
@@ -296,6 +299,7 @@ const PaymentPage = () => {
                   <TableRow>
                     <TableCell> 수량: {purchaseList.length}개</TableCell>
                     <TableCell> 주문금액: {totalCost}원</TableCell>
+                    <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                   </TableRow>

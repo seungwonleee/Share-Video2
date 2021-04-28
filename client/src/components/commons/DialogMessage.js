@@ -12,10 +12,10 @@ const Text = styled.span`
 `;
 
 const DialogMessage = () => {
-  const state = useSelector((state) => state.dialog);
-  // console.log("dialog state ====> ", state);
-  const dialogState = state.dialogState;
-  const message = state.message;
+  const dialog = useSelector((state) => state.dialog);
+
+  const dialogState = dialog.dialogState;
+  const message = dialog.message;
 
   return (
     <Dialog

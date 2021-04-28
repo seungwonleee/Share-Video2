@@ -76,7 +76,6 @@ const SingleComment = ({ comment, refreshComment }) => {
           setCommentValue("");
           setOpenReply(!openReply);
           refreshComment(response.data.result);
-          // console.log(response.data.result);
         } else {
           alert("현재 댓글을 작성할 수 없습니다. 나중에 시도해주세요.");
         }

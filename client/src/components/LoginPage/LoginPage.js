@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    height: "100%",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -242,102 +243,100 @@ const LoginPage = () => {
   };
 
   return (
-    <>
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Link to="/" className={classes.titleLink}>
-            <Typography component="h1" variant="h5" className={classes.title}>
-              Share-Video
-            </Typography>
-          </Link>
-          <Typography className={classes.text}>(로그인)</Typography>
-          <form className={classes.form} onSubmit={handleLogin}>
-            <TextField
-              type="email"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="email"
-              label="Email"
-              id="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={handleInput}
-              inputProps={{ className: classes.text }} // font size of input text
-              InputLabelProps={{ className: classes.text }} // font size of input label
-              className={classes.textField}
-            />
+    <Container component="main" maxWidth="xs">
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Link to="/" className={classes.titleLink}>
+          <Typography component="h1" variant="h5" className={classes.title}>
+            Share-Video
+          </Typography>
+        </Link>
+        <Typography className={classes.text}>(로그인)</Typography>
+        <form className={classes.form} onSubmit={handleLogin}>
+          <TextField
+            type="email"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="email"
+            label="Email"
+            id="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={handleInput}
+            inputProps={{ className: classes.text }} // font size of input text
+            InputLabelProps={{ className: classes.text }} // font size of input label
+            className={classes.textField}
+          />
 
-            <TextField
-              type="password"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={handleInput}
-              inputProps={{ className: classes.text }} // font size of input text
-              InputLabelProps={{ className: classes.text }} // font size of input label
-              className={classes.textField}
-            />
+          <TextField
+            type="password"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={handleInput}
+            inputProps={{ className: classes.text }} // font size of input text
+            InputLabelProps={{ className: classes.text }} // font size of input label
+            className={classes.textField}
+          />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  value="remember"
-                  color="default"
-                  defaultChecked={true}
-                  onChange={handleRememberId}
-                  style={{ transform: "scale(1.5)", paddingLeft: "1.5rem" }}
-                />
-              }
-              label={<span style={{ fontSize: "1.4rem" }}>아이디 저장</span>}
-            />
+          <FormControlLabel
+            control={
+              <Checkbox
+                value="remember"
+                color="default"
+                defaultChecked={true}
+                onChange={handleRememberId}
+                style={{ transform: "scale(1.5)", paddingLeft: "1.5rem" }}
+              />
+            }
+            label={<span style={{ fontSize: "1.4rem" }}>아이디 저장</span>}
+          />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              <span className={classes.text}>로그인</span>
-            </Button>
-          </form>
-          <Grid container>
-            <Grid item xs>
-              <Link to="/findaccount" className={classes.text}>
-                비밀번호 찾기
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link to="/register" className={classes.text}>
-                회원가입
-              </Link>
-            </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            <span className={classes.text}>로그인</span>
+          </Button>
+        </form>
+        <Grid container>
+          <Grid item xs>
+            <Link to="/findaccount" className={classes.text}>
+              비밀번호 찾기
+            </Link>
           </Grid>
-          <br />
-          <h4 className={classes.text}>Social Login</h4>
-          <SocialLoginSection>
-            <GoogleLoginSection name="google">
-              <FontAwesomeIcon icon={faGoogle} size="2x" />
-            </GoogleLoginSection>
-            <GithubLoginSection name="github">
-              <FontAwesomeIcon icon={faGithub} size="2x" />
-            </GithubLoginSection>
-          </SocialLoginSection>
-        </div>
-      </Container>
-    </>
+          <Grid item>
+            <Link to="/register" className={classes.text}>
+              회원가입
+            </Link>
+          </Grid>
+        </Grid>
+        <br />
+        <h4 className={classes.text}>Social Login</h4>
+        <SocialLoginSection>
+          <GoogleLoginSection name="google">
+            <FontAwesomeIcon icon={faGoogle} size="2x" />
+          </GoogleLoginSection>
+          <GithubLoginSection name="github">
+            <FontAwesomeIcon icon={faGithub} size="2x" />
+          </GithubLoginSection>
+        </SocialLoginSection>
+      </div>
+    </Container>
   );
 };
 

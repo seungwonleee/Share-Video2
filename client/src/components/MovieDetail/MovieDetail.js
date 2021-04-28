@@ -50,7 +50,6 @@ const MovieDetail = (props) => {
   const classes = useStyles();
   // URL 값 받아오기
   const movieId = props.match.params.movieId;
-  //   console.log(props.match);
 
   const [Movie, setMovie] = useState([]);
   const [Casts, setCasts] = useState([]);
@@ -63,7 +62,6 @@ const MovieDetail = (props) => {
   const getMovieDetailInfo = async (endpointMovieInfo) => {
     // 영화 상세 정보
     await axios.get(endpointMovieInfo).then((response) => {
-      // console.log("MovieInfo ====>", response.data);
       setMovie(response.data);
     });
   };
@@ -71,7 +69,6 @@ const MovieDetail = (props) => {
   const getMovieCastInfo = async (endpointCast) => {
     // 영화 관계자 정보
     await axios.get(endpointCast).then((response) => {
-      // console.log("Cast ====>", response.data.cast);
       setCasts(response.data.cast);
     });
   };

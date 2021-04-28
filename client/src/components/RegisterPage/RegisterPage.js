@@ -120,6 +120,9 @@ const RegisterPage = () => {
     if (password.length < 6) {
       return alert("비밀번호를 6자리 이상 입력해주세요.");
     }
+    if (nickname.length > 8) {
+      return alert("닉네임은 8글자를 넘을 수 없습니다.");
+    }
 
     let body = {
       email,
@@ -151,6 +154,13 @@ const RegisterPage = () => {
       .catch((error) => console.log(error));
   };
 
+  const handleSpacebar = (event) => {
+    if (event.key === " ") {
+      event.preventDefault();
+      alert("공백은 사용할 수 없습니다.");
+    }
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -164,7 +174,11 @@ const RegisterPage = () => {
             </Typography>
           </Link>
           <Typography className={classes.text}>(회원가입)</Typography>
-          <form className={classes.form} onSubmit={handleCreateAccount}>
+          <form
+            className={classes.form}
+            onSubmit={handleCreateAccount}
+            onKeyDown={handleSpacebar}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
