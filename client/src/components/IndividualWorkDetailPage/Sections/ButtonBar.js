@@ -15,7 +15,7 @@ const ButtonBar = ({ userFrom, video }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const shoppingBasketData = {
-    video: video._id,
+    videoId: video._id,
     userFrom,
     madeFrom: video.writer._id,
     userNickname: video.nickname,

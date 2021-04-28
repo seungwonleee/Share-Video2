@@ -5,7 +5,6 @@ const { ShoppingBasket } = require("../models/ShoppingBasket");
 router.post("/addShoppingBasket", (req, res) => {
   // 장바구니 목록에 추가
   const shoppingBasket = new ShoppingBasket(req.body);
-  // console.log(req.body);
 
   ShoppingBasket.find({
     userFrom: req.body.userFrom,
@@ -32,7 +31,7 @@ router.post("/addShoppingBasket", (req, res) => {
 router.post("/getShoppingBasketList", (req, res) => {
   //로그인한 사용자 장바구니 목록
   ShoppingBasket.find({ userFrom: req.body.loginUser })
-    .populate(["video", "userFrom", "madeFrom"])
+    .populate(["videoId", "userFrom", "madeFrom"])
     .exec((err, shoppingbaskets) => {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, shoppingbaskets });

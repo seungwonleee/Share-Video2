@@ -164,7 +164,7 @@ const PaymentPage = () => {
         if (response.data.success) {
           response.data.shoppingbaskets.map((basketList, index) => {
             purchaseList.map((item, index) => {
-              if (basketList.video._id === item._id) {
+              if (basketList.videoId._id === item._id) {
                 filterdList.push(basketList);
               }
             });

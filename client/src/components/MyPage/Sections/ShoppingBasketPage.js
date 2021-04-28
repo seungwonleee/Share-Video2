@@ -47,7 +47,7 @@ const ShoppingBasketPage = () => {
 
   const [selection, setSelection] = useState([]);
   const [myShoppingBasketList, setMyShoppingBasketList] = useState([]);
-
+  console.log(myShoppingBasketList);
   const userData = {
     loginUser,
   };
@@ -102,11 +102,12 @@ const ShoppingBasketPage = () => {
     myShoppingBasketList.map((item, index) => {
       selection.map((selectValue, index) => {
         if (item.id === Number(selectValue)) {
-          videoList.push(item.video);
+          videoList.push(item.videoId);
         }
       });
     });
 
+    // console.log(videoList);
     const videoListData = JSON.stringify(videoList);
     localStorage.setItem("purchaseItem", videoListData);
     history.push({
@@ -131,7 +132,7 @@ const ShoppingBasketPage = () => {
       let deleteData = {
         deleteList: list,
       };
-      // console.log(deleteData);
+      console.log(deleteData);
       axios
         .post("/api/shoppingBasket/deleteShoppingBasketList", deleteData)
         .then((response) => {

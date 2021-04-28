@@ -237,7 +237,7 @@ const GridCards = ({
     const seconds = Math.floor(duration - minutes * 60);
 
     const shoppingBasketData = {
-      video: _id,
+      videoId: _id,
       userFrom: userId,
       madeFrom: madeFrom,
       userNickname: userNickname,

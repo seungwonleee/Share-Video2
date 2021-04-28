@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { dbService, storageService } from "../../../fire_module/fireMain";
+import { useSelector, useDispatch } from "react-redux";
+import { refresh } from "../../../features/refresh/refreshSlice";
 import { useMediaQuery } from "react-responsive";
+import moment from "moment";
+import "moment/locale/ko";
 //Material UI Imports
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,9 +19,10 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "title", headerName: "작품 제목", width: 130 },
-  { field: "description", headerName: "설명", width: 130 },
-  { field: "genre", headerName: "장르", width: 100 },
+  { field: "id", headerName: "No", width: 60 },
+  { field: "title", headerName: "작품 제목", width: 190 },
+  { field: "genre", headerName: "장르", width: 90 },
+  { field: "runningTime", headerName: "재생 시간", width: 100 },
   { field: "cost", headerName: "가격", width: 100 },
   { field: "createdAt", headerName: "업로드 날짜", width: 130 },
 ];
@@ -36,60 +40,85 @@ const MyIndividualWorkPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
+  const loginUser = useSelector((state) => state.auth.userId);
+
   const [selection, setSelection] = useState([]);
-  const [myVideo, setMyVideo] = useState([]);
-  const [uid, setUid] = useState("");
-  const [refDownloadUrl, setRefDownloadUrl] = useState("");
+  const [myVideoList, setMyVideoList] = useState([]);
 
-  const getMyIndividualWorkList = async (uid) => {
-    // dbService
-    //   .collection(uid)
-    //   .doc("video")
-    //   .collection(uid)
-    //   .onSnapshot((snapshot) => {
-    //     // console.log("실시간 데이터 변경 ===>", snapshot.docs);
-    //     const myIndividualWorkVideo = snapshot.docs.map((doc, index) => {
-    //       // console.log(doc.data());
-    //       setRefDownloadUrl(doc.data().downloadURL);
-    //       return {
-    //         ...doc.data(),
-    //         id: doc.data().title,
-    //       };
-    //     });
-    //     // console.log("내 작품 목록 ===> ", ...myIndividualWorkVideo);
-    //     setMyVideo([...myIndividualWorkVideo]);
-    //   });
-  };
-
-  const getUid = async () => {
-    await axios.get("/api/users/auth").then((res) => {
-      // setUid(res.data.uid);
-      // getMyIndividualWorkList(res.data.uid);
-    });
+  const getMyIndividualWorkList = () => {
+    const userData = {
+      writer: loginUser,
+    };
+    axios
+      .post("/api/video/getMyVideos", userData)
+      .then((response) => {
+        if (response.data.success) {
+          const resultBasketList = response.data.videos.map((item, index) => {
+            const minutes = Math.floor(Number(item.duration) / 60);
+            const seconds = Math.floor(Number(item.duration) - minutes * 60);
+            const runningTime = {
+              runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+            };
+            const createdAt = {
+              createdAt: moment(item.createdAt).format("LL"),
+            };
+            return {
+              id: index + 1,
+              ...item,
+              ...runningTime,
+              ...createdAt,
+            };
+          });
+          setMyVideoList(resultBasketList);
+        } else {
+          alert("내 작품 목록을 불러오는데 실패했습니다. 나중에 시도해주세요.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getUid();
+    getMyIndividualWorkList();
   }, []);
 
   const handleLikeListRemove = async () => {
+    if (selection.length < 1) {
+      return alert("목록에서 선택하세요.");
+    }
     const ok = window.confirm("정말로 삭제하시겠습니까?");
     if (ok) {
-      // firestore DB delete
-      // await selection.map((videoTitle) => {
-      //   dbService
-      //     .collection(uid)
-      //     .doc("video")
-      //     .collection(uid)
-      //     .doc(videoTitle)
-      //     .delete()
-      //     .then(() => {
-      //       console.log("삭제 성공!");
-      //     })
-      //     .catch((error) => console.log("삭제 에러 ==> ", error));
-      // });
-      // //firebase Storage data delete
-      // await storageService.refFromURL(refDownloadUrl).delete();
+      let list = [];
+      myVideoList.map((item, index) => {
+        selection.map((selectValue, index) => {
+          if (item.id === Number(selectValue)) {
+            list.push(item);
+          }
+        });
+      });
+
+      let deleteData = {
+        deleteList: list,
+      };
+
+      axios
+        .post("/api/video/deleteMyVideos", deleteData)
+        .then((response) => {
+          if (response.data.success) {
+            alert("내 작품을 삭제하였습니다.");
+            getMyIndividualWorkList();
+            //새로고침용
+            dispatch(refresh(1));
+          } else {
+            alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
   return (
@@ -97,7 +126,7 @@ const MyIndividualWorkPage = () => {
       {breakPoint ? (
         <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
-            rows={myVideo}
+            rows={myVideoList}
             columns={columns}
             pageSize={5}
             checkboxSelection
@@ -107,7 +136,7 @@ const MyIndividualWorkPage = () => {
       ) : (
         <div style={{ height: "400px", width: "100%" }}>
           <DataGrid
-            rows={myVideo}
+            rows={myVideoList}
             columns={columns}
             pageSize={5}
             checkboxSelection

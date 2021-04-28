@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const shoppingBasketSchema = mongoose.Schema(
   {
-    video: {
+    videoId: {
       type: Schema.Types.ObjectId,
       ref: "Video",
     },
