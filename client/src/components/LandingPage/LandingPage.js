@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Carousel from "react-material-ui-carousel";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Carousel from 'react-material-ui-carousel';
+import axios from 'axios';
 import {
   API_URL,
   API_KEY,
   IMAGE_BASE_URL,
   ORIGINAL_SIZE,
   POSTER_SIZE,
-} from "../Config";
-import GridCards from "../commons/GridCards";
-import Item from "./Sections/CarouselMainImage";
-import DialogMessage from "../commons/DialogMessage";
+} from '../Config';
+import GridCards from '../commons/GridCards';
+import Item from './Sections/CarouselMainImage';
+import DialogMessage from '../commons/DialogMessage';
 //Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 const Container = styled.div`
   width: 100%;
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: 'center',
     color: theme.palette.text.secondary,
   },
 }));
@@ -96,7 +96,7 @@ const LandingPage = () => {
             IndicatorIcon={false}
             indicatorIconButtonProps={{
               style: {
-                display: "none",
+                display: 'none',
               },
             }}
           >
