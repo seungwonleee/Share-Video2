@@ -14,7 +14,7 @@ const App = () => {
       <GlobalStyle />
       {/* 페이지 이동시 Scroll 위치 상단 고정 컴포넌트*/}
       <ScrollToTop />
-
+      {/* styled-components Function themes를 사용한 스타일 적용*/}
       <ThemeProvider theme={theme}>
         <Routes />
       </ThemeProvider>

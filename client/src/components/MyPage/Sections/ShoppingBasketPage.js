@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { DataGridStyle } from "../styles/styles";
 import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -151,6 +152,8 @@ const ShoppingBasketPage = () => {
   };
   return (
     <>
+      {/* 표 폰트 스타일  */}
+      <DataGridStyle />
       {breakPoint ? (
         <div style={{ height: "400px", minWidth: "768px" }}>
           <DataGrid
