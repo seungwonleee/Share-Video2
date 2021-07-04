@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import KakaoMap from "./KakaoMap";
 // Material UI Imports
@@ -51,15 +51,18 @@ const SearchPlacePage = () => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
 
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     setInputText(e.target.value);
-  };
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setPlace(inputText);
-    setInputText("");
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      setPlace(inputText);
+      setInputText("");
+    },
+    [inputText]
+  );
 
   return (
     <PageContainer>
