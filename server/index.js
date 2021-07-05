@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const config = require("./config/key");
 const mongoose = require("mongoose");
+const compression = require("compression");
 
 mongoose
   .connect(config.mongoURI, {
@@ -15,9 +15,11 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch((error) => console.log(error));
 
+// 모든 응답 압축해서 gzip 형태로 client로 전달
+app.use(compression());
 // 데이터 전송 100mb 이상 제한
-app.use(bodyParser.json({ limit: "100mb" }));
-app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", require("./routes/users"));
