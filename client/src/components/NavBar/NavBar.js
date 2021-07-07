@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { useMediaQuery } from "react-responsive";
-import LeftMenu from "./Sections/LeftMenu";
-import CenterMenu from "./Sections/CenterMenu";
-import RightMenu from "./Sections/RightMenu";
-import DrawerButton from "./DrawerButton";
+import React from 'react';
+import styled from 'styled-components';
+import { useMediaQuery } from 'react-responsive';
+import LeftMenu from './Sections/LeftMenu';
+import CenterMenu from './Sections/CenterMenu';
+import RightMenu from './Sections/RightMenu';
+import DrawerButton from './DrawerButton';
 
 // styled-components
 const Navbar = styled.nav`
@@ -20,7 +20,7 @@ const Navbar = styled.nav`
 
 const NavBar = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
 
   return (

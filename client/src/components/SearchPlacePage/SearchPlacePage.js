@@ -1,34 +1,34 @@
-import React, { useState, useCallback } from "react";
-import styled from "styled-components";
-import KakaoMap from "./KakaoMap";
+import React, { useState, useCallback } from 'react';
+import styled from 'styled-components';
+import KakaoMap from './KakaoMap';
 // Material UI Imports
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import { withStyles } from "@material-ui/core/styles";
+import SearchIcon from '@material-ui/icons/Search';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { withStyles } from '@material-ui/core/styles';
 
 const SearchPlace = withStyles({
   root: {
-    "& label.Mui-focused": {
-      color: "#A5292A",
+    '& label.Mui-focused': {
+      color: '#A5292A',
     },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#A5292A",
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#A5292A',
     },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#A5292A",
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#A5292A',
       },
-      "&:hover fieldset": {
-        borderColor: "#A5292A",
+      '&:hover fieldset': {
+        borderColor: '#A5292A',
       },
-      "&.Mui-focused fieldset": {
-        borderColor: "#A5292A",
+      '&.Mui-focused fieldset': {
+        borderColor: '#A5292A',
       },
     },
-    width: "60%",
-    height: "3rem",
+    width: '60%',
+    height: '3rem',
   },
 })(TextField);
 
@@ -48,8 +48,8 @@ const MapContainer = styled.div`
 `;
 
 const SearchPlacePage = () => {
-  const [inputText, setInputText] = useState("");
-  const [place, setPlace] = useState("");
+  const [inputText, setInputText] = useState('');
+  const [place, setPlace] = useState('');
 
   const onChange = useCallback((e) => {
     setInputText(e.target.value);
@@ -59,7 +59,7 @@ const SearchPlacePage = () => {
     (e) => {
       e.preventDefault();
       setPlace(inputText);
-      setInputText("");
+      setInputText('');
     },
     [inputText]
   );
@@ -84,9 +84,9 @@ const SearchPlacePage = () => {
             },
             {
               style: {
-                fontSize: "1.6rem",
-                color: "white",
-                fontFamily: "sans-serif",
+                fontSize: '1.6rem',
+                color: 'white',
+                fontFamily: 'sans-serif',
               },
             })
           }

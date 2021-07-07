@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { dialogState } from "../../features/dialog/dialogSlice";
-import DialogMessage from "../commons/DialogMessage";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { dialogState } from '../../features/dialog/dialogSlice';
+import DialogMessage from '../commons/DialogMessage';
 //Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableFooter from "@material-ui/core/TableFooter";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import PaymentIcon from "@material-ui/icons/Payment";
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableFooter from '@material-ui/core/TableFooter';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import PaymentIcon from '@material-ui/icons/Payment';
 
 const ControlButton = styled(Button)`
   span {
@@ -43,25 +43,25 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 650,
   },
   font: {
-    fontSizes: "16px",
+    fontSizes: '16px',
   },
   Button: {
     margin: theme.spacing(1),
   },
   fontsize: {
-    fontSize: "1.6rem !important",
+    fontSize: '1.6rem !important',
   },
   tableHead: {
-    fontSize: "1.6rem",
+    fontSize: '1.6rem',
   },
   tableCell: {
-    fontSize: "1.4rem",
+    fontSize: '1.4rem',
   },
 }));
 
 const PaymentPage = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
   const classes = useStyles();
   let history = useHistory();
@@ -84,38 +84,38 @@ const PaymentPage = () => {
 
   //개인 작품 페이지에서 하나만 구매할 때 하나의 비디오만 불러온다.
   const getSelectVideo = () => {
-    const getPurchaseItem = localStorage.getItem("purchaseItem");
+    const getPurchaseItem = localStorage.getItem('purchaseItem');
     const videoId = JSON.parse(getPurchaseItem);
 
     const videoData = {
       ...videoId,
     };
 
-    axios.post("/api/video/getVideo", videoData).then((response) => {
+    axios.post('/api/video/getVideo', videoData).then((response) => {
       if (response.data.success) {
         setPurchaseList([response.data.video]);
         calculateTotalCost([response.data.video]);
-        localStorage.removeItem("purchaseItem");
+        localStorage.removeItem('purchaseItem');
       } else {
-        alert("해당 상품을 불러오는데 실패했습니다. 나중에 시도해 주세요.");
+        alert('해당 상품을 불러오는데 실패했습니다. 나중에 시도해 주세요.');
       }
     });
   };
 
   useEffect(() => {
-    if (localStorage.getItem("purchaseItem")) {
-      if (history.location.from === "shoppingBasketPage") {
+    if (localStorage.getItem('purchaseItem')) {
+      if (history.location.from === 'shoppingBasketPage') {
         //장바구니 목록에서 구매하는 경우
-        const list = JSON.parse(localStorage.getItem("purchaseItem"));
+        const list = JSON.parse(localStorage.getItem('purchaseItem'));
         setPurchaseList(list);
         calculateTotalCost(list);
-        localStorage.removeItem("purchaseItem");
+        localStorage.removeItem('purchaseItem');
       } else {
         //개인 작품 목록에서 구매하는 경우
         getSelectVideo();
       }
     } else {
-      alert("결제 목록이 초기화 되었습니다. 다시 시도해주세요.");
+      alert('결제 목록이 초기화 되었습니다. 다시 시도해주세요.');
     }
   }, []);
 
@@ -124,7 +124,7 @@ const PaymentPage = () => {
     dispatch(
       dialogState({
         dialogState: true,
-        message: "결제 진행 중 입니다. 잠시만 기다려주세요.",
+        message: '결제 진행 중 입니다. 잠시만 기다려주세요.',
       })
     );
     setTimeout(() => {
@@ -135,7 +135,7 @@ const PaymentPage = () => {
         })
       );
       //결제 완료 페이지로 이동
-      history.push("/completepayment");
+      history.push('/completepayment');
     }, 1300);
   };
 
@@ -145,10 +145,10 @@ const PaymentPage = () => {
       deleteList: filterdList,
     };
     axios
-      .post("/api/shoppingBasket/deleteShoppingBasketList", buyListData)
+      .post('/api/shoppingBasket/deleteShoppingBasketList', buyListData)
       .then((response) => {
         if (response.data.success) {
-          console.log("장바구니 목록에서 삭제 성공!");
+          console.log('장바구니 목록에서 삭제 성공!');
         }
       })
       .catch((error) => {
@@ -162,7 +162,7 @@ const PaymentPage = () => {
       loginUser: userId,
     };
     axios
-      .post("/api/shoppingBasket/getShoppingBasketList", loginUser)
+      .post('/api/shoppingBasket/getShoppingBasketList', loginUser)
       .then((response) => {
         let filterdList = [];
         //장바구니가 아닌 개인 작품 페이지에서 구매할 경우 사용자의 video ObjectId를 알 수 없기 때문에 사용자의 장바구니 목록을 불러온다.
@@ -191,7 +191,7 @@ const PaymentPage = () => {
     };
 
     axios
-      .post("/api/purchaseList/savePurchaseList", buyListData)
+      .post('/api/purchaseList/savePurchaseList', buyListData)
       .then((response) => {
         if (response.data.success) {
           //DB에 구매목록 저장 후 장바구니에서 삭제
@@ -199,14 +199,14 @@ const PaymentPage = () => {
           //DB 작업동안 안내 Dialog 표시
           messageDialog();
         } else {
-          return alert("결제 도중에 문제가 생겼습니다. 나중에 시도해 주세요.");
+          return alert('결제 도중에 문제가 생겼습니다. 나중에 시도해 주세요.');
         }
       });
   };
 
   const handlePayment = () => {
     if (purchaseList.length < 1) {
-      return alert("구매할 목록이 없습니다.");
+      return alert('구매할 목록이 없습니다.');
     }
     //결제내역 DB에 저장
     savePurchaseList();
@@ -220,11 +220,11 @@ const PaymentPage = () => {
           //데스크톱
           <div
             style={{
-              height: "400px",
-              minWidth: "600px",
+              height: '400px',
+              minWidth: '600px',
             }}
           >
-            <TableContainer component={Paper} style={{ height: "100%" }}>
+            <TableContainer component={Paper} style={{ height: '100%' }}>
               <Table
                 className={classes.table}
                 size="small"
@@ -253,7 +253,7 @@ const PaymentPage = () => {
                       </TableCell>
                       <TableCell className={classes.tableCell}>
                         {row.description.length >= 8
-                          ? row.description.substr(0, 9) + "..."
+                          ? row.description.substr(0, 9) + '...'
                           : row.description}
                       </TableCell>
                       <TableCell className={classes.tableCell}>
@@ -271,11 +271,11 @@ const PaymentPage = () => {
                 <TableFooter>
                   <TableRow>
                     <TableCell className={classes.tableHead}>
-                      {" "}
+                      {' '}
                       수량: {purchaseList.length}개
                     </TableCell>
                     <TableCell className={classes.tableHead}>
-                      {" "}
+                      {' '}
                       주문금액: {totalCost}원
                     </TableCell>
                     <TableCell></TableCell>
@@ -288,8 +288,8 @@ const PaymentPage = () => {
           </div>
         ) : (
           //모바일, 테블릿
-          <div style={{ height: "400px", width: "100%", padding: "0 1rem" }}>
-            <TableContainer component={Paper} style={{ height: "100%" }}>
+          <div style={{ height: '400px', width: '100%', padding: '0 1rem' }}>
+            <TableContainer component={Paper} style={{ height: '100%' }}>
               <Table
                 className={classes.table}
                 size="small"
@@ -334,11 +334,11 @@ const PaymentPage = () => {
                 <TableFooter>
                   <TableRow>
                     <TableCell className={classes.tableHead}>
-                      {" "}
+                      {' '}
                       수량: {purchaseList.length}개
                     </TableCell>
                     <TableCell className={classes.tableHead}>
-                      {" "}
+                      {' '}
                       주문금액: {totalCost}원
                     </TableCell>
                     <TableCell></TableCell>

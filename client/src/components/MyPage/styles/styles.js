@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 //Data-Grid 표 글씨 크기
 export const DataGridStyle = createGlobalStyle`

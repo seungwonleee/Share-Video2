@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   setLoginState,
   setId,
   setEmail,
   setNickname,
-} from "../features/auth/authSlice";
+} from '../features/auth/authSlice';
 
 const auth = (SpecificComponent, option) => {
   //option 미입력    =>  아무나 출입이 가능한 페이지
@@ -19,19 +19,19 @@ const auth = (SpecificComponent, option) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      axios.get("/api/users/auth").then((res) => {
-        console.log("auth ===> ", res.data);
+      axios.get('/api/users/auth').then((res) => {
+        console.log('auth ===> ', res.data);
 
         //로그인 하지 않은 상태
         if (!res.data.isAuth) {
           if (option) {
-            alert("로그인 후 사용 가능합니다.");
-            return history.push("/login");
+            alert('로그인 후 사용 가능합니다.');
+            return history.push('/login');
           }
         } else {
           //로그인 한 상태
           if (option === false) {
-            history.push("/");
+            history.push('/');
           }
           dispatch(setLoginState(res.data.isAuth));
           dispatch(setId(res.data._id));

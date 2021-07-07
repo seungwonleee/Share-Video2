@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
 import {
   API_URL,
   API_KEY,
   IMAGE_BASE_URL,
   ORIGINAL_SIZE,
   POSTER_SIZE,
-} from "../Config";
-import MainImage from "./Sections/MainImage";
-import MovieInfo from "./Sections/MovieInfo";
-import GridCards from "../commons/GridCards";
+} from '../Config';
+import MainImage from './Sections/MainImage';
+import MovieInfo from './Sections/MovieInfo';
+import GridCards from '../commons/GridCards';
 // Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 const Container = styled.div`
   width: 85%;
@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: 'center',
     color: theme.palette.text.secondary,
   },
   button: {
-    "& > *": {
+    '& > *': {
       margin: theme.spacing(1),
     },
   },
@@ -87,7 +87,7 @@ const MovieDetail = (props) => {
         overview={Movie.overview}
       />
       {/* Movie Detail InFormation */}
-      <Container style={{ width: "85%", margin: "1rem auto" }}>
+      <Container style={{ width: '85%', margin: '1rem auto' }}>
         {/* Movie Info (제목, 장르, 재생시간, 평점 출시일) */}
         <MovieInfo movie={Movie} />
         <br />

@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // Redux action + reducer → slice
 export const refreshSlice = createSlice({
-  name: "refresh",
+  name: 'refresh',
   initialState: {
     count: 0,
   },

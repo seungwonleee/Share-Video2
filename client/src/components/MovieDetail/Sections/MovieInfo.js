@@ -1,54 +1,54 @@
-import React from "react";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import { useMediaQuery } from 'react-responsive';
 //Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
   mobileTable: {
-    width: "100%",
-    textAlign: "center",
-    border: "1px solid gray",
-    borderRadius: "4px",
+    width: '100%',
+    textAlign: 'center',
+    border: '1px solid gray',
+    borderRadius: '4px',
   },
   mobileTh: {
-    fontSize: "1.6rem",
-    border: "1px solid gray",
-    borderRadius: "4px",
-    background: "gray",
-    minWidth: "6rem",
+    fontSize: '1.6rem',
+    border: '1px solid gray',
+    borderRadius: '4px',
+    background: 'gray',
+    minWidth: '6rem',
   },
   mobileTd: {
-    fontSize: "1.4rem",
-    border: "1px solid gray",
-    borderRadius: "4px",
+    fontSize: '1.4rem',
+    border: '1px solid gray',
+    borderRadius: '4px',
   },
   tableHead: {
-    background: "gray",
+    background: 'gray',
   },
   tableCell: {
-    fontSize: "1.4rem",
+    fontSize: '1.4rem',
   },
 });
 
 const MovieInfo = ({ movie }) => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
   const classes = useStyles();
 
   const genresCollection = movie.genres
-    ? movie.genres.map((genre) => genre.name).join(", ")
-    : "";
+    ? movie.genres.map((genre) => genre.name).join(', ')
+    : '';
 
   return (
     <>
@@ -102,7 +102,7 @@ const MovieInfo = ({ movie }) => {
                 <TableRow>
                   <TableCell
                     className={classes.tableCell}
-                    style={{ textAlign: "center" }}
+                    style={{ textAlign: 'center' }}
                   >
                     줄거리
                   </TableCell>

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import Dropzone from "react-dropzone";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import Dropzone from 'react-dropzone';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import styled from 'styled-components';
 // Material UI Imports
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 const Section = styled.section`
   max-width: 700px;
@@ -115,21 +115,21 @@ const VideoDescription = styled.div`
 
 //장르 목록
 const Catogory = [
-  { label: "선택하세요." },
-  { label: "코미디" },
-  { label: "애니메이션" },
-  { label: "액션" },
-  { label: "음악" },
-  { label: "동물" },
-  { label: "스포츠" },
-  { label: "멜로" },
-  { label: "SF" },
-  { label: "가족" },
+  { label: '선택하세요.' },
+  { label: '코미디' },
+  { label: '애니메이션' },
+  { label: '액션' },
+  { label: '음악' },
+  { label: '동물' },
+  { label: '스포츠' },
+  { label: '멜로' },
+  { label: 'SF' },
+  { label: '가족' },
 ];
 
 const VideoUploadPage = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
   let history = useHistory();
 
@@ -137,22 +137,22 @@ const VideoUploadPage = () => {
   const userId = useSelector((state) => state.auth.userId);
   const userNickname = useSelector((state) => state.auth.nickname);
 
-  const [dropFile, setDropFile] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [genre, setGenre] = useState("");
-  const [cost, setCost] = useState("");
-  const [preview, setPreview] = useState("");
+  const [dropFile, setDropFile] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [genre, setGenre] = useState('');
+  const [cost, setCost] = useState('');
+  const [preview, setPreview] = useState('');
 
   const handleChangeTitle = (event) => {
     const { value } = event.currentTarget;
-    if (value.length >= 50) return alert("최대 50자까지 작성가능 합니다.");
+    if (value.length >= 50) return alert('최대 50자까지 작성가능 합니다.');
     setTitle(value);
   };
 
   const handleChangeDecsription = (event) => {
     const { value } = event.currentTarget;
-    if (value.length >= 400) return alert("최대 400자까지 작성가능 합니다.");
+    if (value.length >= 400) return alert('최대 400자까지 작성가능 합니다.');
     setDescription(value);
   };
 
@@ -164,7 +164,7 @@ const VideoUploadPage = () => {
   const handleChangeCost = (event) => {
     const { value } = event.currentTarget;
     //가격 숫자만 입력 가능
-    setCost(Number(value.replace(/[^0-9]/g, "")));
+    setCost(Number(value.replace(/[^0-9]/g, '')));
   };
 
   //최종적으로 작성 정보, video file, thumbnail에 관한 정보를 하나의 document에 저장한다.
@@ -182,19 +182,19 @@ const VideoUploadPage = () => {
     };
 
     //영상 관련 모든 데이터 저장
-    axios.post("/api/video/uploadVideo", data).then((response) => {
+    axios.post('/api/video/uploadVideo', data).then((response) => {
       if (response.data.success) {
-        alert("영상을 업로드하는데 성공했습니다.");
-        history.push("/");
+        alert('영상을 업로드하는데 성공했습니다.');
+        history.push('/');
       } else {
-        alert("영상을 업로드하는데 실패했습니다.(code:SVD)");
+        alert('영상을 업로드하는데 실패했습니다.(code:SVD)');
       }
     });
   };
 
   const saveThumbnail = (filePathAndName) => {
     //영상에대한 thumbnail과 파일 경로(filepath) 생성
-    axios.post("/api/video/thumbnail", filePathAndName).then((response) => {
+    axios.post('/api/video/thumbnail', filePathAndName).then((response) => {
       if (response.data.success) {
         let fileDurationAndThumbnail = {
           fileDuration: response.data.fileDuration,
@@ -203,7 +203,7 @@ const VideoUploadPage = () => {
         //최종적으로 video file 과 thumbnail에 대한 정보를 하나의 document에 저장
         saveVideoData(filePathAndName, fileDurationAndThumbnail);
       } else {
-        alert("영상을 업로드하는데 실패했습니다.(code:ST)");
+        alert('영상을 업로드하는데 실패했습니다.(code:ST)');
       }
     });
   };
@@ -211,12 +211,12 @@ const VideoUploadPage = () => {
   const saveVideoFile = () => {
     let formData = new FormData();
     const config = {
-      header: { "content-type": "multipart/form-data" },
+      header: { 'content-type': 'multipart/form-data' },
     };
 
-    formData.append("file", dropFile);
+    formData.append('file', dropFile);
     //동영상 파일을 저장
-    axios.post("/api/video/uploadfiles", formData, config).then((response) => {
+    axios.post('/api/video/uploadfiles', formData, config).then((response) => {
       if (response.data.success) {
         let filePathAndName = {
           filePath: response.data.filePath,
@@ -226,7 +226,7 @@ const VideoUploadPage = () => {
         //영상에대한 thumbnail과 파일 경로(filepath) 생성
         saveThumbnail(filePathAndName);
       } else {
-        alert("영상을 업로드하는데 실패했습니다.(code:SV)");
+        alert('영상을 업로드하는데 실패했습니다.(code:SV)');
       }
     });
   };
@@ -235,13 +235,13 @@ const VideoUploadPage = () => {
     event.preventDefault();
 
     if (
-      title === "" ||
-      description === "" ||
-      genre === "" ||
-      cost === "" ||
-      preview === ""
+      title === '' ||
+      description === '' ||
+      genre === '' ||
+      cost === '' ||
+      preview === ''
     ) {
-      return alert("모든 항목을 입력해주세요.");
+      return alert('모든 항목을 입력해주세요.');
     }
 
     //영상 DB 저장(파일, 썸네일, 작성 내용) uploadfiles => thumbnail => uploadVideo 순서
@@ -254,11 +254,11 @@ const VideoUploadPage = () => {
 
     // 100mb 이상 업로드 불가
     if (theFile.size >= 100000000) {
-      return alert("용량이 너무 크기 때문에 업로드가 불가합니다.");
+      return alert('용량이 너무 크기 때문에 업로드가 불가합니다.');
     }
 
-    if (theFile.type !== "video/mp4") {
-      return alert("mp4 형식의 영상만 가능합니다.");
+    if (theFile.type !== 'video/mp4') {
+      return alert('mp4 형식의 영상만 가능합니다.');
     }
 
     //영상 정보를 받아온다.
@@ -279,12 +279,12 @@ const VideoUploadPage = () => {
 
       <form onSubmit={onSubmit}>
         {breakPoint ? (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Dropzone onDrop={onDrop} multiple={false}>
               {({ getRootProps, getInputProps }) => (
                 <DropzoneBox {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <AddIcon style={{ fontSize: "3rem" }} />
+                  <AddIcon style={{ fontSize: '3rem' }} />
                 </DropzoneBox>
               )}
             </Dropzone>
@@ -301,8 +301,8 @@ const VideoUploadPage = () => {
         ) : (
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
             {preview ? (
@@ -312,7 +312,7 @@ const VideoUploadPage = () => {
                 {({ getRootProps, getInputProps }) => (
                   <DropzoneBox {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <AddIcon style={{ fontSize: "3rem" }} />
+                    <AddIcon style={{ fontSize: '3rem' }} />
                   </DropzoneBox>
                 )}
               </Dropzone>
@@ -344,7 +344,7 @@ const VideoUploadPage = () => {
             <label>장르</label>
             <select
               onChange={handleChangeCategory}
-              defaultValue={"선택하세요."}
+              defaultValue={'선택하세요.'}
             >
               {Catogory.map((item, index) => (
                 <option

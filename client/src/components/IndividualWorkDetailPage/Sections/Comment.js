@@ -1,10 +1,10 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
-import SingleComment from "./SingleComment";
-import ReplyComment from "./ReplyComment";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
+import SingleComment from './SingleComment';
+import ReplyComment from './ReplyComment';
 
 const P = styled.p`
   font-size: ${(props) => props.theme.fontSizes.xlarge};
@@ -25,7 +25,7 @@ const Comment = () => {
   const loginUser = useSelector((state) => state.auth.userId);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const [commentValue, setCommentValue] = useState("");
+  const [commentValue, setCommentValue] = useState('');
   const [commentLists, setCommentLists] = useState([]);
 
   const videoData = {
@@ -33,11 +33,11 @@ const Comment = () => {
   };
 
   const getComments = () => {
-    axios.post("/api/comment/getComments", videoData).then((response) => {
+    axios.post('/api/comment/getComments', videoData).then((response) => {
       if (response.data.success) {
         setCommentLists(response.data.comments);
       } else {
-        alert("댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.");
+        alert('댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.');
       }
     });
   };
@@ -55,7 +55,7 @@ const Comment = () => {
 
     if (isLoggedIn) {
       if (commentValue.length === 0) {
-        return alert("댓글을 작성해주세요.");
+        return alert('댓글을 작성해주세요.');
       }
 
       const commentData = {
@@ -64,19 +64,19 @@ const Comment = () => {
         videoId: videoId,
       };
 
-      axios.post("/api/comment/saveComment", commentData).then((response) => {
+      axios.post('/api/comment/saveComment', commentData).then((response) => {
         if (response.data.success) {
-          setCommentValue("");
+          setCommentValue('');
           setCommentLists([...commentLists, ...response.data.result]);
         } else {
           alert(
-            "댓글을 작성하는데 문제가 발생하였습닌다. 나중에 시도해주세요."
+            '댓글을 작성하는데 문제가 발생하였습닌다. 나중에 시도해주세요.'
           );
         }
       });
     } else {
-      alert("로그인 후 사용 가능합니다.");
-      history.push("/login");
+      alert('로그인 후 사용 가능합니다.');
+      history.push('/login');
     }
   };
 
@@ -85,7 +85,7 @@ const Comment = () => {
   };
 
   return (
-    <div style={{ marginTop: "2rem" }}>
+    <div style={{ marginTop: '2rem' }}>
       {/* 작성된 댓글이 없을 때만 보이는 알림창 */}
       {commentLists.length === 0 && <P>현재 작성된 댓글이 없습니다.</P>}
       <H1>댓글</H1>
@@ -113,18 +113,18 @@ const Comment = () => {
 
       {/* 댓글 작성 폼 */}
       <form
-        style={{ display: "flex", marginTop: "1rem" }}
+        style={{ display: 'flex', marginTop: '1rem' }}
         onSubmit={handleSubmit}
       >
         <textarea
-          style={{ width: "100%", borderRadius: "5px", fontSize: "1.6rem" }}
+          style={{ width: '100%', borderRadius: '5px', fontSize: '1.6rem' }}
           onChange={handleCommentText}
           value={commentValue}
           placeholder="댓글을 남겨주세요."
         />
         <br />
         <button
-          style={{ width: "20%", height: "52px", fontSize: "1.4rem" }}
+          style={{ width: '20%', height: '52px', fontSize: '1.4rem' }}
           onClick={handleSubmit}
         >
           댓글작성

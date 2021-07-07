@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // Redux action + reducer → slice
 export const dialogSlice = createSlice({
-  name: "dialog",
+  name: 'dialog',
   initialState: {
     dialogState: false,
     message: null,

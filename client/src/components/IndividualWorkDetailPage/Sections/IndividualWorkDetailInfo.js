@@ -1,57 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import axios from "axios";
-import moment from "moment";
-import "moment/locale/ko";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/ko';
+import { useSelector } from 'react-redux';
 //Material UI Imports
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
   mobileTable: {
-    width: "100%",
-    textAlign: "center",
-    border: "1px solid gray",
-    borderRadius: "4px",
-    background: "#F7F7F7",
+    width: '100%',
+    textAlign: 'center',
+    border: '1px solid gray',
+    borderRadius: '4px',
+    background: '#F7F7F7',
   },
   mobileTh: {
-    fontSize: "1.6rem",
-    border: "1px solid gray",
-    borderRadius: "4px",
-    background: "#2C2D2E",
-    color: "#FFFFFF",
+    fontSize: '1.6rem',
+    border: '1px solid gray',
+    borderRadius: '4px',
+    background: '#2C2D2E',
+    color: '#FFFFFF',
   },
   mobileTd: {
-    fontSize: "1.4rem",
-    border: "1px solid gray",
-    borderRadius: "4px",
+    fontSize: '1.4rem',
+    border: '1px solid gray',
+    borderRadius: '4px',
   },
   desktopTh: {
-    background: "#2C2D2E",
+    background: '#2C2D2E',
   },
   desktopThCell: {
-    textAlign: "center",
-    color: "#FFFFFF",
+    textAlign: 'center',
+    color: '#FFFFFF',
   },
   desktopTdCell: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const IndividualWorkDetailInfo = ({ video }) => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
   const classes = useStyles();
 
@@ -61,7 +61,7 @@ const IndividualWorkDetailInfo = ({ video }) => {
   const description = video.description;
   const genre = video.genre;
 
-  const createdAt = moment(video.createdAt).format("LL");
+  const createdAt = moment(video.createdAt).format('LL');
   const duration = Math.floor(Number(video.duration));
   const hour = parseInt(duration / 3600);
   const min = parseInt((duration % 3600) / 60);
@@ -74,13 +74,13 @@ const IndividualWorkDetailInfo = ({ video }) => {
   };
 
   useEffect(() => {
-    axios.post("/api/like/getLikes", likeData).then((response) => {
+    axios.post('/api/like/getLikes', likeData).then((response) => {
       // console.log("getLikes", response.data.likes);
       if (response.data.success) {
         setLikeCount(response.data.likes.length);
       } else {
         alert(
-          "좋아요 수를 불러오는데 문제가 발생했습니다. 나중에 시도해주세요."
+          '좋아요 수를 불러오는데 문제가 발생했습니다. 나중에 시도해주세요.'
         );
       }
     });
@@ -117,8 +117,8 @@ const IndividualWorkDetailInfo = ({ video }) => {
                     {genre}
                   </TableCell>
                   <TableCell className={classes.desktopTdCell}>{`${
-                    min ? `${min}분` : ""
-                  }${sec ? `${sec}초` : ""}`}</TableCell>
+                    min ? `${min}분` : ''
+                  }${sec ? `${sec}초` : ''}`}</TableCell>
                   <TableCell className={classes.desktopTdCell}>
                     {likeCount}
                   </TableCell>
@@ -161,8 +161,8 @@ const IndividualWorkDetailInfo = ({ video }) => {
             </tr>
             <tr>
               <th className={classes.mobileTh}>재생 시간</th>
-              <td className={classes.mobileTd}>{`${min ? `${min}분` : ""}${
-                sec ? `${sec}초` : ""
+              <td className={classes.mobileTd}>{`${min ? `${min}분` : ''}${
+                sec ? `${sec}초` : ''
               }`}</td>
             </tr>
             <tr>

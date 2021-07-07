@@ -3,42 +3,42 @@
 // * 10px ==> 1rem / 14px ==> 1.4rem
 
 const fontSizes = {
-  xsmall: "1.2rem",
-  small: "1.4rem",
-  base: "1.6rem",
-  large: "1.8rem",
-  xlarge: "2.0rem",
-  xxlarge: "2.2rem",
-  xxxlarge: "2.4rem",
-  titleSize: "3.4rem",
+  xsmall: '1.2rem',
+  small: '1.4rem',
+  base: '1.6rem',
+  large: '1.8rem',
+  xlarge: '2.0rem',
+  xxlarge: '2.2rem',
+  xxxlarge: '2.4rem',
+  titleSize: '3.4rem',
 };
 
 const paddings = {
-  xsmall: "0.5rem",
-  small: "0.8rem",
-  base: "1rem",
-  large: "1.2rem",
-  xlarge: "1.4rem",
-  xxlarge: "1.6rem",
-  xxxlarge: "1.8rem",
+  xsmall: '0.5rem',
+  small: '0.8rem',
+  base: '1rem',
+  large: '1.2rem',
+  xlarge: '1.4rem',
+  xxlarge: '1.6rem',
+  xxxlarge: '1.8rem',
 };
 
 const margins = {
-  small: "0.8rem",
-  base: "1rem",
-  large: "1.2rem",
-  xlarge: "1.4rem",
-  xxlarge: "1.6rem",
-  xxxlarge: "1.8rem",
+  small: '0.8rem',
+  base: '1rem',
+  large: '1.2rem',
+  xlarge: '1.4rem',
+  xxlarge: '1.6rem',
+  xxxlarge: '1.8rem',
 };
 
 const interval = {
-  small: "2.5rem",
-  base: "5rem",
-  large: "10rem",
-  xlarge: "15",
-  xxlarge: "20rem",
-  xxxlarge: "25rem",
+  small: '2.5rem',
+  base: '5rem',
+  large: '10rem',
+  xlarge: '15',
+  xxlarge: '20rem',
+  xxxlarge: '25rem',
 };
 
 const verticalInterval = {
@@ -46,21 +46,21 @@ const verticalInterval = {
 };
 
 const colors = {
-  green: "#03C75A",
-  hover: "#11a653",
-  link: "#73797a",
-  black: "#000000",
-  white: "#FFFFFF",
-  gray: "#767676",
-  DarkMode: "#222222",
+  green: '#03C75A',
+  hover: '#11a653',
+  link: '#73797a',
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#767676',
+  DarkMode: '#222222',
 };
 
 const deviceSizes = {
   // min-width 기준
-  mobile: "576px",
-  tablet: "768px",
-  desktop: "992px",
-  largeDesktop: "1200px",
+  mobile: '576px',
+  tablet: '768px',
+  desktop: '992px',
+  largeDesktop: '1200px',
   //material ui 기준 break-point
   // value         |0px     600px    960px    1280px   1920px
   // key           |xs      sm       md       lg       xl

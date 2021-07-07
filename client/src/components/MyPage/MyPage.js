@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 //Import MyPage Navigation
-import LikePage from "./Sections/LikePage";
-import ShoppingBasketPage from "./Sections/ShoppingBasketPage";
-import PurchaseHistoryPage from "./Sections/PurchaseHistoryPage";
-import MyIndividualWorkPage from "./Sections/MyIndividualWorkPage";
+import LikePage from './Sections/LikePage';
+import ShoppingBasketPage from './Sections/ShoppingBasketPage';
+import PurchaseHistoryPage from './Sections/PurchaseHistoryPage';
+import MyIndividualWorkPage from './Sections/MyIndividualWorkPage';
 // Material UI Imports
-import { withStyles } from "@material-ui/core/styles";
-import Badge from "@material-ui/core/Badge";
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
     right: -10,
     top: 2,
     border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
+    padding: '0 4px',
   },
 }))(Badge);
 
@@ -45,7 +45,7 @@ const NavButton = styled(Button)`
 `;
 
 const MyPage = () => {
-  const [title, setTitle] = useState("좋아요 목록");
+  const [title, setTitle] = useState('좋아요 목록');
   const [visible, setVisible] = useState({
     likeVisible: true,
   });
@@ -60,7 +60,7 @@ const MyPage = () => {
 
   const loadShoppingBasketList = () => {
     axios
-      .post("/api/shoppingBasket/getShoppingBasketList", userData)
+      .post('/api/shoppingBasket/getShoppingBasketList', userData)
       .then((response) => {
         if (response.data.success) {
           const resultBasketList = response.data.shoppingbaskets.map(
@@ -69,7 +69,7 @@ const MyPage = () => {
               const minutes = Math.floor(Number(item.duration) / 60);
               const seconds = Math.floor(Number(item.duration) - minutes * 60);
               const runningTime = {
-                runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+                runningTime: `${minutes ? `${minutes}분 ` : ''}${seconds}초`,
               };
               return {
                 id: index + 1,
@@ -82,7 +82,7 @@ const MyPage = () => {
           setShoppingBasketCount(resultBasketList.length);
         } else {
           alert(
-            "장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요."
+            '장바구니 목록을 불러오는데 실패했습니다. 나중에 시도해주세요.'
           );
         }
       })
@@ -98,41 +98,41 @@ const MyPage = () => {
   const handleVisible = (event) => {
     // 새로고침시 likeVisible state 값이 true 이기때문에 좋아요 목록으로 고정된다.
     switch (event.currentTarget.name) {
-      case "like":
+      case 'like':
         setVisible({
           likeVisible: true,
           shoppingBasketVisible: false,
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: false,
         });
-        setTitle("좋아요 목록");
+        setTitle('좋아요 목록');
         break;
-      case "shoppingBasket":
+      case 'shoppingBasket':
         setVisible({
           likeVisible: false,
           shoppingBasketVisible: true,
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: false,
         });
-        setTitle("장바구니");
+        setTitle('장바구니');
         break;
-      case "purchaseHistory":
+      case 'purchaseHistory':
         setVisible({
           likeVisible: false,
           shoppingBasketVisible: false,
           purchaseHistoryVisible: true,
           myIndividualWorkVisible: false,
         });
-        setTitle("구매내역");
+        setTitle('구매내역');
         break;
-      case "myIndividualWork":
+      case 'myIndividualWork':
         setVisible({
           likeVisible: false,
           shoppingBasketVisible: false,
           purchaseHistoryVisible: false,
           myIndividualWorkVisible: true,
         });
-        setTitle("내 작품");
+        setTitle('내 작품');
         break;
       //default를 작성하지 않아도 되지만 eslint로인해 생기는 노란줄 표시를 지우고자 작성함
       default:

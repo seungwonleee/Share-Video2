@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import "./MenuFont.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import './MenuFont.css';
 
 // styled-components
 const List = styled.ul`
@@ -25,9 +25,9 @@ const StyledLink = styled(Link)`
 const CenterMenu = () => {
   // 메뉴 목록
   const menuList = [
-    { route: "/searchplace", name: "극장 찾기" },
-    { route: "/individualwork", name: "개인 작품" },
-    { route: "/videoupload", name: "작품 공유하기" },
+    { route: '/searchplace', name: '극장 찾기' },
+    { route: '/individualwork', name: '개인 작품' },
+    { route: '/videoupload', name: '작품 공유하기' },
   ];
 
   return (

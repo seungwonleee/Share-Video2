@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import IndividualWorkDetailInfo from "./Sections/IndividualWorkDetailInfo";
-import axios from "axios";
-import { useMediaQuery } from "react-responsive";
-import SideVideo from "./Sections/SideVideo";
-import ButtonBar from "./Sections/ButtonBar";
-import Comment from "./Sections/Comment";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import IndividualWorkDetailInfo from './Sections/IndividualWorkDetailInfo';
+import axios from 'axios';
+import { useMediaQuery } from 'react-responsive';
+import SideVideo from './Sections/SideVideo';
+import ButtonBar from './Sections/ButtonBar';
+import Comment from './Sections/Comment';
 // Material UI Imports
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
 
 const Container = styled.div`
   min-height: 80vh;
@@ -18,25 +18,25 @@ const Container = styled.div`
 
 const IndividualWorkDetailPage = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:1280px)",
+    query: '(min-width:1280px)',
   });
   //:videoId url을 가져온다.
   let { videoId } = useParams();
 
   const loginUser = useSelector((state) => state.auth.userId);
 
-  const [video, setVideo] = useState("");
+  const [video, setVideo] = useState('');
 
   const getVideoDetailInfo = () => {
     const videoData = {
       videoId: videoId,
     };
-    axios.post("/api/video/getVideo", videoData).then((response) => {
+    axios.post('/api/video/getVideo', videoData).then((response) => {
       if (response.data.success) {
         console.log(response.data.video);
         setVideo(response.data.video);
       } else {
-        alert("영상 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.");
+        alert('영상 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.');
       }
     });
   };
@@ -58,10 +58,10 @@ const IndividualWorkDetailPage = () => {
             <Grid item md={8} lg={8}>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  margin: "2rem 1rem",
-                  width: "100%",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  margin: '2rem 1rem',
+                  width: '100%',
                 }}
               >
                 <video
@@ -70,18 +70,18 @@ const IndividualWorkDetailPage = () => {
                   controlsList="nodownload"
                   onContextMenu={hanldeDisabledRightClick}
                   style={{
-                    width: "100%",
-                    minWidth: "768px",
-                    maxWidth: "1400px",
+                    width: '100%',
+                    minWidth: '768px',
+                    maxWidth: '1400px',
                   }}
                 />
               </div>
               <div
                 style={{
-                  minWidth: "768px",
-                  maxWidth: "960px",
-                  width: "85%",
-                  margin: "1rem auto",
+                  minWidth: '768px',
+                  maxWidth: '960px',
+                  width: '85%',
+                  margin: '1rem auto',
                   // height: "80vh",
                 }}
               >
@@ -99,7 +99,7 @@ const IndividualWorkDetailPage = () => {
             </Grid>
             <Grid item md={4} lg={4}>
               {/* 사이드바 영상 추천 목록 */}
-              <div style={{ borderLeft: "1px solid #D3D3D3D3" }}>
+              <div style={{ borderLeft: '1px solid #D3D3D3D3' }}>
                 <SideVideo />
               </div>
             </Grid>
@@ -112,10 +112,10 @@ const IndividualWorkDetailPage = () => {
               controls
               controlsList="nodownload"
               onContextMenu={hanldeDisabledRightClick}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
             />
 
-            <div style={{ width: "85%", margin: "1rem auto" }}>
+            <div style={{ width: '85%', margin: '1rem auto' }}>
               {/* video Info (제목, 장르, 재생시간, 평점 출시일) */}
               <IndividualWorkDetailInfo video={video} />
 
@@ -128,7 +128,7 @@ const IndividualWorkDetailPage = () => {
               {/* Comments */}
               <Comment />
               {/* 사이드바 영상 추천 목록 */}
-              <div style={{ margin: "3rem 0 " }}>
+              <div style={{ margin: '3rem 0 ' }}>
                 <SideVideo />
               </div>
             </div>
@@ -140,11 +140,11 @@ const IndividualWorkDetailPage = () => {
     return (
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "80vh",
-          height: "100%",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '80vh',
+          height: '100%',
         }}
       >
         Loading...

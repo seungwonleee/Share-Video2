@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import "./MenuFont.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import './MenuFont.css';
 //Material UI Imports
-import TheatersIcon from "@material-ui/icons/Theaters";
+import TheatersIcon from '@material-ui/icons/Theaters';
 
 // styled-components
 const StyledLink = styled(Link)`
@@ -21,7 +21,7 @@ const Title = styled.h1`
 const LeftMenu = () => {
   return (
     <StyledLink to="/">
-      <TheatersIcon style={{ fontSize: "4.8rem", color: "#A5292A" }} />
+      <TheatersIcon style={{ fontSize: '4.8rem', color: '#A5292A' }} />
       <Title className="Logo-Font">Share-Video</Title>
     </StyledLink>
   );

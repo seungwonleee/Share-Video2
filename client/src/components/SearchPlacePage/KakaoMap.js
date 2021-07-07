@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
 const MapConTainer = styled.div`
   width: 90%;
@@ -12,7 +12,7 @@ const { kakao } = window;
 
 const KakaoMap = ({ searchPlace }) => {
   useEffect(() => {
-    const container = document.getElementById("map");
+    const container = document.getElementById('map');
     const KOREA_CAPITAL_LAT = 37.566536;
     const KOREA_CAPITAL_LONG = 126.977966;
 
@@ -55,12 +55,12 @@ const KakaoMap = ({ searchPlace }) => {
         position: new kakao.maps.LatLng(place.y, place.x),
       });
       // 마커에 클릭이벤트를 등록
-      kakao.maps.event.addListener(marker, "click", function () {
+      kakao.maps.event.addListener(marker, 'click', function () {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출
         infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' +
             place.place_name +
-            "</div>"
+            '</div>'
         );
         infowindow.open(map, marker);
       });

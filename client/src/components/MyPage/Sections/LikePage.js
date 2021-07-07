@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { DataGridStyle } from "../styles/styles";
-import { useMediaQuery } from "react-responsive";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { DataGridStyle } from '../styles/styles';
+import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 //Material UI Imports
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import { DataGrid } from "@material-ui/data-grid";
-import DeleteIcon from "@material-ui/icons/Delete";
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import { DataGrid } from '@material-ui/data-grid';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const RemoveButton = styled(Button)`
   span {
@@ -17,12 +17,12 @@ const RemoveButton = styled(Button)`
 `;
 
 const columns = [
-  { field: "id", headerName: "No", width: 60 },
-  { field: "title", headerName: "작품 제목", width: 190 },
-  { field: "genre", headerName: "장르", width: 110 },
-  { field: "madeFrom", headerName: "제작자", width: 110 },
-  { field: "runningTime", headerName: "재생 시간", width: 130 },
-  { field: "cost", headerName: "가격", width: 100 },
+  { field: 'id', headerName: 'No', width: 60 },
+  { field: 'title', headerName: '작품 제목', width: 190 },
+  { field: 'genre', headerName: '장르', width: 110 },
+  { field: 'madeFrom', headerName: '제작자', width: 110 },
+  { field: 'runningTime', headerName: '재생 시간', width: 130 },
+  { field: 'cost', headerName: '가격', width: 100 },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LikePage = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:768px)",
+    query: '(min-width:768px)',
   });
   // Materail Ui 디자인에 사용
   const classes = useStyles();
@@ -48,7 +48,7 @@ const LikePage = () => {
       userId: loginUser,
     };
 
-    axios.post("/api/like/getLikes", likeData).then((response) => {
+    axios.post('/api/like/getLikes', likeData).then((response) => {
       if (response.data.success) {
         const resultLikeList = response.data.likes.map((item, index) => {
           const videoData = {
@@ -62,7 +62,7 @@ const LikePage = () => {
             Number(item.videoId.duration) - minutes * 60
           );
           const runningTime = {
-            runningTime: `${minutes ? `${minutes}분 ` : ""}${seconds}초`,
+            runningTime: `${minutes ? `${minutes}분 ` : ''}${seconds}초`,
           };
           return {
             id: index + 1,
@@ -75,7 +75,7 @@ const LikePage = () => {
         setMyLiketList(resultLikeList);
       } else {
         alert(
-          "좋아요 목록을 불러오는데 문제가 발생했습니다. 나중에 시도해주세요."
+          '좋아요 목록을 불러오는데 문제가 발생했습니다. 나중에 시도해주세요.'
         );
       }
     });
@@ -87,7 +87,7 @@ const LikePage = () => {
 
   //MyPage 좋아요 목록 삭제
   const handleLikeListRemove = () => {
-    const ok = window.confirm("정말로 삭제하시겠습니까?");
+    const ok = window.confirm('정말로 삭제하시겠습니까?');
     if (ok) {
       if (ok) {
         let list = [];
@@ -107,13 +107,13 @@ const LikePage = () => {
         };
 
         axios
-          .post("/api/like/unLike", deleteData)
+          .post('/api/like/unLike', deleteData)
           .then((response) => {
             if (response.data.success) {
-              alert("좋아요 목록에서 삭제하였습니다.");
+              alert('좋아요 목록에서 삭제하였습니다.');
               getLikeList();
             } else {
-              alert("삭제하는데 실패했습니다. 나중에 시도해주세요.");
+              alert('삭제하는데 실패했습니다. 나중에 시도해주세요.');
             }
           })
           .catch((error) => {
@@ -128,7 +128,7 @@ const LikePage = () => {
       {/* 표 폰트 스타일  */}
       <DataGridStyle />
       {breakPoint ? (
-        <div style={{ height: "400px", minWidth: "768px" }}>
+        <div style={{ height: '400px', minWidth: '768px' }}>
           <DataGrid
             rows={myLiketList}
             columns={columns}
@@ -138,7 +138,7 @@ const LikePage = () => {
           />
         </div>
       ) : (
-        <div style={{ height: "400px", width: "100%" }}>
+        <div style={{ height: '400px', width: '100%' }}>
           <DataGrid
             rows={myLiketList}
             columns={columns}

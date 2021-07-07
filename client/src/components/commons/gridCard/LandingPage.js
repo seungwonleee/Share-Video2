@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import noImage from '../../../images/No_image.svg';
 import { useDispatch } from 'react-redux';
 import { dialogState } from '../../../features/dialog/dialogSlice';
-
 // Material UI Imports
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';

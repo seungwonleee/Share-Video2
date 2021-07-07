@@ -1,76 +1,76 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import axios from 'axios';
 //Material UI 로그인 Form 관련 Imports
-import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 // Materaul UI 회원가입 Form Design
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(16),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%',
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#A5292A",
+    backgroundColor: '#A5292A',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   textField: {
-    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      borderColor: "light-gray",
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'light-gray',
     },
-    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#A5292A",
+    '&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#A5292A',
     },
-    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#A5292A",
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#A5292A',
     },
-    "& .MuiOutlinedInput-input": {
-      color: "black",
+    '& .MuiOutlinedInput-input': {
+      color: 'black',
     },
-    "&:hover .MuiOutlinedInput-input": {
-      color: "gray",
+    '&:hover .MuiOutlinedInput-input': {
+      color: 'gray',
     },
-    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-      color: "black",
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input': {
+      color: 'black',
     },
-    "& .MuiInputLabel-outlined": {
-      color: "gray",
+    '& .MuiInputLabel-outlined': {
+      color: 'gray',
     },
-    "&:hover .MuiInputLabel-outlined": {
-      color: "gray",
+    '&:hover .MuiInputLabel-outlined': {
+      color: 'gray',
     },
-    "& .MuiInputLabel-outlined.Mui-focused": {
-      color: "gray",
+    '& .MuiInputLabel-outlined.Mui-focused': {
+      color: 'gray',
     },
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    background: "#A5292A",
-    "&:hover": {
-      background: "#822626",
+    background: '#A5292A',
+    '&:hover': {
+      background: '#822626',
     },
   },
   title: {
-    fontSize: "3.4rem",
-    color: "#000000",
+    fontSize: '3.4rem',
+    color: '#000000',
   },
   text: {
-    fontSize: "1.6rem",
+    fontSize: '1.6rem',
   },
 }));
 
@@ -80,23 +80,23 @@ const FindAccountPage = () => {
 
   let history = useHistory();
 
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [resetPasswordState, setResetPasswordState] = useState(false);
   const [responseUserData, setResponseUserData] = useState(null);
-  const [resetPassword, setResetPassword] = useState("");
+  const [resetPassword, setResetPassword] = useState('');
 
   const handleInput = (event) => {
     const { name, value } = event.currentTarget;
 
     switch (name) {
-      case "email":
+      case 'email':
         setEmail(value);
         break;
-      case "name":
+      case 'name':
         setName(value);
         break;
-      case "resetPassword":
+      case 'resetPassword':
         setResetPassword(value);
         break;
       default:
@@ -113,7 +113,7 @@ const FindAccountPage = () => {
       name,
     };
 
-    await axios.post("/api/users/findaccount", body).then((response) => {
+    await axios.post('/api/users/findaccount', body).then((response) => {
       const userInfo = response.data.user;
       console.log(userInfo);
       if (response.data.findAccount) {
@@ -129,7 +129,7 @@ const FindAccountPage = () => {
     event.preventDefault();
 
     if (resetPassword.length < 6) {
-      return alert("비밀번호는 6자리 이상이어야 합니다.");
+      return alert('비밀번호는 6자리 이상이어야 합니다.');
     }
 
     let body = {
@@ -137,12 +137,12 @@ const FindAccountPage = () => {
       password: resetPassword,
     };
 
-    await axios.post("/api/users/resetpassword", body).then((response) => {
+    await axios.post('/api/users/resetpassword', body).then((response) => {
       if (response.data.resetPassword) {
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        history.push("/login");
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        history.push('/login');
       } else {
-        alert("비밀번호를 변경하는데 실패했습니다. 나중에 시도해 주세요.");
+        alert('비밀번호를 변경하는데 실패했습니다. 나중에 시도해 주세요.');
       }
     });
   };
@@ -158,7 +158,7 @@ const FindAccountPage = () => {
             Share-Video
           </Typography>
         </a>
-        <Typography className={classes.text} style={{ padding: "1rem 0 " }}>
+        <Typography className={classes.text} style={{ padding: '1rem 0 ' }}>
           (계정 찾기)
         </Typography>
         {resetPasswordState ? (

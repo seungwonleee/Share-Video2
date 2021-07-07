@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // Redux action + reducer → slice
 export const likeSlice = createSlice({
-  name: "like",
+  name: 'like',
   initialState: {
     count: 0,
   },

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
 
 const H2 = styled.h2`
   margin-top: 2rem;
@@ -38,11 +38,11 @@ const SideVideo = () => {
 
   //user별로 업로드한 영상을 불러와서 배열에 모두 담는다.
   const getUserVideo = () => {
-    axios.get("/api/video/getVideos").then((response) => {
+    axios.get('/api/video/getVideos').then((response) => {
       if (response.data.success) {
         setSideVideos(response.data.videos);
       } else {
-        alert("영상을 불러오는데 실패했습니다.");
+        alert('영상을 불러오는데 실패했습니다.');
       }
     });
   };

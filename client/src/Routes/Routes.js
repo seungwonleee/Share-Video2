@@ -1,28 +1,28 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   useLocation,
-} from "react-router-dom";
-import styled from "styled-components";
-import Auth from "../hoc/auth";
+} from 'react-router-dom';
+import styled from 'styled-components';
+import Auth from '../hoc/auth';
 // 라우팅할 모든 페이지 imports
-import LandingPage from "../components/LandingPage/LandingPage";
-import SearchPlacePage from "../components/SearchPlacePage/SearchPlacePage";
-import RegisterPage from "../components/RegisterPage/RegisterPage";
-import LoginPage from "../components/LoginPage/LoginPage";
-import MyPage from "../components/MyPage/MyPage";
-import FindAccountPage from "../components/FindAccountPage/FindAccountPage";
-import NoMatchPage from "../components/NoMatchPage/NoMatchPage";
-import NavBar from "../components/NavBar/NavBar";
-import Footer from "../components/Footer/Footer";
-import IndividualWorkPage from "../components/IndividualWorkPage/IndividualWorkPage";
-import VideoUploadPage from "../components/VideoUploadPage/VideoUploadPage";
-import PaymentPage from "../components/PaymentPage/PaymentPage";
-import CompletePaymentPage from "../components/PaymentPage/CompletePaymentPage";
-import MovieDetail from "../components/MovieDetail/MovieDetail";
-import IndividualWorkDetailPage from "../components/IndividualWorkDetailPage/IndividualWorkDetailPage";
+import LandingPage from '../components/LandingPage/LandingPage';
+import SearchPlacePage from '../components/SearchPlacePage/SearchPlacePage';
+import RegisterPage from '../components/RegisterPage/RegisterPage';
+import LoginPage from '../components/LoginPage/LoginPage';
+import MyPage from '../components/MyPage/MyPage';
+import FindAccountPage from '../components/FindAccountPage/FindAccountPage';
+import NoMatchPage from '../components/NoMatchPage/NoMatchPage';
+import NavBar from '../components/NavBar/NavBar';
+import Footer from '../components/Footer/Footer';
+import IndividualWorkPage from '../components/IndividualWorkPage/IndividualWorkPage';
+import VideoUploadPage from '../components/VideoUploadPage/VideoUploadPage';
+import PaymentPage from '../components/PaymentPage/PaymentPage';
+import CompletePaymentPage from '../components/PaymentPage/CompletePaymentPage';
+import MovieDetail from '../components/MovieDetail/MovieDetail';
+import IndividualWorkDetailPage from '../components/IndividualWorkDetailPage/IndividualWorkDetailPage';
 
 const MainSection = styled.section`
   background: #f7f7f7;
@@ -37,9 +37,9 @@ const Routes = () => {
   const { pathname } = useLocation();
   return (
     <>
-      {pathname !== "/login" &&
-        pathname !== "/register" &&
-        pathname !== "/findaccount" && <NavBar />}
+      {pathname !== '/login' &&
+        pathname !== '/register' &&
+        pathname !== '/findaccount' && <NavBar />}
       <MainSection>
         <Switch>
           <Route exact path="/" component={Auth(LandingPage)} />
@@ -79,10 +79,10 @@ const Routes = () => {
           <Route path="*" component={NoMatchPage} />
         </Switch>
       </MainSection>
-      {pathname !== "/login" &&
-        pathname !== "/register" &&
-        pathname !== "/videoupload" &&
-        pathname !== "/findaccount" && <Footer />}
+      {pathname !== '/login' &&
+        pathname !== '/register' &&
+        pathname !== '/videoupload' &&
+        pathname !== '/findaccount' && <Footer />}
     </>
   );
 };

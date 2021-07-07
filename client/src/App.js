@@ -1,10 +1,10 @@
-import React from "react";
-import dotenv from "dotenv";
-import Routes from "./Routes/Routes";
-import { ThemeProvider } from "styled-components";
-import GlobalStyle from "./Styles/GlobalStyle";
-import theme from "./Theme/theme";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import React from 'react';
+import dotenv from 'dotenv';
+import Routes from './Routes/Routes';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './Styles/GlobalStyle';
+import theme from './Theme/theme';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 dotenv.config();
 
 const App = () => {

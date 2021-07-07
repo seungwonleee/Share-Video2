@@ -1,15 +1,15 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   setLoginState,
   setId,
   setEmail,
   setNickname,
-} from "../../../features/auth/authSlice";
-import { Link, useHistory } from "react-router-dom";
-import styled from "styled-components";
-import "./MenuFont.css";
-import axios from "axios";
+} from '../../../features/auth/authSlice';
+import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+import './MenuFont.css';
+import axios from 'axios';
 
 // styled-components
 const List = styled.ul`
@@ -35,10 +35,10 @@ const RightMenu = () => {
   // 로그아웃하기
   const handleLogout = () => {
     axios
-      .get("/api/users/logout")
+      .get('/api/users/logout')
       .then((res) => {
         if (res.data.removeCookie) {
-          history.push("/");
+          history.push('/');
           // 로그아웃시 Redux의 사용자 로그인 상태와 식별 id 초기화
           dispatch(setLoginState(false));
           dispatch(setId(null));

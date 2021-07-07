@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 // material UI Imports
-import TheatersIcon from "@material-ui/icons/Theaters";
-import Typography from "@material-ui/core/Typography";
+import TheatersIcon from '@material-ui/icons/Theaters';
+import Typography from '@material-ui/core/Typography';
 
 // styled components
 const FooterSection = styled.footer`
@@ -57,7 +57,7 @@ const Copyright = () => {
       <span>Copyright ©</span>
       <Link to="/about">
         <span>SeungWon</span>
-      </Link>{" "}
+      </Link>{' '}
       <span>{new Date().getFullYear()}</span>
     </Typography>
   );
@@ -65,23 +65,23 @@ const Copyright = () => {
 
 const Footer = () => {
   const breakPoint = useMediaQuery({
-    query: "(min-width:600px)",
+    query: '(min-width:600px)',
   });
   return (
     <FooterSection>
       <div
         style={{
-          padding: "30px 0 50px 0",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          padding: '30px 0 50px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         {breakPoint ? (
           <>
             <LogoSection>
-              <TheatersIcon style={{ color: "#A5292A", fontSize: "3.6rem" }} />
+              <TheatersIcon style={{ color: '#A5292A', fontSize: '3.6rem' }} />
               <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
@@ -96,11 +96,11 @@ const Footer = () => {
         ) : (
           <>
             <LogoSection>
-              <TheatersIcon style={{ color: "#A5292A", fontSize: "2.4rem" }} />
+              <TheatersIcon style={{ color: '#A5292A', fontSize: '2.4rem' }} />
               <p>Share-Video</p>
             </LogoSection>
             <EmailSection>
-              <p style={{ margin: "1rem" }}>Contact</p>
+              <p style={{ margin: '1rem' }}>Contact</p>
               <a href="mailto:seungwon.code@gmail.com">
                 seungwon.code@gmail.com
               </a>
