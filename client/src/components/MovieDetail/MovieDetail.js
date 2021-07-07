@@ -54,18 +54,32 @@ const MovieDetail = (props) => {
   const [Movie, setMovie] = useState([]);
   const [Casts, setCasts] = useState([]);
 
-  const getMovieDetailInfo = async (endpointMovieInfo) => {
+  const getMovieDetailInfo = (endpointMovieInfo) => {
     // 영화 상세 정보
-    await axios.get(endpointMovieInfo).then((response) => {
-      setMovie(response.data);
-    });
+    axios
+      .get(endpointMovieInfo)
+      .then((response) => {
+        setMovie(response.data);
+      })
+      .catch((error) => {
+        alert(
+          '상세 정보를 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
 
-  const getMovieCastInfo = async (endpointCast) => {
+  const getMovieCastInfo = (endpointCast) => {
     // 영화 관계자 정보
-    await axios.get(endpointCast).then((response) => {
-      setCasts(response.data.cast);
-    });
+    axios
+      .get(endpointCast)
+      .then((response) => {
+        setCasts(response.data.cast);
+      })
+      .catch((error) => {
+        alert(
+          '관계자 정보를 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
 
   useEffect(() => {

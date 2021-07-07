@@ -74,16 +74,16 @@ const IndividualWorkDetailInfo = ({ video }) => {
   };
 
   useEffect(() => {
-    axios.post('/api/like/getLikes', likeData).then((response) => {
-      // console.log("getLikes", response.data.likes);
-      if (response.data.success) {
+    axios
+      .post('/api/like/getLikes', likeData)
+      .then((response) => {
         setLikeCount(response.data.likes.length);
-      } else {
+      })
+      .catch((error) => {
         alert(
-          '좋아요 수를 불러오는데 문제가 발생했습니다. 나중에 시도해주세요.'
+          '좋아요 정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
-      }
-    });
+      });
   }, [likeCountNum]);
 
   return (

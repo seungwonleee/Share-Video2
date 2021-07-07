@@ -35,16 +35,20 @@ const Description = styled.div`
 
 const SideVideo = () => {
   const [sideVideos, setSideVideos] = useState([]);
+  console.log(sideVideos);
 
   //user별로 업로드한 영상을 불러와서 배열에 모두 담는다.
   const getUserVideo = () => {
-    axios.get('/api/video/getVideos').then((response) => {
-      if (response.data.success) {
+    axios
+      .get('/api/video/getVideos')
+      .then((response) => {
         setSideVideos(response.data.videos);
-      } else {
-        alert('영상을 불러오는데 실패했습니다.');
-      }
-    });
+      })
+      .catch((error) => {
+        alert(
+          '추천 영상을 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
 
   useEffect(() => {

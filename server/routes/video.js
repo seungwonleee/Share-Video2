@@ -33,10 +33,8 @@ const upload = multer({ storage: storage }).single("file");
 // 업로드 영상 저장
 router.post("/uploadfiles", (req, res) => {
   upload(req, res, (err) => {
-    if (err) {
-      return res.json({ success: false, err });
-    }
-    return res.json({
+    if (err) return res.status(400).json({ success: false, err });
+    return res.status(200).json({
       success: true,
       filePath: res.req.file.path,
       fileName: res.req.file.filename,
@@ -52,6 +50,7 @@ router.post("/thumbnail", (req, res) => {
   ffmpeg.ffprobe(req.body.filePath, function (err, metadata) {
     // console.dir(metadata);
     // console.log(metadata.format.duration);
+    if (err) return res.status(400).send(err);
     fileDuration = metadata.format.duration;
   });
 
@@ -79,7 +78,7 @@ router.post("/thumbnail", (req, res) => {
 });
 
 // 영상 전체 데이터 저장(작성자, 파일 경로, thumbnail 경로 등등)
-router.post("/uploadVideo", (req, res) => {
+router.post("/saveVideoData", (req, res) => {
   const video = new Video(req.body);
 
   video.save((err, video) => {

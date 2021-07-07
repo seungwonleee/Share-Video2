@@ -49,8 +49,8 @@ router.post("/login", (req, res) => {
 
 router.post("/findaccount", (req, res) => {
   // 입력받은 이메일을 DB에서 찾는다.
-  // console.log(req.body);
   User.findOne({ email: req.body.email }, (error, user) => {
+    if (error) return res.status(400).send(error);
     if (!user) {
       return res.json({
         findAccount: false,
@@ -59,6 +59,7 @@ router.post("/findaccount", (req, res) => {
     }
     // 이메일이 있다면 이름을 찾는다.
     User.findOne({ name: req.body.name }, (error, user) => {
+      if (error) return res.status(400).send(error);
       if (!user) {
         return res.json({
           findAccount: false,
@@ -75,41 +76,25 @@ router.post("/findaccount", (req, res) => {
 });
 
 router.post("/resetpassword", (req, res) => {
+  //사용자로부터 새롭게 입력받은 비밀번호
   const newPassword = req.body.password;
-  // console.log("=====>", newPassword);
   // 입력받은 이메일을 DB에서 찾는다.
   User.findOne({ email: req.body.email }, (error, user) => {
-    if (!user) {
-      return res.json({
-        loginSuccess: false,
-        message: "가입되어 있지 않은 계정입니다.",
-      });
-    }
-    // 새로입력 된 비밀번호를 bcrypt로 암호화
-    user.resetPassword(newPassword, (err, reset) => {
-      if (err) {
-        return res.json({
-          reset: false,
-          message: "비밀번호 초기화 실패",
-        });
-      }
+    if (error) return res.status(400).send(error);
+    // 새로입력 된 비밀번호를 bcrypt로 암호화 (resetPassword 함수는 User 모델에 정의 되어있다.)
+    user.resetPassword(newPassword, (error, reset) => {
+      if (error) return res.status(400).send(error);
       // 새로운 비밀번호 암호화에 성공하면 해당 계정 비밀번호 업데이트
       User.findOneAndUpdate(
         { email: req.body.email },
         { $set: { password: reset } },
         { new: true },
-        (err, doc) => {
-          if (error) {
-            res.json({
-              resetPassword: "false",
-            });
-          }
+        (error, doc) => {
+          if (error) return res.status(400).send(error);
+          res.status(200).send("reset success");
         }
       );
     });
-  });
-  res.json({
-    resetPassword: true,
   });
 });
 

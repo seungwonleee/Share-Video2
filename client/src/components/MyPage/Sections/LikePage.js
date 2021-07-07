@@ -48,8 +48,9 @@ const LikePage = () => {
       userId: loginUser,
     };
 
-    axios.post('/api/like/getLikes', likeData).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/like/getLikes', likeData)
+      .then((response) => {
         const resultLikeList = response.data.likes.map((item, index) => {
           const videoData = {
             title: item.videoId.title,
@@ -71,14 +72,13 @@ const LikePage = () => {
             ...item,
           };
         });
-
         setMyLiketList(resultLikeList);
-      } else {
+      })
+      .catch((error) => {
         alert(
-          '좋아요 목록을 불러오는데 문제가 발생했습니다. 나중에 시도해주세요.'
+          '좋아요 목록을 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
-      }
-    });
+      });
   };
 
   useEffect(() => {

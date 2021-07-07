@@ -33,13 +33,14 @@ const Comment = () => {
   };
 
   const getComments = () => {
-    axios.post('/api/comment/getComments', videoData).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/comment/getComments', videoData)
+      .then((response) => {
         setCommentLists(response.data.comments);
-      } else {
-        alert('댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.');
-      }
-    });
+      })
+      .catch((error) => {
+        alert('댓글을 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      });
   };
   useEffect(() => {
     getComments();

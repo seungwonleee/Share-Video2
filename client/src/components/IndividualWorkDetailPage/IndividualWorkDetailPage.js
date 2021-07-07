@@ -31,14 +31,15 @@ const IndividualWorkDetailPage = () => {
     const videoData = {
       videoId: videoId,
     };
-    axios.post('/api/video/getVideo', videoData).then((response) => {
-      if (response.data.success) {
-        console.log(response.data.video);
+    axios
+      .post('/api/video/getVideo', videoData)
+      .then((response) => {
         setVideo(response.data.video);
-      } else {
-        alert('영상 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.');
-      }
-    });
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('문제가 발생했습니다. 잠시후 다시 시도해 주세요.');
+      });
   };
   useEffect(() => {
     getVideoDetailInfo();

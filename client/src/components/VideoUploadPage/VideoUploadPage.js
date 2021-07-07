@@ -182,32 +182,39 @@ const VideoUploadPage = () => {
     };
 
     //영상 관련 모든 데이터 저장
-    axios.post('/api/video/uploadVideo', data).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/video/saveVideoData', data)
+      .then((response) => {
         alert('영상을 업로드하는데 성공했습니다.');
         history.push('/');
-      } else {
-        alert('영상을 업로드하는데 실패했습니다.(code:SVD)');
-      }
-    });
+      })
+      .catch((error) => {
+        alert(
+          '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 3)'
+        );
+      });
   };
 
+  // 저장된 영상 파일 thumbnail과 파일 경로(filepath) 생성
   const saveThumbnail = (filePathAndName) => {
-    //영상에대한 thumbnail과 파일 경로(filepath) 생성
-    axios.post('/api/video/thumbnail', filePathAndName).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/video/thumbnail', filePathAndName)
+      .then((response) => {
         let fileDurationAndThumbnail = {
           fileDuration: response.data.fileDuration,
           fileThumbnail: response.data.thumbsFilePath,
         };
         //최종적으로 video file 과 thumbnail에 대한 정보를 하나의 document에 저장
         saveVideoData(filePathAndName, fileDurationAndThumbnail);
-      } else {
-        alert('영상을 업로드하는데 실패했습니다.(code:ST)');
-      }
-    });
+      })
+      .catch((error) => {
+        alert(
+          '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 2)'
+        );
+      });
   };
 
+  //영상 파일 저장
   const saveVideoFile = () => {
     let formData = new FormData();
     const config = {
@@ -216,8 +223,9 @@ const VideoUploadPage = () => {
 
     formData.append('file', dropFile);
     //동영상 파일을 저장
-    axios.post('/api/video/uploadfiles', formData, config).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/video/uploadfiles', formData, config)
+      .then((response) => {
         let filePathAndName = {
           filePath: response.data.filePath,
           fileName: response.data.fileName,
@@ -225,10 +233,12 @@ const VideoUploadPage = () => {
 
         //영상에대한 thumbnail과 파일 경로(filepath) 생성
         saveThumbnail(filePathAndName);
-      } else {
-        alert('영상을 업로드하는데 실패했습니다.(code:SV)');
-      }
-    });
+      })
+      .catch((error) => {
+        alert(
+          '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 1)'
+        );
+      });
   };
 
   const onSubmit = (event) => {

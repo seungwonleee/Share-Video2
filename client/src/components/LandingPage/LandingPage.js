@@ -61,16 +61,22 @@ const LandingPage = () => {
 
   const [Movies, setMovies] = useState([]);
   const [mainMovieImage, setMainMovieImage] = useState([]);
-  console.log(mainMovieImage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getMovies = (endpoint) => {
-    axios.get(endpoint).then((response) => {
-      // console.log("인기 영화 ===>", response.data.results);
-      setMovies([...Movies, ...response.data.results]);
-      setMainMovieImage(response.data.results);
-      setCurrentPage(response.data.page);
-    });
+    axios
+      .get(endpoint)
+      .then((response) => {
+        // console.log("인기 영화 ===>", response.data.results);
+        setMovies([...Movies, ...response.data.results]);
+        setMainMovieImage(response.data.results);
+        setCurrentPage(response.data.page);
+      })
+      .catch((error) => {
+        alert(
+          '영화 목록을 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
   // 인기 영화 호출 API
   useEffect(() => {

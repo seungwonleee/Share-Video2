@@ -91,15 +91,18 @@ const PaymentPage = () => {
       ...videoId,
     };
 
-    axios.post('/api/video/getVideo', videoData).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/video/getVideo', videoData)
+      .then((response) => {
         setPurchaseList([response.data.video]);
         calculateTotalCost([response.data.video]);
         localStorage.removeItem('purchaseItem');
-      } else {
-        alert('해당 상품을 불러오는데 실패했습니다. 나중에 시도해 주세요.');
-      }
-    });
+      })
+      .catch((error) => {
+        alert(
+          '해당 상품을 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
 
   useEffect(() => {

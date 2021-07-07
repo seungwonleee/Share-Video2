@@ -58,25 +58,32 @@ const ButtonBar = ({ userFrom, video }) => {
   //영상 좋아요 및 좋아요 목록에 추가
   const handleLike = () => {
     if (isLoggedIn) {
-      axios.post('/api/like/upLike', likeData).then((response) => {
-        if (response.data.success) {
-          alert('좋아요 했습니다.');
-          dispatch(setCount(1));
-        } else if (response.data.message) {
-          //upLike 에서 해당 영상이 이미 좋아요한 목록에 있으면 unlike 하도록 한다.
-          axios.post('/api/like/unLike', likeData).then((response) => {
-            if (response.data.success) {
-              alert('좋아요를 취소 했습니다.');
-              dispatch(setCount(-1));
-            } else {
-              alert('좋아요 취소를 실패 했습니다. 나중에 시도해주세요.');
-            }
-          });
-        } else {
-          alert('좋아요를 실패 했습니다. 나중에 시도해주세요.');
-        }
-      });
+      axios
+        .post('/api/like/upLike', likeData)
+        .then((response) => {
+          if (response.data.success) {
+            alert('좋아요 했습니다.');
+            dispatch(setCount(1));
+          } else if (response.data.message) {
+            //Like DB에서 해당 영상이 이미 좋아요한 데이터가 존재하면 unlike 하도록 한다.
+            axios
+              .post('/api/like/unLike', likeData)
+              .then((response) => {
+                alert('좋아요를 취소 했습니다.');
+                dispatch(setCount(-1));
+              })
+              .catch((error) => {
+                alert(
+                  '좋아요 취소에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+                );
+              });
+          }
+        })
+        .catch((error) => {
+          alert('좋아요에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        });
     } else {
+      // 로그인하지 않은 사용자 redirect
       alert('로그인 후 사용가능 합니다.');
       history.push('/login');
     }

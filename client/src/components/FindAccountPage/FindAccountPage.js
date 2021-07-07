@@ -104,8 +104,8 @@ const FindAccountPage = () => {
     }
   };
 
-  //비밀번호 찾기(변경)
-  const handleFindAccount = async (event) => {
+  //비밀번호 찾기 (계정 확인)
+  const handleFindAccount = (event) => {
     event.preventDefault();
 
     let body = {
@@ -113,19 +113,26 @@ const FindAccountPage = () => {
       name,
     };
 
-    await axios.post('/api/users/findaccount', body).then((response) => {
-      const userInfo = response.data.user;
-      console.log(userInfo);
-      if (response.data.findAccount) {
-        setResetPasswordState(true);
-        setResponseUserData(userInfo);
-      } else {
-        alert(response.data.message);
-      }
-    });
+    axios
+      .post('/api/users/findaccount', body)
+      .then((response) => {
+        const userInfo = response.data.user;
+
+        if (response.data.findAccount) {
+          //계정 주인인지 확인이 되면 비밀번호 초기화가 가능하도록 한다.
+          setResetPasswordState(true);
+          setResponseUserData(userInfo);
+        } else {
+          alert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        alert('문제가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      });
   };
 
-  const handleResetPassword = async (event) => {
+  // 비밀번호 초기화(재설정)
+  const handleResetPassword = (event) => {
     event.preventDefault();
 
     if (resetPassword.length < 6) {
@@ -137,14 +144,15 @@ const FindAccountPage = () => {
       password: resetPassword,
     };
 
-    await axios.post('/api/users/resetpassword', body).then((response) => {
-      if (response.data.resetPassword) {
+    axios
+      .post('/api/users/resetpassword', body)
+      .then((response) => {
         alert('비밀번호가 성공적으로 변경되었습니다.');
         history.push('/login');
-      } else {
-        alert('비밀번호를 변경하는데 실패했습니다. 나중에 시도해 주세요.');
-      }
-    });
+      })
+      .catch((error) => {
+        alert('문제가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      });
   };
   return (
     <Container component="main" maxWidth="xs">

@@ -71,16 +71,18 @@ const SingleComment = ({ comment, refreshComment }) => {
         responseTo: comment._id,
       };
 
-      axios.post('/api/comment/saveComment', commentData).then((response) => {
-        if (response.data.success) {
+      axios
+        .post('/api/comment/saveComment', commentData)
+        .then((response) => {
           setCommentValue('');
           setOpenReply(!openReply);
           refreshComment(response.data.result);
-        } else {
-          alert('현재 댓글을 작성할 수 없습니다. 나중에 시도해주세요.');
-        }
-      });
+        })
+        .catch((error) => {
+          alert('현재 댓글을 작성할 수 없습니다. 잠시 후 다시 시도해 주세요.');
+        });
     } else {
+      //로그인하지 않은 사용자 redirect
       alert('로그인 후 사용 가능합니다.');
       history.push('/login');
     }
