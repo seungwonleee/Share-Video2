@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const config = require("./config/key");
 const mongoose = require("mongoose");
 const compression = require("compression");
+const helmet = require("helmet");
 
 mongoose
   .connect(config.mongoURI, {
@@ -15,6 +16,8 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch((error) => console.log(error));
 
+// Helmet은 보안 관련 HTTP 헤더를 설정
+app.use(helmet());
 // 모든 응답 압축해서 gzip 형태로 client로 전달
 app.use(compression());
 // 데이터 전송 100mb 이상 제한
