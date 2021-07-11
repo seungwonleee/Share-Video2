@@ -62,35 +62,31 @@ const PurchaseHistoryPage = () => {
     axios
       .post('/api/purchaseList/getPurchaseList', userData)
       .then((response) => {
-        if (response.data.success) {
-          const resultBuyLists = response.data.buyLists.map((item, index) => {
-            const title = { title: item.videoId.title };
-            const genre = { genre: item.videoId.genre };
-            const filePath = {
-              filePath: `http://localhost:5000/${item.videoId.filePath}`,
-            };
-            const madeFrom = { madeFrom: item.videoId.nickname };
-            const minutes = Math.floor(Number(item.videoId.duration) / 60);
-            const seconds = Math.floor(
-              Number(item.videoId.duration) - minutes * 60
-            );
-            const runningTime = {
-              runningTime: `${minutes ? `${minutes}분 ` : ''}${seconds}초`,
-            };
-            return {
-              id: index + 1,
-              ...title,
-              ...genre,
-              ...filePath,
-              ...item,
-              ...runningTime,
-              ...madeFrom,
-            };
-          });
-          setPurchaseList(resultBuyLists);
-        } else {
-          alert('구매내역을 불러오는데 실패했습니다. 나중에 시도해주세요.');
-        }
+        const resultBuyLists = response.data.buyLists.map((item, index) => {
+          const title = { title: item.videoId.title };
+          const genre = { genre: item.videoId.genre };
+          const filePath = {
+            filePath: item.videoId.filePath,
+          };
+          const madeFrom = { madeFrom: item.videoId.nickname };
+          const minutes = Math.floor(Number(item.videoId.duration) / 60);
+          const seconds = Math.floor(
+            Number(item.videoId.duration) - minutes * 60
+          );
+          const runningTime = {
+            runningTime: `${minutes ? `${minutes}분 ` : ''}${seconds}초`,
+          };
+          return {
+            id: index + 1,
+            ...title,
+            ...genre,
+            ...filePath,
+            ...item,
+            ...runningTime,
+            ...madeFrom,
+          };
+        });
+        setPurchaseList(resultBuyLists);
       })
       .catch((error) => {
         console.log(error);

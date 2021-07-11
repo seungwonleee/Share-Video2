@@ -89,15 +89,15 @@ router.post("/deleteMyVideos", (req, res) => {
       if (err) return res.status(400).json({ success: false, err });
     });
     // DB 영상 삭제
-    unlink(item.filePath, (err) => {
-      if (err) return res.status(400).json({ success: false, err });
-      console.log("thumbnail was deleted");
-    });
+    // unlink(item.filePath, (err) => {
+    //   if (err) return res.status(400).json({ success: false, err });
+    //   console.log("thumbnail was deleted");
+    // });
     // DB 썸네일 삭제
-    unlink(item.thumbnail, (err) => {
-      if (err) return res.status(400).json({ success: false, err });
-      console.log("video was deleted");
-    });
+    // unlink(item.thumbnail, (err) => {
+    //   if (err) return res.status(400).json({ success: false, err });
+    //   console.log("video was deleted");
+    // });
     //해당 영상을 장바구니 목록에 추가한 모든 유저의 장바구니 목록에서 삭제
     await ShoppingBasket.deleteMany({ videoId: item._id }, (err) => {
       if (err) return res.status(400).json({ success: false, err });
