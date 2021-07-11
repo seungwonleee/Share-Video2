@@ -126,9 +126,8 @@ const IndividualWorkDetailPage = () => {
                 userFrom={loginUser}
                 video={video}
               />
-              {/* Comments */}
-              {/* TODO comment 반복 요청 수정하기 */}
-              {/* <Comment /> */}
+              {/* Comments 댓글 컴포넌트*/}
+              <Comment />
               {/* 사이드바 영상 추천 목록 */}
               <div style={{ margin: '3rem 0 ' }}>
                 <SideVideo />

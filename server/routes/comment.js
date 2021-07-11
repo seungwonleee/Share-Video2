@@ -9,11 +9,11 @@ router.post("/saveComment", (req, res) => {
   comment.save((err, comment) => {
     if (err) return res.status(400).json({ success: false, err });
 
-    Comment.find({ _id: comment._id })
+    Comment.find({ videoId: req.body.videoId })
       .populate("writer")
-      .exec((err, result) => {
+      .exec((err, comments) => {
         if (err) return res.status(400).json({ success: false, err });
-        return res.status(200).json({ success: true, result });
+        return res.status(200).json({ success: true, comments });
       });
   });
 });
@@ -32,7 +32,13 @@ router.post("/getComments", (req, res) => {
 router.post("/removeComment", (req, res) => {
   Comment.findOneAndDelete({ _id: req.body.commentId }).exec((err, result) => {
     if (err) return res.status(400).json({ success: false, err });
-    res.status(200).json({ success: true });
+
+    Comment.find({ videoId: req.body.videoId })
+      .populate("writer")
+      .exec((err, comments) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, comments });
+      });
   });
 });
 

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import SingleComment from './SingleComment';
-import ReplyComment from './ReplyComment';
 
 const P = styled.p`
   font-size: ${(props) => props.theme.fontSizes.xlarge};
@@ -28,10 +27,9 @@ const Comment = () => {
   const [commentValue, setCommentValue] = useState('');
   const [commentLists, setCommentLists] = useState([]);
 
-  const videoData = {
-    videoId: videoId,
-  };
+  const videoData = { videoId };
 
+  // 댓글 목록 불러오기
   const getComments = () => {
     axios
       .post('/api/comment/getComments', videoData)
@@ -42,15 +40,17 @@ const Comment = () => {
         alert('댓글을 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.');
       });
   };
+
   useEffect(() => {
     getComments();
-  }, [commentLists]);
+  }, []);
 
   const handleCommentText = (event) => {
     const { value } = event.currentTarget;
     setCommentValue(value);
   };
 
+  // 댓글 db 저장
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -65,24 +65,26 @@ const Comment = () => {
         videoId: videoId,
       };
 
-      axios.post('/api/comment/saveComment', commentData).then((response) => {
-        if (response.data.success) {
+      axios
+        .post('/api/comment/saveComment', commentData)
+        .then((response) => {
           setCommentValue('');
-          setCommentLists([...commentLists, ...response.data.result]);
-        } else {
+          setCommentLists(response.data.comments);
+        })
+        .catch((error) => {
           alert(
-            '댓글을 작성하는데 문제가 발생하였습닌다. 나중에 시도해주세요.'
+            '댓글을 작성하는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
           );
-        }
-      });
+        });
     } else {
       alert('로그인 후 사용 가능합니다.');
       history.push('/login');
     }
   };
 
-  const refreshComment = (newComment) => {
-    setCommentLists([...commentLists, ...newComment]);
+  // 댓글 작성, 삭제 시 db에서 댓글 전체 데이터를 가져와서 교체해준다.
+  const refreshComment = (resultComment) => {
+    setCommentLists(resultComment);
   };
 
   return (
@@ -102,12 +104,6 @@ const Comment = () => {
                   comment={comment}
                   refreshComment={refreshComment}
                 />
-                {/* <ReplyComment
-                  key={`replyComment-${index}`}
-                  commentLists={commentLists}
-                  parentCommentId={comment._id}
-                  refreshComment={refreshComment}
-                /> */}
               </>
             )
         )}
@@ -125,7 +121,12 @@ const Comment = () => {
         />
         <br />
         <button
-          style={{ width: '20%', height: '52px', fontSize: '1.4rem' }}
+          style={{
+            width: '20%',
+            height: '52px',
+            fontSize: '1.4rem',
+            cursor: 'pointer',
+          }}
           onClick={handleSubmit}
         >
           댓글작성

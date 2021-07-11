@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { useHistory } from 'react-router-dom';
 //material ui imports
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -43,85 +42,28 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleComment = ({ comment, refreshComment }) => {
   const classes = useStyles();
-  let history = useHistory();
   //:videoId url을 가져온다.
   let { videoId } = useParams();
   const loginUser = useSelector((state) => state.auth.userId);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  const [commentValue, setCommentValue] = useState('');
-  const [openReply, setOpenReply] = useState(false);
-
-  const handleChange = (event) => {
-    setCommentValue(event.currentTarget.value);
-  };
-
-  //댓글 저장
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (isLoggedIn) {
-      if (commentValue.length === 0) {
-        return alert('댓글을 작성해주세요.');
-      }
-
-      const commentData = {
-        writer: loginUser,
-        videoId: videoId,
-        content: commentValue,
-        responseTo: comment._id,
-      };
-
-      axios
-        .post('/api/comment/saveComment', commentData)
-        .then((response) => {
-          setCommentValue('');
-          setOpenReply(!openReply);
-          refreshComment(response.data.result);
-        })
-        .catch((error) => {
-          alert('현재 댓글을 작성할 수 없습니다. 잠시 후 다시 시도해 주세요.');
-        });
-    } else {
-      //로그인하지 않은 사용자 redirect
-      alert('로그인 후 사용 가능합니다.');
-      history.push('/login');
-    }
-  };
-
-  //대댓글 열기/닫기
-  const handleReply = () => {
-    setOpenReply(!openReply);
-  };
-
-  //댓글 새로고침
-  const refreshCommentList = () => {
-    const videoData = {
-      videoId: videoId,
-    };
-
-    axios.post('/api/comment/getComments', videoData).then((response) => {
-      if (response.data.success) {
-        refreshComment([]);
-      } else {
-        alert('댓글 정보를 불러오는데 실패했습니다. 나중에 시도해주세요.');
-      }
-    });
-  };
 
   //댓글 삭제
   const removeComment = (event) => {
     const commentData = {
       commentId: event.currentTarget.getAttribute('_id'),
+      videoId: videoId,
     };
 
-    axios.post('/api/comment/removeComment', commentData).then((response) => {
-      if (response.data.success) {
+    axios
+      .post('/api/comment/removeComment', commentData)
+      .then((response) => {
         alert('댓글을 삭제했습니다.');
-        refreshCommentList();
-      } else {
-        alert('댓글을 삭제하는데 실패했습니다. 나중에 시도해주세요.');
-      }
-    });
+        refreshComment(response.data.comments);
+      })
+      .catch((error) => {
+        alert(
+          '댓글을 삭제하는데 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      });
   };
 
   return (
@@ -146,12 +88,14 @@ const SingleComment = ({ comment, refreshComment }) => {
                 <span style={{ fontSize: '1.2rem', padding: '1rem 0 0.3rem' }}>
                   {moment(comment.createdAt).format('LL')}
                 </span>
-                {/* <span style={{ fontSize: "1.3rem" }} onClick={handleReply}>
-                  {"답글쓰기"}
-                </span> */}
+
                 <span
                   _id={comment._id}
-                  style={{ marginLeft: '1rem', fontSize: '1.3rem' }}
+                  style={{
+                    marginLeft: '1rem',
+                    fontSize: '1.3rem',
+                    cursor: 'pointer',
+                  }}
                   onClick={removeComment}
                 >
                   {loginUser === comment.writer._id ? '삭제' : ''}
@@ -164,24 +108,6 @@ const SingleComment = ({ comment, refreshComment }) => {
 
         <Divider component="li" variant="inset" />
       </List>
-
-      {openReply && (
-        <form style={{ display: 'flex' }} onSubmit={handleSubmit}>
-          <textarea
-            style={{ width: '100%', borderRadius: '5px', fontSize: '1.6rem' }}
-            onChange={handleChange}
-            value={commentValue}
-            placeholder="댓글을 남겨주세요."
-          />
-          <br />
-          <button
-            style={{ width: '20%', height: '52px', fontSize: '1.6rem' }}
-            onClick={handleSubmit}
-          >
-            답글쓰기
-          </button>
-        </form>
-      )}
     </div>
   );
 };
