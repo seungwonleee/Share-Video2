@@ -67,10 +67,7 @@ const SideVideo = () => {
         <Container key={index}>
           <Image>
             <a href={`/individualwork/${video._id}`}>
-              <img
-                src={`http://localhost:5000/${video.thumbnail}`}
-                alt={`thumbnail-${video.title}`}
-              />
+              <img src={video.thumbnail} alt={`thumbnail-${video.title}`} />
             </a>
           </Image>
           <Description>

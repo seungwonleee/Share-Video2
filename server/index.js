@@ -20,9 +20,9 @@ mongoose
 app.use(helmet());
 // 모든 응답 압축해서 gzip 형태로 client로 전달
 app.use(compression());
-// 데이터 전송 100mb 이상 제한
-app.use(express.json({ limit: "100mb" }));
-app.use(express.urlencoded({ limit: "100mb", extended: true }));
+// 데이터 전송 20mb 이상 제한
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", require("./routes/users"));

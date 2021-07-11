@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -143,6 +143,24 @@ const VideoUploadPage = () => {
   const [genre, setGenre] = useState('');
   const [cost, setCost] = useState('');
   const [preview, setPreview] = useState('');
+  const [thumnail, setThumnail] = useState('');
+
+  const fileInput = useRef();
+  //20mb 이상인 경우 input value reset
+  const resetInput = () => {
+    fileInput.current.value = '';
+  };
+
+  const handleThumnail = (event) => {
+    const imageFile = event.currentTarget.files[0];
+    console.log(imageFile);
+    if (imageFile.size >= 20 * 1024 * 1024) {
+      //20mb 이상인 경우 input value reset
+      resetInput();
+      return alert('20mb 이상 업로드가 불가합니다.');
+    }
+    setThumnail(imageFile);
+  };
 
   const handleChangeTitle = (event) => {
     const { value } = event.currentTarget;
@@ -167,8 +185,8 @@ const VideoUploadPage = () => {
     setCost(Number(value.replace(/[^0-9]/g, '')));
   };
 
-  //최종적으로 작성 정보, video file, thumbnail에 관한 정보를 하나의 document에 저장한다.
-  const saveVideoData = (filePathAndName, fileDurationAndThumbnail) => {
+  //db에 저장될 최종 정보
+  const saveVideoData = (thumnailPath, videoFilePath, videoFileDuration) => {
     const data = {
       writer: userId,
       nickname: userNickname,
@@ -176,9 +194,9 @@ const VideoUploadPage = () => {
       description,
       genre,
       cost,
-      filePath: filePathAndName.filePath,
-      duration: fileDurationAndThumbnail.fileDuration,
-      thumbnail: fileDurationAndThumbnail.fileThumbnail,
+      filePath: videoFilePath,
+      duration: videoFileDuration,
+      thumbnail: thumnailPath,
     };
 
     //영상 관련 모든 데이터 저장
@@ -195,17 +213,19 @@ const VideoUploadPage = () => {
       });
   };
 
-  // 저장된 영상 파일 thumbnail과 파일 경로(filepath) 생성
-  const saveThumbnail = (filePathAndName) => {
+  // s3에 영상이 저장되면 thumbnail 저장 및 s3 파일 경로 생성
+  const saveThumbnail = (videoData) => {
+    let formData = new FormData();
+    formData.append('file', thumnail);
+
     axios
-      .post('/api/video/thumbnail', filePathAndName)
+      .post('/api/video/thumbnail', formData)
       .then((response) => {
-        let fileDurationAndThumbnail = {
-          fileDuration: response.data.fileDuration,
-          fileThumbnail: response.data.thumbsFilePath,
-        };
-        //최종적으로 video file 과 thumbnail에 대한 정보를 하나의 document에 저장
-        saveVideoData(filePathAndName, fileDurationAndThumbnail);
+        let thumnailPath = response.data.thumbnailPath;
+        let videoFilePath = videoData.filePath;
+        let videoFileDuration = videoData.fileDuration;
+        //aws s3 thumnail 주소, video 주소, 영상 시간 정보
+        saveVideoData(thumnailPath, videoFilePath, videoFileDuration);
       })
       .catch((error) => {
         alert(
@@ -214,7 +234,7 @@ const VideoUploadPage = () => {
       });
   };
 
-  //영상 파일 저장
+  //aws s3에 영상 파일 저장
   const saveVideoFile = () => {
     let formData = new FormData();
     const config = {
@@ -226,13 +246,14 @@ const VideoUploadPage = () => {
     axios
       .post('/api/video/uploadfiles', formData, config)
       .then((response) => {
-        let filePathAndName = {
+        let videoData = {
           filePath: response.data.filePath,
-          fileName: response.data.fileName,
+          fileDuration: response.data.fileDuration,
         };
+        console.log('비디오 정보', videoData);
 
         //영상에대한 thumbnail과 파일 경로(filepath) 생성
-        saveThumbnail(filePathAndName);
+        saveThumbnail(videoData);
       })
       .catch((error) => {
         alert(
@@ -249,7 +270,8 @@ const VideoUploadPage = () => {
       description === '' ||
       genre === '' ||
       cost === '' ||
-      preview === ''
+      preview === '' ||
+      thumnail === ''
     ) {
       return alert('모든 항목을 입력해주세요.');
     }
@@ -262,9 +284,9 @@ const VideoUploadPage = () => {
     const theFile = files[0];
     setDropFile(theFile);
 
-    // 100mb 이상 업로드 불가
-    if (theFile.size >= 100000000) {
-      return alert('용량이 너무 크기 때문에 업로드가 불가합니다.');
+    // 20mb 이상 업로드 불가
+    if (theFile.size >= 20 * 1024 * 1024) {
+      return alert('20mb 이상 업로드가 불가합니다.');
     }
 
     if (theFile.type !== 'video/mp4') {
@@ -342,14 +364,14 @@ const VideoUploadPage = () => {
         <VideoDescription>
           <label>제목</label>
           <input onChange={handleChangeTitle} value={title} maxLength={50} />
-
+          <br />
           <label>설명</label>
           <textarea
             onChange={handleChangeDecsription}
             value={description}
             maxLength={400}
           />
-
+          <br />
           <div>
             <label>장르</label>
             <select
@@ -366,7 +388,7 @@ const VideoUploadPage = () => {
                 </option>
               ))}
             </select>
-
+            <br />
             <label>가격</label>
             <input
               placeholder="원 단위로 입력하세요."
@@ -374,7 +396,15 @@ const VideoUploadPage = () => {
               onChange={handleChangeCost}
             />
           </div>
-
+          <br />
+          <input
+            type="file"
+            style={{ background: 'white', width: '50%', height: '100%' }}
+            accept="image/png, image/jpeg"
+            name="thumnail"
+            onChange={handleThumnail}
+            ref={fileInput}
+          />
           <Button
             variant="contained"
             type="primary"

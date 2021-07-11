@@ -66,7 +66,7 @@ const IndividualWorkDetailPage = () => {
                 }}
               >
                 <video
-                  src={`http://localhost:5000/${video.filePath}`}
+                  src={video.filePath}
                   controls
                   controlsList="nodownload"
                   onContextMenu={hanldeDisabledRightClick}
@@ -109,7 +109,7 @@ const IndividualWorkDetailPage = () => {
           //모바일 버전
           <>
             <video
-              src={`http://localhost:5000/${video.filePath}`}
+              src={video.filePath}
               controls
               controlsList="nodownload"
               onContextMenu={hanldeDisabledRightClick}
@@ -127,7 +127,8 @@ const IndividualWorkDetailPage = () => {
                 video={video}
               />
               {/* Comments */}
-              <Comment />
+              {/* TODO comment 반복 요청 수정하기 */}
+              {/* <Comment /> */}
               {/* 사이드바 영상 추천 목록 */}
               <div style={{ margin: '3rem 0 ' }}>
                 <SideVideo />

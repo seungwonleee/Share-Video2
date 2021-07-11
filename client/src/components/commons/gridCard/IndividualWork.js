@@ -121,7 +121,7 @@ const IndividualWork = ({
           <div style={{ position: 'relative' }}>
             <a href={`/individualwork/${_id}`}>
               <img
-                src={`http://localhost:5000/${thumbnail}`}
+                src={thumbnail}
                 alt={`thumbnail-${title}`}
                 style={{ width: '100%', height: '100%' }}
               />

@@ -10,71 +10,85 @@ const { ShoppingBasket } = require("../models/ShoppingBasket");
 const { Comment } = require("../models/Comment");
 const { Like } = require("../models/Like");
 const { PurchaseList } = require("../models/PurchaseList");
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
+const path = require("path");
+
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY_ID,
+  region: "ap-northeast-2",
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "share-video2",
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 
 //비디오 저장, 이름, 경로 생성, 확장자 검사
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    if (ext !== ".mp4") {
-      return cb(res.status(400).end("only mp4 is allowed"), false);
-    }
-    cb(null, true);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}_${file.originalname}`);
+//   },
+//   fileFilter: (req, file, cb) => {
+//     const ext = path.extname(file.originalname);
+//     if (ext !== ".mp4") {
+//       return cb(res.status(400).end("only mp4 is allowed"), false);
+//     }
+//     cb(null, true);
+//   },
+// });
 
-const upload = multer({ storage: storage }).single("file");
+// const upload = multer({ storage: storage }).single("file");
 
 // 업로드 영상 저장
-router.post("/uploadfiles", (req, res) => {
-  upload(req, res, (err) => {
-    if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({
-      success: true,
-      filePath: res.req.file.path,
-      fileName: res.req.file.filename,
-    });
-  });
-});
-
-// 영상에대한 thumbnail 생성
-router.post("/thumbnail", (req, res) => {
-  let thumbsFilePath = "";
+router.post("/uploadfiles", upload.single("file"), (req, res) => {
+  // console.log(req.file);
+  // req.file.location으로 s3 bucket에 업로드한 파일 주소를 받을 수 있다.
   let fileDuration = "";
 
-  ffmpeg.ffprobe(req.body.filePath, function (err, metadata) {
+  ffmpeg.ffprobe(req.file.location, function (err, metadata) {
     // console.dir(metadata);
     // console.log(metadata.format.duration);
     if (err) return res.status(400).send(err);
     fileDuration = metadata.format.duration;
-  });
 
-  ffmpeg(req.body.filePath)
-    .on("filenames", function (filenames) {
-      //   console.log("Will generate " + filenames.join(", "));
-      thumbsFilePath = "uploads/thumbnails/" + filenames[0];
-    })
-    .on("end", function () {
-      //   console.log("Screenshots taken");
-      return res.json({
-        success: true,
-        thumbsFilePath: thumbsFilePath,
-        fileDuration: fileDuration,
-      });
-    })
-    .screenshots({
-      // Screenshots of the video
-      count: 1,
-      folder: "uploads/thumbnails",
-      size: "320x240",
-      // %b input basename ( filename w/o extension )
-      filename: "thumbnail-%b.png",
+    return res.status(200).json({
+      success: true,
+      filePath: req.file.location,
+      fileName: req.file.originalname,
+      fileDuration: fileDuration,
     });
+  });
+});
+
+const uploadThumnail = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "share-video2",
+    key(req, file, cb) {
+      cb(null, `thumnail/${Date.now()}_${path.basename(file.originalname)}`);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, //20mb 제한
+});
+
+// 영상에대한 thumbnail 생성
+router.post("/thumbnail", uploadThumnail.single("file"), (req, res) => {
+  // console.log(req.file);
+  // req.file.location으로 s3 bucket에 업로드한 파일 주소를 받을 수 있다.
+  return res.status(200).json({
+    thumbnailPath: req.file.location,
+  });
 });
 
 // 영상 전체 데이터 저장(작성자, 파일 경로, thumbnail 경로 등등)
@@ -95,7 +109,7 @@ router.get("/getVideos", (req, res) => {
     .populate("writer")
     .exec((err, videos) => {
       if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true, videos });
+      res.status(200).json({ success: true, videos: videos });
     });
 });
 
