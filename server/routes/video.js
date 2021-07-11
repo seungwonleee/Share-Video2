@@ -122,4 +122,18 @@ router.post("/deleteMyVideos", (req, res) => {
   res.status(200).json({ success: true });
 });
 
+// 작품 조회수 업데이트
+router.post("/updateViews", (req, res) => {
+  console.log(req.body);
+  Video.findOneAndUpdate(
+    { _id: req.body.videoId },
+    { $inc: { views: 1 } },
+    { new: true },
+    (error, doc) => {
+      if (error) return res.status(400).send(error);
+      res.status(200).send("update success");
+    }
+  );
+});
+
 module.exports = router;

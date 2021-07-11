@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
+import DialogMessage from '../commons/DialogMessage';
+import { dialogState } from '../../features/dialog/dialogSlice';
 // Material UI Imports
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -132,6 +134,7 @@ const VideoUploadPage = () => {
     query: '(min-width:768px)',
   });
   let history = useHistory();
+  const dispatch = useDispatch();
 
   //현재 로그인한 회원 식별 id
   const userId = useSelector((state) => state.auth.userId);
@@ -203,6 +206,13 @@ const VideoUploadPage = () => {
     axios
       .post('/api/video/saveVideoData', data)
       .then((response) => {
+        //dialog 메시지 초기화, 제거
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
         alert('영상을 업로드하는데 성공했습니다.');
         history.push('/');
       })
@@ -278,6 +288,13 @@ const VideoUploadPage = () => {
 
     //영상 DB 저장(파일, 썸네일, 작성 내용) uploadfiles => thumbnail => uploadVideo 순서
     saveVideoFile();
+    // 업로드 되는 동안 dialog 메세지 출력
+    dispatch(
+      dialogState({
+        dialogState: true,
+        message: '영상 업로드 하고있습니다. 잠시만 기다려주세요.',
+      })
+    );
   };
 
   const onDrop = (files) => {
@@ -415,6 +432,7 @@ const VideoUploadPage = () => {
           </Button>
         </VideoDescription>
       </form>
+      <DialogMessage />
     </Section>
   );
 };

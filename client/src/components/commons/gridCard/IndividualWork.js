@@ -136,10 +136,23 @@ const IndividualWork = ({
     }
   };
 
+  const handleViews = () => {
+    const data = { videoId: _id };
+    axios
+      .post('/api/video/updateViews', data)
+      .then((response) => {
+        console.log('죄회수 증가');
+      })
+      .catch((error) => {
+        console.error(error);
+        console.log('조회수 증가 오류 발생');
+      });
+  };
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.center}>
       <Card className={classes.root}>
-        <CardMedia>
+        <CardMedia onClick={handleViews}>
           <div style={{ position: 'relative' }}>
             <a href={`/individualwork/${_id}`}>
               <ThumnailImage src={thumbnail} alt={`thumbnail-${title}`} />
@@ -177,6 +190,7 @@ const IndividualWork = ({
             component={Link}
             to={`/individualwork/${_id}`}
             icon={<DescriptionIcon />}
+            onClick={handleViews}
           />
           <BottomNavigationAction
             label="장바구니"
