@@ -1,63 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
 const ffmpeg = require("fluent-ffmpeg");
 const { unlink } = require("fs");
-const { auth } = require("../middleware/auth");
-const { User } = require("../models/User");
 const { Video } = require("../models/Video");
 const { ShoppingBasket } = require("../models/ShoppingBasket");
 const { Comment } = require("../models/Comment");
 const { Like } = require("../models/Like");
 const { PurchaseList } = require("../models/PurchaseList");
-const multerS3 = require("multer-s3");
-const AWS = require("aws-sdk");
-const path = require("path");
+const { uploadVideo, uploadThumnail } = require("../middleware/upload");
 
-AWS.config.update({
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY_ID,
-  region: "ap-northeast-2",
-});
-
-const upload = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: "share-video2",
-    key(req, file, cb) {
-      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 },
-});
-
-//비디오 저장, 이름, 경로 생성, 확장자 검사
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads/");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, `${Date.now()}_${file.originalname}`);
-//   },
-//   fileFilter: (req, file, cb) => {
-//     const ext = path.extname(file.originalname);
-//     if (ext !== ".mp4") {
-//       return cb(res.status(400).end("only mp4 is allowed"), false);
-//     }
-//     cb(null, true);
-//   },
-// });
-
-// const upload = multer({ storage: storage }).single("file");
-
-// 업로드 영상 저장
-router.post("/uploadfiles", upload.single("file"), (req, res) => {
+// 업로드 video 저장
+router.post("/uploadfiles", uploadVideo.single("file"), (req, res) => {
   // console.log(req.file);
   // req.file.location으로 s3 bucket에 업로드한 파일 주소를 받을 수 있다.
   let fileDuration = "";
 
   ffmpeg.ffprobe(req.file.location, function (err, metadata) {
-    // console.dir(metadata);
     // console.log(metadata.format.duration);
     if (err) return res.status(400).send(err);
     fileDuration = metadata.format.duration;
@@ -71,18 +29,7 @@ router.post("/uploadfiles", upload.single("file"), (req, res) => {
   });
 });
 
-const uploadThumnail = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: "share-video2",
-    key(req, file, cb) {
-      cb(null, `thumnail/${Date.now()}_${path.basename(file.originalname)}`);
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, //20mb 제한
-});
-
-// 영상에대한 thumbnail 생성
+// 영상에대한 thumbnail 저장
 router.post("/thumbnail", uploadThumnail.single("file"), (req, res) => {
   // console.log(req.file);
   // req.file.location으로 s3 bucket에 업로드한 파일 주소를 받을 수 있다.
