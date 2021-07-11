@@ -23,6 +23,26 @@ const Text = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xsmall};
 `;
 
+const ThumnailImage = styled.img`
+  width: 320px;
+  height: 240px;
+`;
+
+const VideoDurationWrapper = styled.div`
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  margin: 1rem;
+  padding: 0.5rem;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 5px;
+  line-height: 1rem;
+  span {
+    font-size: 1.4rem;
+  }
+`;
+
 // Material UI CSS
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,13 +109,15 @@ const IndividualWork = ({
         .post('/api/shoppingBasket/addShoppingBasket', shoppingBasketData)
         .then((response) => {
           if (response.data.success) {
-            alert('장바구니에 담았습니다.');
+            return alert('장바구니에 담았습니다.');
           } else {
-            if (response.data.message) {
-              return alert('이미 장바구니에 담겼습니다.');
-            }
-            alert('오류가 발생했습니다. 나중에 시도해주세요.');
+            return alert('이미 장바구니에 담겼습니다.');
           }
+        })
+        .catch((error) => {
+          alert(
+            '장바구니 담기에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+          );
         });
     } else {
       alert('로그인 후 사용 가능합니다.');
@@ -120,29 +142,11 @@ const IndividualWork = ({
         <CardMedia>
           <div style={{ position: 'relative' }}>
             <a href={`/individualwork/${_id}`}>
-              <img
-                src={thumbnail}
-                alt={`thumbnail-${title}`}
-                style={{ width: '100%', height: '100%' }}
-              />
+              <ThumnailImage src={thumbnail} alt={`thumbnail-${title}`} />
             </a>
-            <div
-              style={{
-                bottom: 0,
-                right: 0,
-                position: 'absolute',
-                margin: '1rem',
-                padding: '0.5rem',
-                background: 'black',
-                color: '#FFFFFF',
-                borderRadius: '5px',
-                lineHeight: '1rem',
-              }}
-            >
-              <span
-                style={{ fontSize: '1.4rem' }}
-              >{`${minutes} : ${seconds}`}</span>
-            </div>
+            <VideoDurationWrapper>
+              <span>{`${minutes} : ${seconds}`}</span>
+            </VideoDurationWrapper>
           </div>
         </CardMedia>
         <CardContent>

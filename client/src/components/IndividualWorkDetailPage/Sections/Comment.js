@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import SingleComment from './SingleComment';
+// material ui imports
+import Button from '@material-ui/core/Button';
 
 const P = styled.p`
   font-size: ${(props) => props.theme.fontSizes.xlarge};
@@ -120,17 +122,17 @@ const Comment = () => {
           placeholder="댓글을 남겨주세요."
         />
         <br />
-        <button
+        <Button
+          variant="contained"
           style={{
             width: '20%',
             height: '52px',
-            fontSize: '1.4rem',
             cursor: 'pointer',
           }}
           onClick={handleSubmit}
         >
-          댓글작성
-        </button>
+          <span style={{ fontSize: '1.4rem' }}>댓글작성</span>
+        </Button>
       </form>
     </div>
   );

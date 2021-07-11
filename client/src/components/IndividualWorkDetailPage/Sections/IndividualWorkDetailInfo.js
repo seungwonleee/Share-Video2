@@ -43,9 +43,11 @@ const useStyles = makeStyles({
   desktopThCell: {
     textAlign: 'center',
     color: '#FFFFFF',
+    fontSize: '1.4rem',
   },
   desktopTdCell: {
     textAlign: 'center',
+    fontSize: '1.2rem',
   },
 });
 
@@ -73,6 +75,7 @@ const IndividualWorkDetailInfo = ({ video }) => {
     videoId: video._id,
   };
 
+  //video model의 likes 필드가 아닌 like model에서 데이터를 가져와야한다.
   useEffect(() => {
     axios
       .post('/api/like/getLikes', likeData)

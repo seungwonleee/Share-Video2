@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { setCount } from '../../../features/like/likeSlice';
 import axios from 'axios';
+
 // material UI Imports
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -102,19 +103,19 @@ const ButtonBar = ({ userFrom, video }) => {
   return (
     <BottomNavigation showLabels style={{ background: '#424242' }}>
       <BottomNavigationAction
-        label="좋아요"
+        label={<span style={{ fontSize: '1.4rem' }}>좋아요</span>}
         icon={<ThumbUpAltIcon />}
         style={{ color: '#FFFFFF' }}
         onClick={handleLike}
       />
       <BottomNavigationAction
-        label="장바구니"
+        label={<span style={{ fontSize: '1.4rem' }}>장바구니</span>}
         icon={<ShoppingBasketIcon />}
         style={{ color: '#FFFFFF' }}
         onClick={addShoppingBasket}
       />
       <BottomNavigationAction
-        label="구매하기"
+        label={<span style={{ fontSize: '1.4rem' }}>구매하기</span>}
         icon={<PaymentIcon />}
         style={{ color: '#FFFFFF' }}
         onClick={handlePayment}

@@ -26,7 +26,6 @@ const IndividualWorkDetailPage = () => {
   const loginUser = useSelector((state) => state.auth.userId);
 
   const [video, setVideo] = useState('');
-
   const getVideoDetailInfo = () => {
     const videoData = {
       videoId: videoId,

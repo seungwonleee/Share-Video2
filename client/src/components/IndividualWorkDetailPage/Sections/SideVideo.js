@@ -33,9 +33,13 @@ const Description = styled.div`
   }
 `;
 
+const ThumnailImage = styled.img`
+  width: 120px;
+  height: 180px;
+`;
+
 const SideVideo = () => {
   const [sideVideos, setSideVideos] = useState([]);
-  console.log(sideVideos);
 
   //user별로 업로드한 영상을 불러와서 배열에 모두 담는다.
   const getUserVideo = () => {
@@ -67,7 +71,10 @@ const SideVideo = () => {
         <Container key={index}>
           <Image>
             <a href={`/individualwork/${video._id}`}>
-              <img src={video.thumbnail} alt={`thumbnail-${video.title}`} />
+              <ThumnailImage
+                src={video.thumbnail}
+                alt={`thumbnail-${video.title}`}
+              />
             </a>
           </Image>
           <Description>
