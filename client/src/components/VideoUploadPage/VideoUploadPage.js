@@ -414,6 +414,7 @@ const VideoUploadPage = () => {
             />
           </div>
           <br />
+          <label>썸네일 사진(png, jpeg)</label>
           <input
             type="file"
             style={{ background: 'white', width: '50%', height: '100%' }}
