@@ -62,7 +62,13 @@ const LandingPage = ({
   const copyMovieTitle = (event) => {
     const { name } = event.currentTarget;
     const movieTitle = name;
-    navigator.clipboard.writeText(movieTitle);
+
+    let textField = document.createElement('textarea');
+    textField.innerText = movieTitle;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
 
     dispatch(
       dialogState({
