@@ -1,9 +1,6 @@
 # dependencies
 node_modules
 
-# server config
-dev.js
-
 # secret key
 .env
 
