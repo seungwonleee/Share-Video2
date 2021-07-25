@@ -88,6 +88,8 @@ const IndividualWork = ({
   const minutes = Math.floor(duration / 60);
   const seconds = Math.floor(duration - minutes * 60);
 
+  const createdDate = moment(createdAt).format('LL');
+
   // 장바구니 목록에 추가
   const addShoppingBasket = () => {
     const shoppingBasketData = {
@@ -176,7 +178,7 @@ const IndividualWork = ({
             <Text>가격: {cost} 원</Text>
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            <Text>업로드: {moment({ createdAt }).format('LL')}</Text>
+            <Text>업로드: {createdDate}</Text>
           </Typography>
           <Typography
             variant="body2"
