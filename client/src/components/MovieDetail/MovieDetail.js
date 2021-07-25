@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   API_URL,
@@ -48,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 const MovieDetail = (props) => {
   const classes = useStyles();
-  // URL 값 받아오기
-  const movieId = props.match.params.movieId;
+  //:movieId url을 가져온다.
+  let { movieId } = useParams();
 
   const [Movie, setMovie] = useState([]);
   const [Casts, setCasts] = useState([]);

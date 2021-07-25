@@ -74,7 +74,7 @@ const Routes = () => {
             component={Auth(CompletePaymentPage, true)}
           />
           {/* movie 관련 Route */}
-          <Route exact path="/movie/:movieId" component={MovieDetail} />
+          <Route exact path="/movie/:movieId" component={Auth(MovieDetail)} />
           {/* 설정하지 않은 URL 입력시 NoMatchPage로 이동 */}
           <Route path="*" component={NoMatchPage} />
         </Switch>

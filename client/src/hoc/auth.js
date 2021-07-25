@@ -22,8 +22,7 @@ const auth = (SpecificComponent, option) => {
       axios
         .get('/api/users/auth')
         .then((res) => {
-          console.log('auth ===> ', res.data);
-
+          // console.log('auth ===> ', res.data);
           //로그인 하지 않은 상태
           if (!res.data.isAuth) {
             if (option) {
