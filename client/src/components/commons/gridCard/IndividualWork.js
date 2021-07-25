@@ -24,7 +24,7 @@ const Text = styled.span`
 `;
 
 const ThumnailImage = styled.img`
-  width: 320px;
+  width: 100%;
   height: 240px;
 `;
 
