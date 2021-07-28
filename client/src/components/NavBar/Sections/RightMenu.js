@@ -1,11 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  setLoginState,
-  setId,
-  setEmail,
-  setNickname,
-} from '../../../features/auth/authSlice';
+import { setUserInfo } from '../../../features/auth/authSlice';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import './MenuFont.css';
@@ -28,7 +23,7 @@ const StyledLink = styled(Link)`
 `;
 
 const RightMenu = () => {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.auth.userInfo.isLoggedIn);
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -40,10 +35,14 @@ const RightMenu = () => {
         if (res.data.removeCookie) {
           history.push('/');
           // 로그아웃시 Redux의 사용자 로그인 상태와 식별 id 초기화
-          dispatch(setLoginState(false));
-          dispatch(setId(null));
-          dispatch(setEmail(null));
-          dispatch(setNickname(null));
+          dispatch(
+            setUserInfo({
+              isLoggedIn: false,
+              userId: null,
+              email: null,
+              nickname: null,
+            })
+          );
         }
       })
       .catch((error) => {

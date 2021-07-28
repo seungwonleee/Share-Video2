@@ -43,7 +43,7 @@ const MyIndividualWorkPage = () => {
 
   const dispatch = useDispatch();
 
-  const loginUser = useSelector((state) => state.auth.userId);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
 
   const [selection, setSelection] = useState([]);
   const [myVideoList, setMyVideoList] = useState([]);

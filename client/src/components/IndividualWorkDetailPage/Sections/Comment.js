@@ -23,8 +23,8 @@ const Comment = () => {
   let history = useHistory();
   //:videoId url을 가져온다.
   let { videoId } = useParams();
-  const loginUser = useSelector((state) => state.auth.userId);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
+  const isLoggedIn = useSelector((state) => state.auth.userInfo.isLoggedIn);
 
   const [commentValue, setCommentValue] = useState('');
   const [commentLists, setCommentLists] = useState([]);

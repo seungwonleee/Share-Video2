@@ -40,7 +40,7 @@ const LikePage = () => {
 
   const [selection, setSelection] = useState([]);
   const [myLiketList, setMyLiketList] = useState([]);
-  const loginUser = useSelector((state) => state.auth.userId);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
 
   //MyPage 좋아요 목록에 현재 로그인한 유저의 좋아요 목록 가져온다.
   const getLikeList = () => {

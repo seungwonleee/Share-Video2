@@ -51,7 +51,7 @@ const MyPage = () => {
   });
   const [shoppingBasketCount, setShoppingBasketCount] = useState(0);
 
-  const loginUser = useSelector((state) => state.auth.userId);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
   const refresh = useSelector((state) => state.refresh.count);
 
   const userData = {

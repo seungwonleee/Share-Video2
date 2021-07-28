@@ -4,33 +4,23 @@ import { createSlice } from '@reduxjs/toolkit';
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    isLoggedIn: false,
-    userId: null,
-    email: null,
-    nickname: null,
+    userInfo: {
+      isLoggedIn: false,
+      userId: null,
+      email: null,
+      nickname: null,
+    },
   },
   reducers: {
-    // 로그인 상태 업데이트
-    setLoginState: (state, action) => {
-      state.isLoggedIn = action.payload;
-    },
-    // 사용자 식별 id 업데이트
-    setId: (state, action) => {
-      state.userId = action.payload;
-    },
-    // 사용자 이메일 계정 업데이트
-    setEmail: (state, action) => {
-      state.email = action.payload;
-    },
-    // 사용자 닉네임 업데이트
-    setNickname: (state, action) => {
-      state.nickname = action.payload;
+    // 사용자 정보 업데이트
+    setUserInfo: (state, action) => {
+      // console.log('action ===> ', action);
+      state.userInfo = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoginState, setId, setEmail, setNickname } =
-  authSlice.actions;
+export const { setUserInfo } = authSlice.actions;
 
 export default authSlice.reducer;

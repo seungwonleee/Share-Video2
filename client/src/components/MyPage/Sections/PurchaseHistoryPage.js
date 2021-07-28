@@ -49,7 +49,7 @@ const PurchaseHistoryPage = () => {
   // Materail Ui 디자인에 사용
   const classes = useStyles();
 
-  const loginUser = useSelector((state) => state.auth.userId);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
 
   const [selection, setSelection] = useState([]);
   const [purchaseList, setPurchaseList] = useState([]);

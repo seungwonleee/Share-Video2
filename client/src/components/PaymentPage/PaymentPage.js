@@ -67,7 +67,7 @@ const PaymentPage = () => {
   let history = useHistory();
   const dispatch = useDispatch();
 
-  const userId = useSelector((state) => state.auth.userId);
+  const userId = useSelector((state) => state.auth.userInfo.userId);
 
   const [purchaseList, setPurchaseList] = useState([]);
   const [totalCost, setTotalCost] = useState([]);

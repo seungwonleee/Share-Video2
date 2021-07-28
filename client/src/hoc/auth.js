@@ -2,12 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  setLoginState,
-  setId,
-  setEmail,
-  setNickname,
-} from '../features/auth/authSlice';
+import { setUserInfo } from '../features/auth/authSlice';
 
 const auth = (SpecificComponent, option) => {
   //option 미입력    =>  아무나 출입이 가능한 페이지
@@ -34,10 +29,14 @@ const auth = (SpecificComponent, option) => {
             if (option === false) {
               history.push('/');
             }
-            dispatch(setLoginState(res.data.isAuth));
-            dispatch(setId(res.data._id));
-            dispatch(setEmail(res.data.email));
-            dispatch(setNickname(res.data.nickname));
+            dispatch(
+              setUserInfo({
+                isLoggedIn: res.data.isAuth,
+                userId: res.data._id,
+                email: res.data.email,
+                nickname: res.data.nickname,
+              })
+            );
           }
         })
         .catch((error) => {

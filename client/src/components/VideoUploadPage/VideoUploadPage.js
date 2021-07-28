@@ -137,8 +137,8 @@ const VideoUploadPage = () => {
   const dispatch = useDispatch();
 
   //현재 로그인한 회원 식별 id
-  const userId = useSelector((state) => state.auth.userId);
-  const userNickname = useSelector((state) => state.auth.nickname);
+  const userId = useSelector((state) => state.auth.userInfo.userId);
+  const userNickname = useSelector((state) => state.auth.userInfo.nickname);
 
   const [dropFile, setDropFile] = useState('');
   const [title, setTitle] = useState('');

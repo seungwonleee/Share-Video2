@@ -81,9 +81,9 @@ const IndividualWork = ({
   const classes = useStyles();
 
   let history = useHistory();
-  const userId = useSelector((state) => state.auth.userId);
-  const userNickname = useSelector((state) => state.auth.nickname);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userId = useSelector((state) => state.auth.userInfo.userId);
+  const userNickname = useSelector((state) => state.auth.userInfo.nickname);
+  const isLoggedIn = useSelector((state) => state.auth.userInfo.isLoggedIn);
 
   const minutes = Math.floor(duration / 60);
   const seconds = Math.floor(duration - minutes * 60);

@@ -14,7 +14,7 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 const ButtonBar = ({ userFrom, video }) => {
   let history = useHistory();
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.auth.userInfo.isLoggedIn);
 
   const shoppingBasketData = {
     videoId: video._id,

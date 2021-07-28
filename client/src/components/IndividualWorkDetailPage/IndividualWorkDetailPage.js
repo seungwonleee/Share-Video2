@@ -23,7 +23,7 @@ const IndividualWorkDetailPage = () => {
   //:videoId url을 가져온다.
   let { videoId } = useParams();
 
-  const loginUser = useSelector((state) => state.auth.userId);
+  const loginUser = useSelector((state) => state.auth.userInfo.userId);
 
   const [video, setVideo] = useState('');
   const getVideoDetailInfo = () => {
