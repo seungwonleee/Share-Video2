@@ -37,7 +37,7 @@ router.post("/login", (req, res) => {
         if (err) return res.status(400).send(err);
 
         // 토큰을 쿠키에 저장한다.
-        res.cookie("x_auth", user.token).status(200).json({
+        res.cookie("sv_auth", user.token).status(200).json({
           loginSuccess: true,
           userId: user._id,
           userNickname: user.nickname,
@@ -116,7 +116,7 @@ router.get("/logout", auth, (req, res) => {
     }
     // 저장된 Cookie 삭제
     res
-      .clearCookie("x_auth")
+      .clearCookie("sv_auth")
       .status(200)
       .json({ removeCookie: "true", logout: "true" });
   });
