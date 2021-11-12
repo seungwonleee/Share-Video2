@@ -12,4 +12,5 @@ export default configureStore({
     like: likeSlice,
     refresh: refreshSlice,
   },
+  devTools: process.env.NODE_ENV === 'production' ? false : true,
 });
