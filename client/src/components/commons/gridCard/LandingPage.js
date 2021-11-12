@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  content: {
+    height: '8rem',
+  },
 }));
 
 const LandingPage = ({
@@ -95,7 +98,7 @@ const LandingPage = ({
             <Image src={image ? image : noImage} />
           </CardMedia>
         </a>
-        <CardContent>
+        <CardContent className={classes.content}>
           <Typography variant="body2" color="textSecondary" component="p">
             <Text>{movieNameKorean}</Text> <br />
             <Text>({movieNameEnglish})</Text>
