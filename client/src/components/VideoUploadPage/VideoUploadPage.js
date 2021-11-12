@@ -217,6 +217,13 @@ const VideoUploadPage = () => {
         history.push('/');
       })
       .catch((error) => {
+        //dialog 메시지 초기화, 제거
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
         alert(
           '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 3)'
         );
@@ -238,6 +245,13 @@ const VideoUploadPage = () => {
         saveVideoData(thumnailPath, videoFilePath, videoFileDuration);
       })
       .catch((error) => {
+        //dialog 메시지 초기화, 제거
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
         alert(
           '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 2)'
         );
@@ -266,6 +280,13 @@ const VideoUploadPage = () => {
         saveThumbnail(videoData);
       })
       .catch((error) => {
+        //dialog 메시지 초기화, 제거
+        dispatch(
+          dialogState({
+            dialogState: false,
+            message: null,
+          })
+        );
         alert(
           '영상을 업로드하는데 실패했습니다. 잠시 후 다시 시도해 주세요. (code: 1)'
         );
