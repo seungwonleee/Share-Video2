@@ -113,6 +113,7 @@ const LandingPage = ({
             <a
               href={`https://www.youtube.com/results?search_query=${movieNameKorean} 공식 예고편`}
               target="_blank"
+              rel="noreferrer noopener"
             >
               <IconButton aria-label="share">
                 <PlayCircleOutlineIcon />
