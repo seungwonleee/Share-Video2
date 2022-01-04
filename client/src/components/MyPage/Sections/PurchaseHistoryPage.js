@@ -98,7 +98,7 @@ const PurchaseHistoryPage = () => {
   }, []);
 
   //구매내역 삭제
-  const handlePurchaseListRemove = async () => {
+  const handlePurchaseListRemove = () => {
     const ok = window.confirm('정말로 삭제하시겠습니까?');
 
     if (ok) {

@@ -116,7 +116,7 @@ const ShoppingBasketPage = () => {
     });
   };
 
-  const handleShoppingBasketListRemove = async () => {
+  const handleShoppingBasketListRemove = () => {
     const ok = window.confirm('정말로 삭제하시겠습니까?');
 
     if (ok) {
@@ -132,7 +132,7 @@ const ShoppingBasketPage = () => {
       let deleteData = {
         deleteList: list,
       };
-      console.log(deleteData);
+
       axios
         .post('/api/shoppingBasket/deleteShoppingBasketList', deleteData)
         .then((response) => {

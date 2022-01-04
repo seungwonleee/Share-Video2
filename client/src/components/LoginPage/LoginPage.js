@@ -108,7 +108,7 @@ const LoginPage = () => {
     }
   };
   //이메일 주소 로그인
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
     if (password.length < 6) {
       return alert('비밀번호를 6자리 이상 입력해주세요.');
@@ -122,7 +122,6 @@ const LoginPage = () => {
     axios
       .post('/api/users/login', body)
       .then((response) => {
-        console.log(response.data);
         if (response.data.loginSuccess) {
           alert(`${response.data.userNickname}님 환영합니다.`);
           // 홈으로 이동

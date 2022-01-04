@@ -86,7 +86,7 @@ const MyIndividualWorkPage = () => {
     getMyIndividualWorkList();
   }, []);
 
-  const handleLikeListRemove = async () => {
+  const handleLikeListRemove = () => {
     if (selection.length < 1) {
       return alert('목록에서 선택하세요.');
     }

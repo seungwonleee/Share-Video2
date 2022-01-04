@@ -114,7 +114,7 @@ const RegisterPage = () => {
   };
 
   //회원가입
-  const handleCreateAccount = async (event) => {
+  const handleCreateAccount = (event) => {
     event.preventDefault();
     if (password.length < 6) {
       return alert('비밀번호를 6자리 이상 입력해주세요.');
